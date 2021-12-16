@@ -1,7 +1,13 @@
-INCLUDES =	includes/server.hpp
+INCLUDES =	includes/server.hpp\
+			includes/parser.hpp\
+			includes/client.hpp\
+			includes/channel.hpp
 
 SRCS =	src/server.cpp\
-		src/main.cpp
+		src/main.cpp\
+		src/parser.cpp\
+		src/client.cpp\
+		src/channel.cpp
 
 NAME = ircserv
 
@@ -20,9 +26,9 @@ $(NAME):	$(OBJS) $(INCLUDES)
 all :	$(NAME)
 
 clean :
-		rm -rf $(OBJS) $(OBJS_STL)
+		rm -rf $(OBJS)
 
 fclean : clean
-		rm -rf $(NAME) $(NAME_STL)
+		rm -rf $(NAME)
 
 re :	fclean all

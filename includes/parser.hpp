@@ -2,13 +2,19 @@
 
 #include <iostream>
 
+class server;
+class client;
+
 class parser{
 	private:
-		parser();
 		parser(parser const& other);
 		parser	operator=(parser const& other);
 
 	public:
-		parser(int sd, char *buffer);
+		parser();
 		~parser();
+		void	parse(char *buffer, client *cli);
 };
+
+#include "server.hpp"
+#include "client.hpp"

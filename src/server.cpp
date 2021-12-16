@@ -4,10 +4,10 @@ server::server(char **av)
 {
 	//parser parse;
 	online = true;
-	message = ":127.0.0.1 001 leickmay :Welcome to the Internet Relay Network";
+	message = ":127.0.0.1 001 leickmay :Welcome to the Internet Relay Network\r\n";
 	//initialise all clientSocket[] to 0 so not checked
-	for (int i = 0; i < maxClients; i++)
-		clientSocket[i] = 0;
+	//for (int i = 0; i < maxClients; i++)
+	//	clientSocket[i] = 0;
 
 	//create a master socket
 	if ( (masterSocket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -70,7 +70,8 @@ void	server::start()
 		for (int i = 0; i < maxClients; i++)
 		{
 			//socket descriptor
-			sd = clientSocket[i];
+			//sd = clientSocket[i];
+			sd = clients[i].getSd();
 
 			//if valid socket descriptor then aff to read list
 			if (sd > 0)
@@ -117,10 +118,11 @@ void	server::_incomingConnexion()
 	//add new socket to array of sockets
 	for (int i = 0; i < maxClients; i++)
 	{
-		if (clientSocket[i] == 0)
+		if (clients[i].getSd() == 0)
 		{
-			clientSocket[i] = newSocket;
+			//clientSocket[i] = newSocket;
 			std::cout << "Adding to list of sockets as " << i << std::endl;
+			clients[i].setSd(newSocket);
 			break ;
 		}
 	}
@@ -130,7 +132,8 @@ void	server::_ioOperation()
 {
 	for (int i = 0; i < maxClients; i++)
 	{
-		sd = clientSocket[i];
+		//sd = clientSocket[i];
+		sd = clients[i].getSd();
 
 		if (FD_ISSET(sd, &readfds))
 		{
@@ -143,7 +146,8 @@ void	server::_ioOperation()
 
 				//close tge socket and mark as 0 in list for reuse
 				close(sd);
-				clientSocket[i] = 0;
+				//clientSocket[i] = 0;
+				clients[i].setSd(0);
 			}
 			//Echo back the message that came in
 			else
@@ -151,8 +155,10 @@ void	server::_ioOperation()
 				//set the string terminating NULL byte on the end of the data read
 				buffer[valread] = '\0';
 				send(sd, buffer, strlen(buffer), 0);
-				std::cout << "===BUFFER : " << buffer << std::endl;
-				//parse(buffer, sd);
+				std::cout << "===BUFFER : " << buffer << " SD : " << sd << std::endl;
+				pars.parse(buffer, &clients[i]);
+				std::cout << "parsed : i = " << i << " nick : " << clients[i].getNick() << \
+				" login : " << clients[i].getLogin() << " real name : " << clients[i].getRealName() << std::endl;
 			}
 		}
 	}
