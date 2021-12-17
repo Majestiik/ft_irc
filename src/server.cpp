@@ -156,10 +156,17 @@ void	server::_ioOperation()
 				buffer[valread] = '\0';
 				send(sd, buffer, strlen(buffer), 0);
 				std::cout << "===BUFFER : " << buffer << " SD : " << sd << std::endl;
-				pars.parse(buffer, &clients[i]);
+				pars.parse(buffer, &clients[i], channels);
 				std::cout << "parsed : i = " << i << " nick : " << clients[i].getNick() << \
 				" login : " << clients[i].getLogin() << " real name : " << clients[i].getRealName() << std::endl;
+				std::cout << "existing channels : " << std::endl;
+				for (int j = 0; j < 30; j++)
+				{
+					if (channels[j].getExists() == true)
+						std::cout << channels[j].getName() << std::endl;
+				}
 			}
 		}
 	}
 }
+

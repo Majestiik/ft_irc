@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <vector>
+#include <map>
 #include "parser.hpp"
 #include "client.hpp"
 #include "channel.hpp"
@@ -33,6 +34,7 @@ class server
 		void	_ioOperation();
 		client	clients[maxClients];
 		parser pars;
+		channel channels[maxClients];
 
 
 
@@ -40,5 +42,6 @@ class server
 		server(char **av);
 		~server();
 		void	start();
+
 };
 

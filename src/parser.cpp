@@ -9,7 +9,7 @@ parser::~parser()
 }
 
 
-void	parser::parse(char *buffer, client *cli)
+void	parser::parse(char *buffer, client *cli, channel *channels)
 {
 	std::string buf = buffer;
 	int space = buf.find(' ');
@@ -38,10 +38,19 @@ void	parser::parse(char *buffer, client *cli)
 	{
 		buf = buf.substr(space + 1, buf.length() - (space + 3));
 		std::cout << "channel name : " << buf << std::endl;
-		std::string message = ":127.0.0.1 332 " + buf + "\r\n";
+		int i = 0;
+		while (channels[i].getExists() == true)
+			i++;
+		channels[i].setName(buf);
+		channels[i].setExists(true);
+		channels[i].addClient(cli);
+		channels[i].create();
+		std::string message = ":" + cli->getNick() + "!" + cli->getLogin() + "@" + "127.0.0.1" + " JOIN " + buf;
+		std::cout << "message : " << message << std::endl;
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 	}
 
 	if (command == "EXIT")
 		std::exit(0);
 }
+//(":" + user->getNickName() + "!" + user->getUserName() + "@" + user->getAddress() + " JOIN " + _channelName);
