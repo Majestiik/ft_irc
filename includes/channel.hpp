@@ -11,7 +11,7 @@ class channel
 		bool		_exists;
 		channel(channel const& other);
 		channel	operator=(channel const& other);
-		std::vector<client *> members;
+		std::vector<client*> members;
 
 
 	public:
@@ -27,6 +27,7 @@ class channel
 		void		addClient(client *cli);
 		void		deleteClient(client *cli);
 		void		create();
+		std::string	listClients();
 };
 
 

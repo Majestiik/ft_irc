@@ -63,3 +63,14 @@ void		channel::create()
 {
 	
 }
+
+std::string	channel::listClients()
+{
+	std::string ret;
+	for (std::vector<client *>::iterator it = members.begin(); it != members.end(); it++)
+	{
+		client *c = *it;
+		ret = "@" + c->getNick() + " ";
+	}
+	return ret;
+}

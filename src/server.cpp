@@ -3,6 +3,7 @@
 server::server(char **av)
 {
 	//parser parse;
+	pars.setServ(this);
 	online = true;
 	message = ":127.0.0.1 001 leickmay :Welcome to the Internet Relay Network\r\n";
 	//initialise all clientSocket[] to 0 so not checked

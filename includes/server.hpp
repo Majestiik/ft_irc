@@ -6,9 +6,11 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include "parser.hpp"
+
 #include "client.hpp"
 #include "channel.hpp"
+#include "parser.hpp"
+//class parser;
 
 class server
 {
@@ -35,6 +37,7 @@ class server
 		client	clients[maxClients];
 		parser pars;
 		channel channels[maxClients];
+		//std::map<std::string, channel*> chan;
 
 
 
