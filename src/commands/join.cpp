@@ -49,6 +49,8 @@ void	join::broadcastMsg(std::string buf, client *cli, channel *chan)
 	std::cout << "message : " << message << std::endl;
 	send(cli->getSd(), message.c_str(), message.length(), 0);
 	std::cout << "listClients : " << chan->listClients() << std::endl;
+	
+	
 }
 
 bool	join::_checkName(std::string name, channel *chan)
@@ -73,5 +75,33 @@ void	join::_joinAlreadyExists(std::string name, client *cli, channel *chan)
 		i++;
 	}
 	chan[i].addClient(cli);
+	_getOtherMembers(name, cli, chan, i);
+	_informOtherMembers(name, cli, chan, i);
 	std::cout << "== " << "i = " << i << " " << chan[i].listClients() << std::endl;
+
+}
+
+void	join::_getOtherMembers(std::string name, client *cli, channel *chan, int i)
+{
+	std::string message;
+	std::vector<client*> members = chan[i].getMembers();
+	for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
+	{
+		client *c = *it;
+		std::cout << "_getOtherMembers : " << c->getLogin() << std::endl;
+		message = ":" + c->getNick() + "!" + c->getLogin() + "@" + "127.0.0.1" + " JOIN " + name;
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+	}
+}
+
+void	join::_informOtherMembers(std::string name, client *cli, channel *chan, int i)
+{
+	std::string message = ":" + cli->getNick() + "!" + cli->getLogin() + "@" + "127.0.0.1" + " JOIN " + name;
+	std::vector<client*> members = chan[i].getMembers();
+	for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
+	{
+		client *c = *it;
+		std::cout << "broadcast to : " << c->getLogin() << std::endl;
+		send(c->getSd(), message.c_str(), message.length(), 0);
+	}
 }

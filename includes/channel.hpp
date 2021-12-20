@@ -11,7 +11,7 @@ class channel
 		bool		_exists;
 		channel(channel const& other);
 		channel	operator=(channel const& other);
-		std::vector<client*> members;
+		std::vector<client*> _members;
 
 
 	public:
@@ -20,6 +20,7 @@ class channel
 		~channel();
 		std::string	getName() const;
 		std::string	getPassword() const;
+		std::vector<client*>	getMembers();
 		bool		getExists() const;
 		void		setName(std::string name);
 		void		setPassword(std::string password);
