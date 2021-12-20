@@ -45,6 +45,12 @@ void	channel::setExists(bool b)
 void		channel::addClient(client *cli)
 {
 	members.push_back(cli);
+	std::cout << "== Members vector : " << std::endl;
+	for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
+	{
+		client *c = *it;
+		std::cout << "- "<< c->getNick() << std::endl;
+	}
 }
 
 void		channel::deleteClient(client *cli)
@@ -70,7 +76,7 @@ std::string	channel::listClients()
 	for (std::vector<client *>::iterator it = members.begin(); it != members.end(); it++)
 	{
 		client *c = *it;
-		ret = "@" + c->getNick() + " ";
+		ret += "@" + c->getNick() + " ";
 	}
 	return ret;
 }
