@@ -12,6 +12,7 @@ class channel
 		channel(channel const& other);
 		channel	operator=(channel const& other);
 		std::vector<client*> _members;
+		std::vector<client*> _op;
 
 
 	public:

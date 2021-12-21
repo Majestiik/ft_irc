@@ -30,6 +30,8 @@ void	parser::parse(char *buffer, client *cli, channel *channels)
 		space = buf.find(' ');
 		cli->setLogin(buf.substr(0, space));
 		space = buf.find(':');
+		if (space < 0)
+			space = buf.find('*') + 1;
 		buf = buf.substr(space + 1, buf.length() - (space + 1));
 		cli->setRealName(buf);
 	}
@@ -53,6 +55,11 @@ void	parser::parse(char *buffer, client *cli, channel *channels)
 		std::string message = ":" + cli->getNick() + "!" + cli->getLogin() + "@" + "127.0.0.1" + " JOIN " + buf;
 		std::cout << "message : " << message << std::endl;
 		send(cli->getSd(), message.c_str(), message.length(), 0);*/
+	}
+
+	if (command == "PRIVMSG")
+	{
+		
 	}
 
 	if (command == "EXIT")

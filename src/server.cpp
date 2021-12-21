@@ -5,7 +5,7 @@ server::server(char **av)
 	//parser parse;
 	pars.setServ(this);
 	online = true;
-	message = ":127.0.0.1 001 leickmay :Welcome to the Internet Relay Network\r\n";
+	message = ":127.0.0.1 001 leickmay :Welcome to the IRMEGASTONKS network, you'll see it's incredible\r\n";
 	//initialise all clientSocket[] to 0 so not checked
 	//for (int i = 0; i < maxClients; i++)
 	//	clientSocket[i] = 0;
