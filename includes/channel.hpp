@@ -11,6 +11,7 @@ class channel
 		bool		_exists;
 		channel(channel const& other);
 		channel	operator=(channel const& other);
+		client *_creator;
 		std::vector<client*> _members;
 		std::vector<client*> _op;
 

@@ -17,7 +17,7 @@ void	parser::parse(char *buffer, client *cli, channel *channels)
 	std::cout << "space : " << space << std::endl;
 	std::string command = buf.substr(0, space);
 	std::cout << "command : " << command << std::endl;
-
+	
 	if (command == "NICK")
 	{
 		std::cout << "buf.length : " << buf.length() << std::endl;
@@ -59,7 +59,13 @@ void	parser::parse(char *buffer, client *cli, channel *channels)
 
 	if (command == "PRIVMSG")
 	{
-		
+
+	}
+
+	if (command == "PART")
+	{
+		buf = buf.substr(space + 1, buf.length() - (space + 3));
+		_part.execute(buf, cli, channels);
 	}
 
 	if (command == "EXIT")

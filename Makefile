@@ -2,14 +2,16 @@ INCLUDES =	includes/server.hpp\
 			includes/parser.hpp\
 			includes/client.hpp\
 			includes/channel.hpp\
-			includes/commands/join.hpp
+			includes/commands/join.hpp\
+			includes/commands/part.hpp
 
 SRCS =	src/server.cpp\
 		src/main.cpp\
 		src/parser.cpp\
 		src/client.cpp\
 		src/channel.cpp\
-		src/commands/join.cpp
+		src/commands/join.cpp\
+		src/commands/part.cpp
 
 
 NAME = ircserv

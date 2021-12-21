@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "commands/join.hpp"
+#include "commands/part.hpp"
 
 class server;
 class client;
@@ -14,6 +15,8 @@ class parser{
 		parser	operator=(parser const& other);
 		server	*_serv;
 		join	_join;
+		part	_part;
+
 
 	public:
 		parser();
