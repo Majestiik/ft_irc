@@ -9,9 +9,9 @@ parser::~parser()
 }
 
 
-void	parser::parse(char *buffer, client *cli, channel *channels)
+void	parser::parse(std::string buf, client *cli, channel *channels)
 {
-	std::string buf = buffer;
+	//std::string buf = buffer;
 	int space = buf.find(' ');
 	(void)cli;
 	std::cout << "space : " << space << std::endl;
@@ -21,7 +21,19 @@ void	parser::parse(char *buffer, client *cli, channel *channels)
 	if (command == "NICK")
 	{
 		std::cout << "buf.length : " << buf.length() << std::endl;
-		cli->setNick(buf.substr(space + 1, buf.length() - (space + 3)));
+		buf = buf.substr(space + 1, buf.length() - space - 1);
+		space = buf.find('U');
+		std::cout << "== buf avant setNick() : " << buf << std::endl;
+		if (space > 0)
+		{
+			cli->setNick(buf.substr(0, space - 1));
+			buf = buf.substr(space, buf.length() - space);
+			command = "USER";
+			space = buf.find(' ');
+		}
+		else
+			cli->setNick(buf.substr(0, buf.length() - 2));
+		std::cout << "buf apres setnick : " << buf << " et nick : " << cli->getNick() << std::endl;
 	}
 		
 	if (command == "USER")
@@ -34,6 +46,11 @@ void	parser::parse(char *buffer, client *cli, channel *channels)
 			space = buf.find('*') + 1;
 		buf = buf.substr(space + 1, buf.length() - (space + 1));
 		cli->setRealName(buf);
+		std::string message = ":127.0.0.1 001 " + cli->getNick() + " :Welcome to the IRMEGASTONKS network, you'll see it's incredible\r\n";
+		if (send(cli->getSd(), message.c_str(), message.length(), 0) != (long)message.length())
+			std::cerr << "send" << std::endl;
+		else
+			std::cout << "Welcome message sent successfully" << std::endl;
 	}
 
 	if (command == "JOIN")
@@ -70,6 +87,10 @@ void	parser::parse(char *buffer, client *cli, channel *channels)
 
 	if (command == "EXIT")
 		std::exit(0);
+
+	if (command == "QUIT")
+		_quit.execute(buf, cli, channels);
+	
 }
 //(":" + user->getNickName() + "!" + user->getUserName() + "@" + user->getAddress() + " JOIN " + _channelName);
 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include "commands/join.hpp"
 #include "commands/part.hpp"
+#include "commands/quit.hpp"
 
 class server;
 class client;
@@ -16,12 +17,13 @@ class parser{
 		server	*_serv;
 		join	_join;
 		part	_part;
+		quit	_quit;
 
 
 	public:
 		parser();
 		~parser();
-		void	parse(char *buffer, client *cli, channel *channels);
+		void	parse(std::string buf, client *cli, channel *channels);
 		void	setServ(server *serv);
 };
 

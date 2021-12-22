@@ -5,7 +5,7 @@ server::server(char **av)
 	//parser parse;
 	pars.setServ(this);
 	online = true;
-	message = ":127.0.0.1 001 leickmay :Welcome to the IRMEGASTONKS network, you'll see it's incredible\r\n";
+	//message = ":127.0.0.1 001 leickmay :Welcome to the IRMEGASTONKS network, you'll see it's incredible\r\n";
 	//initialise all clientSocket[] to 0 so not checked
 	//for (int i = 0; i < maxClients; i++)
 	//	clientSocket[i] = 0;
@@ -111,10 +111,10 @@ void	server::_incomingConnexion()
 	std::cout << "New connection, socket fd is " << newSocket << " ip is " << inet_ntoa(address.sin_addr) << " port : " << ntohs(address.sin_port) << std::endl;
 
 	//send new connection greeting message
-	if (send(newSocket, message.c_str(), message.length(), 0) != (long)message.length())
-		std::cerr << "send" << std::endl;
-	else
-		std::cout << "Welcome message sent successfully" << std::endl;
+	//if (send(newSocket, message.c_str(), message.length(), 0) != (long)message.length())
+	//	std::cerr << "send" << std::endl;
+	//else
+	//	std::cout << "Welcome message sent successfully" << std::endl;
 
 	//add new socket to array of sockets
 	for (int i = 0; i < maxClients; i++)
@@ -156,10 +156,10 @@ void	server::_ioOperation()
 				//set the string terminating NULL byte on the end of the data read
 				buffer[valread] = '\0';
 				//send(sd, buffer, strlen(buffer), 0);
-				std::cout << "===BUFFER : " << buffer << " SD : " << sd << std::endl;
-				pars.parse(buffer, &clients[i], channels);
-				std::cout << "parsed : i = " << i << " nick : " << clients[i].getNick() << \
-				" login : " << clients[i].getLogin() << " real name : " << clients[i].getRealName() << std::endl;
+				std::cout << "===BUFFER : |" << buffer << "| SD : " << sd << std::endl;
+				std::string buf = buffer;
+				pars.parse(buf, &clients[i], channels);
+				std::cout << "parsed : i = " << i << " nick : ||" << clients[i].getNick() << "|| login : " << clients[i].getLogin() << " real name : " << clients[i].getRealName() << std::endl;
 				std::cout << "existing channels : " << std::endl;
 				for (int j = 0; j < 30; j++)
 				{
