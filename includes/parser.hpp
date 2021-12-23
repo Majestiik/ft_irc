@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "commands/join.hpp"
+#include "commands/privmsg.hpp"
 #include "commands/part.hpp"
 #include "commands/quit.hpp"
 
@@ -16,6 +17,7 @@ class parser{
 		parser	operator=(parser const& other);
 		server	*_serv;
 		join	_join;
+		privmsg _privmsg;
 		part	_part;
 		quit	_quit;
 

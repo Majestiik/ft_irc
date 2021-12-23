@@ -156,7 +156,7 @@ void	server::_ioOperation()
 				//set the string terminating NULL byte on the end of the data read
 				buffer[valread] = '\0';
 				//send(sd, buffer, strlen(buffer), 0);
-				std::cout << "===BUFFER : |" << buffer << "| SD : " << sd << std::endl;
+				std::cout << "===BUFFER : " << buffer << "| SD : " << sd << std::endl;
 				std::string buf = buffer;
 				pars.parse(buf, &clients[i], channels);
 				std::cout << "parsed : i = " << i << " nick : ||" << clients[i].getNick() << "|| login : " << clients[i].getLogin() << " real name : " << clients[i].getRealName() << std::endl;

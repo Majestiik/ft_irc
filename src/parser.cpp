@@ -76,7 +76,7 @@ void	parser::parse(std::string buf, client *cli, channel *channels)
 
 	if (command == "PRIVMSG")
 	{
-
+		_privmsg.execute(buf, cli, channels);
 	}
 
 	if (command == "PART")

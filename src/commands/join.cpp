@@ -49,8 +49,6 @@ void	join::broadcastMsg(std::string buf, client *cli, channel *chan)
 	std::cout << "message : " << message << std::endl;
 	send(cli->getSd(), message.c_str(), message.length(), 0);
 	std::cout << "listClients : " << chan->listClients() << std::endl;
-	
-	
 }
 
 bool	join::_checkName(std::string name, channel *chan)

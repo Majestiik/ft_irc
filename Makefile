@@ -2,7 +2,9 @@ INCLUDES =	includes/server.hpp\
 			includes/parser.hpp\
 			includes/client.hpp\
 			includes/channel.hpp\
+			includes/reply_codes.hpp\
 			includes/commands/join.hpp\
+			includes/commands/privmsg.hpp\
 			includes/commands/part.hpp\
 			includes/commands/quit.hpp
 
@@ -12,6 +14,7 @@ SRCS =	src/server.cpp\
 		src/client.cpp\
 		src/channel.cpp\
 		src/commands/join.cpp\
+		src/commands/privmsg.cpp\
 		src/commands/part.cpp\
 		src/commands/quit.cpp
 
@@ -20,7 +23,7 @@ NAME = ircserv
 
 CC = clang++
 
-FLAGS = -Wall -Wextra -Werror -std=c++98
+FLAGS = -Wall -Wextra -Werror #-std=c++98
 
 OBJS = $(SRCS:.cpp=.o)
 
