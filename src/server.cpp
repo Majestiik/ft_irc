@@ -169,5 +169,10 @@ void	server::_ioOperation()
 			}
 		}
 	}
+
 }
 
+client *server::getClients()
+{
+	return (clients);
+}

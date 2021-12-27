@@ -1,11 +1,13 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
 #include <sys/socket.h>
 
-#include "../../includes/reply_codes.hpp"
-#include "../client.hpp"
+#include "../reply_codes.hpp"
+//#include "../client.hpp"
 #include "../channel.hpp"
+
 
 class privmsg
 {
@@ -17,5 +19,5 @@ class privmsg
 		privmsg();
 		~privmsg();
 
-		void execute(std::string buf, client *cli, channel *chan);
+		void execute(std::string buf, client *cli, channel *chan, client *cli_list);
 };

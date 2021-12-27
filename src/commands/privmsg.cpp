@@ -10,7 +10,7 @@ privmsg::~privmsg()
 
 }
 
-void privmsg::execute(std::string buf, client *cli, channel *chan)
+void privmsg::execute(std::string buf, client *cli, channel *chan, client *cli_list)
 {
 	int i = 0;
 	bool isChanExist = false;
@@ -35,7 +35,7 @@ void privmsg::execute(std::string buf, client *cli, channel *chan)
 		}
 		if (isChanExist)
 		{
-			std::string message = ":" + cli->getNick() + " PRIVMSG " + cmd[1] + " :" + cmd[2] + "\r\n";
+			std::string chan_message = ":" + cli->getNick() + " PRIVMSG " + cmd[1] + " :" + &cmd[2][1] + "\r\n";
 			std::vector<client*> members = chan[i].getMembers();
 			for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
 			{
@@ -43,7 +43,7 @@ void privmsg::execute(std::string buf, client *cli, channel *chan)
 				if (c->getNick() != cli->getNick())
 				{
 					std::cout << "broadcast to : " << c->getLogin() << std::endl;
-					send(c->getSd(), message.c_str(), message.length(), 0);
+					send(c->getSd(), chan_message.c_str(), chan_message.length(), 0);
 				}
 			}
 		}
@@ -51,40 +51,53 @@ void privmsg::execute(std::string buf, client *cli, channel *chan)
 	else /* is user */
 	{
 		std::cout << "IS CLI !" << std::endl;
-		/*client target =  need to get list of ALL client */
+		(void)cli_list;
+		/*int i = 0;
+
+		while (i < 30)
+		{
+			if (cmd[1] == cli_list[i].getNick())
+				break;
+			i++;
+		}
+		if (i >= 30)
+		{
+
+		}
+		else
+		{
+			std::string cli_message = ":" + cli->getNick() + " PRIVMSG " + cmd[1] + " :" + &cmd[2][1] + "\r\n";
+			send(cli_list[i].getSd(), cli_message.c_str(), cli_message.length(), 0);
+		}*/
 	}
 }
 
-void privmsg::getCmd(std::string buf) /*Generic function for all command (move to command class later)*/
+void privmsg::getCmd(std::string buf)
 {
-	std::string tmp;
-	int i_tmp = 0;
+	char delimiter = ' ';
+	std::vector<std::string> cmd_tmp;
+	std::string line;
+	std::stringstream ss(buf);
 
-	for (size_t i = 0; buf[i] != '\r' && buf[i] != '\n'; i++)
+	while (std::getline(ss, line, delimiter))
 	{
-		if (buf[i] != ' ' && buf[i] != '\n' && buf[i] != '\r')
+		if (line[0] == ':')
 		{
-			tmp[i_tmp] = buf[i];
-			std::cout << "tmp[" << i_tmp << "] " << tmp[i_tmp] << std::endl;
-			i_tmp++;
+			line.append(" ");
+			std::string tmp;
+			while (std::getline(ss, tmp, '\n'))
+				line.append(tmp);
 		}
-		else if (buf[i] == ' ')
-		{
-			//std::cout << "insert " << i << std::endl;
-			cmd.push_back(tmp);
-			//std::cout << "tmp clear " << i << std::endl;
-			tmp.clear();
-			i_tmp = 0;
-			//std::cout << "while skip space " << i << std::endl;
-			while (buf[i] && buf[i] == ' ')
-				i++;
-		}
+		cmd_tmp.push_back(line);
 	}
+
+	cmd.clear();
+	cmd = cmd_tmp;
+
 	std::vector<std::string>::iterator it = cmd.begin();
 	while (it != cmd.end())
 	{
-		std::cout << "cmd = " << (*it).front() << std::endl;
+		std::cout << "cmd = " << (*it) << std::endl;
 		it++;
 	}
-	
 }

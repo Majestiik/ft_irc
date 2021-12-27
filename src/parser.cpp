@@ -76,7 +76,8 @@ void	parser::parse(std::string buf, client *cli, channel *channels)
 
 	if (command == "PRIVMSG")
 	{
-		_privmsg.execute(buf, cli, channels);
+		std::cout << "PRIVMSG COMMAND DETECTED" << std::endl;
+		_privmsg.execute(buf, cli, channels, _serv->getClients());
 	}
 
 	if (command == "PART")
@@ -90,7 +91,6 @@ void	parser::parse(std::string buf, client *cli, channel *channels)
 
 	if (command == "QUIT")
 		_quit.execute(buf, cli, channels);
-	
 }
 //(":" + user->getNickName() + "!" + user->getUserName() + "@" + user->getAddress() + " JOIN " + _channelName);
 

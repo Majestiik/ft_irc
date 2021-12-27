@@ -10,6 +10,8 @@
 #include "client.hpp"
 #include "channel.hpp"
 #include "parser.hpp"
+#include "commands/privmsg.hpp"
+
 //class parser;
 
 class server
@@ -45,6 +47,7 @@ class server
 		server(char **av);
 		~server();
 		void	start();
+		client *getClients();
 
 };
 
