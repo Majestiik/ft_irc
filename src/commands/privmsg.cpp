@@ -52,7 +52,7 @@ void privmsg::execute(std::string buf, client *cli, channel *chan, client *cli_l
 	{
 		std::cout << "IS CLI !" << std::endl;
 		(void)cli_list;
-		/*int i = 0;
+	/*	int i = 0;
 
 		while (i < 30)
 		{

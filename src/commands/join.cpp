@@ -33,14 +33,7 @@ void	join::execute(std::string buf, client *cli, channel *chan)
 		chan[i].create();
 		std::cout << "i a la creation : " << i << std::endl;
 	}
-	else
-	{
-		std::cout << "===ALREADY EXIST===\n";
-		_joinAlreadyExists(name, cli, chan);
-	}
-
-
-	broadcastMsg(name, cli, chan);
+	_join(name, cli, chan);
 }
 
 void	join::broadcastMsg(std::string buf, client *cli, channel *chan)
@@ -76,8 +69,9 @@ bool	join::_checkClient(client *cli, channel *chan, int i)
 	return false;
 }
 
-void	join::_joinAlreadyExists(std::string name, client *cli, channel *chan)
+void	join::_join(std::string name, client *cli, channel *chan)
 {
+	bool new_cli = false;
 	int i = 0;
 	while (chan[i].getExists() == true)
 	{
@@ -88,11 +82,20 @@ void	join::_joinAlreadyExists(std::string name, client *cli, channel *chan)
 	if (!_checkClient(cli, chan, i))
 	{
 		chan[i].addClient(cli);
-		_getOtherMembers(name, cli, chan, i);
-		_informOtherMembers(name, cli, chan, i);
+		new_cli = true;
+		//_getOtherMembers(name, cli, chan, i);
 		std::cout << "== " << "i = " << i << " " << chan[i].listClients() << std::endl;
 	}
-
+	_informOtherMembers(name, cli, chan, i);
+	if (new_cli)
+	{
+		std::string tmp = ":server " + std::string(RPL_TOPIC) + " " + cli->getNick() + " " + name + " :Undefined topic";
+		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
+		tmp = ":server " + std::string(RPL_NAMREPLY) + " " + cli->getNick() + " = " + name + " :" + chan[i].listClients();
+		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
+		tmp = ":server " + std::string(RPL_ENDOFNAMES) + " " + cli->getNick() + " " + name + " : End of NAMES list";
+		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
+	}
 }
 
 void	join::_getOtherMembers(std::string name, client *cli, channel *chan, int i)

@@ -4,12 +4,13 @@
 //#include "../parser.hpp"
 #include "../client.hpp"
 #include "../channel.hpp"
+#include "../reply_codes.hpp"
 
 class join
 {
 	private:
 		bool	_checkName(std::string name, channel *chan);
-		void	_joinAlreadyExists(std::string name, client *cli, channel *chan);
+		void	_join(std::string name, client *cli, channel *chan);
 		void	_getOtherMembers(std::string name, client *cli, channel *chan, int i);
 		void	_informOtherMembers(std::string name, client *cli, channel *chan, int i);
 		bool	_checkClient(client *cli, channel *chan, int i);
