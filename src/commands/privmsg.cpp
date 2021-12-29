@@ -16,11 +16,6 @@ void privmsg::execute(std::string buf, client *cli, channel *chan, client *cli_l
 	bool isChanExist = false;
 	getCmd(buf);
 
-	std::cout << "buf dans privmsg : " << buf << std::endl;
-	std::cout << "cli de privmsg : " << cli->getLogin() << std::endl;
-	std::cout << "cmd[1] : " << cmd[1] << std::endl;
-
-
 	/* Sends <message> to <msgtarget>, which is usually a user or channel. */
 	if (cmd[1][0] == '#') /* is chan */
 	{
@@ -42,7 +37,7 @@ void privmsg::execute(std::string buf, client *cli, channel *chan, client *cli_l
 				client *c = *it;
 				if (c->getNick() != cli->getNick())
 				{
-					std::cout << "broadcast to : " << c->getLogin() << std::endl;
+					//std::cout << "broadcast to : " << c->getLogin() << std::endl;
 					send(c->getSd(), chan_message.c_str(), chan_message.length(), 0);
 				}
 			}
@@ -93,11 +88,4 @@ void privmsg::getCmd(std::string buf)
 
 	cmd.clear();
 	cmd = cmd_tmp;
-
-	std::vector<std::string>::iterator it = cmd.begin();
-	while (it != cmd.end())
-	{
-		std::cout << "cmd = " << (*it) << std::endl;
-		it++;
-	}
 }

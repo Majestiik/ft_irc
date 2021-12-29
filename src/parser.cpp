@@ -11,19 +11,14 @@ parser::~parser()
 
 void	parser::parse(std::string buf, client *cli, channel *channels)
 {
-	//std::string buf = buffer;
 	int space = buf.find(' ');
 	(void)cli;
-	std::cout << "space : " << space << std::endl;
 	std::string command = buf.substr(0, space);
-	std::cout << "command : " << command << std::endl;
 	
 	if (command == "NICK")
 	{
-		std::cout << "buf.length : " << buf.length() << std::endl;
 		buf = buf.substr(space + 1, buf.length() - space - 1);
 		space = buf.find('U');
-		std::cout << "== buf avant setNick() : " << buf << std::endl;
 		if (space > 0)
 		{
 			cli->setNick(buf.substr(0, space - 1));
@@ -33,7 +28,6 @@ void	parser::parse(std::string buf, client *cli, channel *channels)
 		}
 		else
 			cli->setNick(buf.substr(0, buf.length() - 2));
-		std::cout << "buf apres setnick : " << buf << " et nick : " << cli->getNick() << std::endl;
 	}
 		
 	if (command == "USER")
@@ -55,23 +49,8 @@ void	parser::parse(std::string buf, client *cli, channel *channels)
 
 	if (command == "JOIN")
 	{
-
-		//join j(name, cli, serv);
 		buf = buf.substr(space + 1, buf.length() - (space + 3));
 		_join.execute(buf, cli, channels);
-		
-		/*std::cout << "channel name : " << buf << std::endl;
-		int i = 0;
-		while (channels[i].getExists() == true)
-			i++;
-		channels[i].setName(buf);
-		channels[i].setExists(true);
-		channels[i].addClient(cli);
-		channels[i].create();
-
-		std::string message = ":" + cli->getNick() + "!" + cli->getLogin() + "@" + "127.0.0.1" + " JOIN " + buf;
-		std::cout << "message : " << message << std::endl;
-		send(cli->getSd(), message.c_str(), message.length(), 0);*/
 	}
 
 	if (command == "PRIVMSG")
@@ -92,7 +71,6 @@ void	parser::parse(std::string buf, client *cli, channel *channels)
 	if (command == "QUIT")
 		_quit.execute(buf, cli, channels);
 }
-//(":" + user->getNickName() + "!" + user->getUserName() + "@" + user->getAddress() + " JOIN " + _channelName);
 
 void	parser::setServ(server *serv)
 {

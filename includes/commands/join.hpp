@@ -9,8 +9,7 @@ class join
 	private:
 		bool	_checkName(std::string name, channel *chan);
 		void	_join(std::string name, client *cli, channel *chan);
-		void	_getOtherMembers(std::string name, client *cli, channel *chan, int i);
-		void	_informOtherMembers(std::string name, client *cli, channel *chan, int i);
+		void	_informMembers(std::string name, client *cli, channel *chan, int i);
 		bool	_checkClient(client *cli, channel *chan, int i);
 
 	public:
