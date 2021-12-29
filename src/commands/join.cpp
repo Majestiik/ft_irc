@@ -89,11 +89,12 @@ void	join::_join(std::string name, client *cli, channel *chan)
 	_informOtherMembers(name, cli, chan, i);
 	if (new_cli)
 	{
-		std::string tmp = ":server " + std::string(RPL_TOPIC) + " " + cli->getNick() + " " + name + " :Undefined topic";
+		//std::cout << GREEN << ""
+		std::string tmp = ":server " + std::string(RPL_TOPIC) + " " + cli->getNick() + " " + name + " :Undefined topic\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
-		tmp = ":server " + std::string(RPL_NAMREPLY) + " " + cli->getNick() + " = " + name + " :" + chan[i].listClients();
+		tmp = ":server " + std::string(RPL_NAMREPLY) + " " + cli->getNick() + " = " + name + " :" + chan[i].listClients() + "\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
-		tmp = ":server " + std::string(RPL_ENDOFNAMES) + " " + cli->getNick() + " " + name + " : End of NAMES list";
+		tmp = ":server " + std::string(RPL_ENDOFNAMES) + " " + cli->getNick() + " " + name + " : End of NAMES list\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 	}
 }

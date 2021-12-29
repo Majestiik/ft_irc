@@ -2,9 +2,7 @@
 #include <iostream>
 #include <sys/socket.h>
 //#include "../parser.hpp"
-#include "../client.hpp"
-#include "../channel.hpp"
-#include "../reply_codes.hpp"
+#include "command.hpp"
 
 class join
 {

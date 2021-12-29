@@ -15,5 +15,6 @@ void	quit::execute(std::string buf, client *cli, channel *chan)
 	while(i < 30)
 	{
 		chan[i].deleteClient(cli);
+		i++;
 	}
 }

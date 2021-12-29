@@ -35,7 +35,7 @@ void privmsg::execute(std::string buf, client *cli, channel *chan, client *cli_l
 		}
 		if (isChanExist)
 		{
-			std::string chan_message = ":" + cli->getNick() + " PRIVMSG " + cmd[1] + " :" + &cmd[2][1] + "\r\n";
+			std::string chan_message = ":" + cli->getNick() + " PRIVMSG " + cmd[1] + " :" + cmd[2] + "\r\n";
 			std::vector<client*> members = chan[i].getMembers();
 			for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
 			{
@@ -52,7 +52,7 @@ void privmsg::execute(std::string buf, client *cli, channel *chan, client *cli_l
 	{
 		std::cout << "IS CLI !" << std::endl;
 		(void)cli_list;
-	/*	int i = 0;
+		int i = 0;
 
 		while (i < 30)
 		{
@@ -66,9 +66,9 @@ void privmsg::execute(std::string buf, client *cli, channel *chan, client *cli_l
 		}
 		else
 		{
-			std::string cli_message = ":" + cli->getNick() + " PRIVMSG " + cmd[1] + " :" + &cmd[2][1] + "\r\n";
+			std::string cli_message = ":" + cli->getNick() + " PRIVMSG " + cmd[1] + " :" + cmd[2] + "\r\n";
 			send(cli_list[i].getSd(), cli_message.c_str(), cli_message.length(), 0);
-		}*/
+		}
 	}
 }
 
