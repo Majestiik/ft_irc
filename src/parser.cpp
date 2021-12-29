@@ -9,7 +9,7 @@ parser::~parser()
 }
 
 
-void	parser::parse(std::string buf, client *cli, std::vector<channel *> channels)
+void	parser::parse(std::string buf, client *cli, std::vector<channel *> *channels)
 {
 	int space = buf.find(' ');
 	(void)cli;

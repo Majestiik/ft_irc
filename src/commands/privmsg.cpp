@@ -10,7 +10,7 @@ privmsg::~privmsg()
 
 }
 
-void privmsg::execute(std::string buf, client *cli, std::vector<channel *> channels, client *cli_list)
+void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *channels, client *cli_list)
 {
 	//int i = 0;
 	//bool isChanExist = false;
@@ -92,9 +92,9 @@ void privmsg::getCmd(std::string buf)
 	cmd = cmd_tmp;
 }
 
-channel*	privmsg::_getChan(std::string name, std::vector<channel *> channels)
+channel*	privmsg::_getChan(std::string name, std::vector<channel *> *channels)
 {
-	for (std::vector<channel *>::iterator it = channels.begin(); it != channels.end(); it++)
+	for (std::vector<channel *>::iterator it = channels->begin(); it != channels->end(); it++)
 	{
 		channel *c = *it;
 		if (c->getName() == name)

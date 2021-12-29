@@ -174,7 +174,13 @@ void	server::_ioOperation()
 				buffer[valread] = '\0';
 				std::cout << "===BUFFER : " << buffer << std::endl;
 				std::string buf = buffer;
-				pars.parse(buf, c, chl);
+				pars.parse(buf, c, &chl);
+				std::cout << "existing channels :\n";
+				for(std::vector<channel*>::iterator it = chl.begin(); it != chl.end(); it++)
+				{
+					channel *c = *it;
+					std::cout << c->getName() << std::endl;
+				}
 			}
 		}
 	}

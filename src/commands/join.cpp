@@ -13,7 +13,7 @@ join::~join()
 {
 }
 
-void	join::execute(std::string buf, client *cli, std::vector<channel *> channels)
+void	join::execute(std::string buf, client *cli, std::vector<channel *> *channels)
 {
 	int space = buf.find(' ');
 
@@ -27,7 +27,7 @@ void	join::execute(std::string buf, client *cli, std::vector<channel *> channels
 		chan[i].setName(name);
 		chan[i].setExists(true);
 		chan[i].addClient(cli);*/
-		channels.push_back(new channel(name, cli));
+		channels->push_back(new channel(name, cli));
 		
 	}
 
@@ -41,7 +41,7 @@ void	join::broadcastMsg(std::string buf, client *cli, channel *chan)
 	std::cout << "listClients : " << chan->listClients() << std::endl;
 }
 
-bool	join::_checkName(std::string name, std::vector<channel *> channels)
+bool	join::_checkName(std::string name, std::vector<channel *> *channels)
 {
 	/*int i = 0;
 	while (chan[i].getExists() == true)
@@ -52,7 +52,7 @@ bool	join::_checkName(std::string name, std::vector<channel *> channels)
 	}
 	return true;*/
 
-	for (std::vector<channel *>::iterator it = channels.begin(); it != channels.end(); it++)
+	for (std::vector<channel *>::iterator it = channels->begin(); it != channels->end(); it++)
 	{
 		channel *c = *it;
 		if (c->getName() == name)
@@ -74,7 +74,7 @@ bool	join::_checkClient(client *cli, channel *chan)
 	return false;
 }
 
-void	join::_joinChan(std::string name, client *cli, std::vector<channel *> channels)
+void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *channels)
 {
 	bool new_cli = false;
 	/*int i = 0;
@@ -102,6 +102,7 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> chann
 		tmp = ":server " + std::string(RPL_ENDOFNAMES) + " " + cli->getNick() + " " + name + " : End of NAMES list\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 	}
+	std::cout << "=-=-=-=-=-chan list clients : " << chan->listClients() << std::endl ;
 }
 
 void	join::_informMembers(std::string name, client *cli, channel *chan)
@@ -116,9 +117,9 @@ void	join::_informMembers(std::string name, client *cli, channel *chan)
 	}
 }
 
-channel*	join::_getChan(std::string name, std::vector<channel *> channels)
+channel*	join::_getChan(std::string name, std::vector<channel *> *channels)
 {
-	for (std::vector<channel *>::iterator it = channels.begin(); it != channels.end(); it++)
+	for (std::vector<channel *>::iterator it = channels->begin(); it != channels->end(); it++)
 	{
 		channel *c = *it;
 		if (c->getName() == name)
