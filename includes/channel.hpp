@@ -8,17 +8,17 @@ class channel
 	private:
 		std::string	_name;
 		std::string	_password;
-		bool		_exists;
 		channel(channel const& other);
 		channel	operator=(channel const& other);
 		client *_creator;
 		std::vector<client*> _members;
 		std::vector<client*> _op;
+		channel();
 
 
 	public:
-		channel(std::string name);
-		channel();
+		channel(std::string name, client *cli);
+
 		~channel();
 		std::string	getName() const;
 		std::string	getPassword() const;
@@ -26,10 +26,8 @@ class channel
 		bool		getExists() const;
 		void		setName(std::string name);
 		void		setPassword(std::string password);
-		void		setExists(bool b);
 		void		addClient(client *cli);
 		void		deleteClient(client *cli);
-		void		create();
 		std::string	listClients();
 };
 

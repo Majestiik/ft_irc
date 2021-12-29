@@ -8,6 +8,10 @@ client::client(int sd):_sd(sd)
 {
 }
 
+client::client(int sd, sockaddr_in address):_sd(sd), _address(address)
+{
+}
+
 //client::~client()
 //{
 //}
@@ -50,4 +54,15 @@ void	client::setRealName(std::string realName)
 void	client::setSd(int sd)
 {
 	_sd = sd;
+}
+
+void	client::setAddr(sockaddr_in address)
+{
+	_address = address;
+}
+
+std::string	client::getIp() const
+{
+	std::string ip = inet_ntoa(_address.sin_addr);
+	return ip;
 }

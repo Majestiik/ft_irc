@@ -68,7 +68,7 @@ void	server::start()
 		maxSd = masterSocket;
 
 		//add child sockets to set
-		for (int i = 0; i < maxClients; i++)
+		/*for (int i = 0; i < maxClients; i++)
 		{
 			//socket descriptor
 			//sd = clientSocket[i];
@@ -81,6 +81,21 @@ void	server::start()
 			//highest file descriptor number, need it for the select function
 			if (sd > maxSd)
 				maxSd = sd;
+		}*/
+
+		for(std::vector<client *>::iterator it = cls.begin(); it != cls.end(); it++)
+		{
+			client *c = *it;
+			sd = c->getSd();
+
+			//if valid socket descriptor then aff to read list
+			if (sd > 0)
+				FD_SET(sd, &readfds);
+			
+			//highest file descriptor number, need it for the select function
+			if (sd > maxSd)
+				maxSd = sd;
+
 		}
 
 		//wait for an activity on one of the socketsm timeout is NULL
@@ -117,21 +132,54 @@ void	server::_incomingConnexion()
 	//	std::cout << "Welcome message sent successfully" << std::endl;
 
 	//add new socket to array of sockets
-	for (int i = 0; i < maxClients; i++)
+	/*for (int i = 0; i < maxClients; i++)
 	{
 		if (clients[i].getSd() == 0)
 		{
 			//clientSocket[i] = newSocket;
 			std::cout << "Adding to list of sockets as " << i << std::endl;
 			clients[i].setSd(newSocket);
+			clients[i].setAddr(address);
 			break ;
 		}
-	}
+	}*/
+
+	cls.push_back(new client(newSocket, address));
 }
 
 void	server::_ioOperation()
 {
-	for (int i = 0; i < maxClients; i++)
+
+	for (std::vector<client *>::iterator it = cls.begin(); it != cls.end(); it++)
+	{
+		
+		client *c = *it;
+		sd = c->getSd();
+
+		if (FD_ISSET(sd, &readfds))
+		{
+			
+			if ((valread = read(sd, buffer, 1024)) == 0)
+			{
+				//somebody disconnected, get his details and print
+				getpeername(sd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
+				std::cout << "Host disconnected, ip " << inet_ntoa(address.sin_addr) << " port " << ntohs(address.sin_port) << std::endl;
+
+				//close tge socket and mark as 0 in list for reuse
+				close(sd);
+				cls.erase(it);
+			}
+			else
+			{
+				buffer[valread] = '\0';
+				std::cout << "===BUFFER : " << buffer << std::endl;
+				std::string buf = buffer;
+				pars.parse(buf, c, chl);
+			}
+		}
+	}
+
+	/*for (int i = 0; i < maxClients; i++)
 	{
 		//sd = clientSocket[i];
 		sd = clients[i].getSd();
@@ -159,7 +207,7 @@ void	server::_ioOperation()
 				std::cout << "===BUFFER : " << buffer << "| SD : " << sd << std::endl;
 				std::string buf = buffer;
 				pars.parse(buf, &clients[i], channels);
-				std::cout << "parsed : i = " << i << " nick : ||" << clients[i].getNick() << "|| login : " << clients[i].getLogin() << " real name : " << clients[i].getRealName() << std::endl;
+				//std::cout << "parsed : i = " << i << " nick : ||" << clients[i].getNick() << "|| login : " << clients[i].getLogin() << " real name : " << clients[i].getRealName() << std::endl;
 				std::cout << "existing channels : " << std::endl;
 				for (int j = 0; j < 30; j++)
 				{
@@ -168,7 +216,7 @@ void	server::_ioOperation()
 				}
 			}
 		}
-	}
+	}*/
 
 }
 

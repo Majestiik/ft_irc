@@ -37,8 +37,10 @@ class server
 		void	_incomingConnexion();
 		void	_ioOperation();
 		client	clients[maxClients];
+		std::vector<client *> cls;
 		parser pars;
-		channel channels[maxClients];
+		//channel channels[maxClients];
+		std::vector<channel *> chl;
 		//std::map<std::string, channel*> chan;
 
 

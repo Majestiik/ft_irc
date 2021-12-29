@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 #include "commands/join.hpp"
 #include "commands/privmsg.hpp"
 #include "commands/part.hpp"
@@ -25,7 +26,7 @@ class parser{
 	public:
 		parser();
 		~parser();
-		void	parse(std::string buf, client *cli, channel *channels);
+		void	parse(std::string buf, client *cli, std::vector<channel *> channels);
 		void	setServ(server *serv);
 };
 

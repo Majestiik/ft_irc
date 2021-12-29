@@ -10,34 +10,37 @@ privmsg::~privmsg()
 
 }
 
-void privmsg::execute(std::string buf, client *cli, channel *chan, client *cli_list)
+void privmsg::execute(std::string buf, client *cli, std::vector<channel *> channels, client *cli_list)
 {
-	int i = 0;
-	bool isChanExist = false;
+	//int i = 0;
+	//bool isChanExist = false;
 	getCmd(buf);
+	channel *chan;
 
 	/* Sends <message> to <msgtarget>, which is usually a user or channel. */
 	if (cmd[1][0] == '#') /* is chan */
 	{
 		std::cout << "IS CHAN !" << std::endl;
-		for (i = 0; chan[i].getExists() == true; i++)
+		/*for (i = 0; chan[i].getExists() == true; i++)
 		{
 			if (chan[i].getName() == cmd[1])
 			{
 				isChanExist = true;
 				break;
 			}
-		}
-		if (isChanExist)
+		}*/
+		//if (isChanExist)
+		if ((chan = _getChan(cmd[1], channels)) != NULL)
 		{
 			std::string chan_message = ":" + cli->getNick() + " PRIVMSG " + cmd[1] + " :" + cmd[2] + "\r\n";
-			std::vector<client*> members = chan[i].getMembers();
+			std::vector<client*> members = chan->getMembers();
 			for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
 			{
 				client *c = *it;
+				std::cout << "dans privmsg : c : " << c->getNick() << std::endl;
 				if (c->getNick() != cli->getNick())
 				{
-					//std::cout << "broadcast to : " << c->getLogin() << std::endl;
+					std::cout << "broadcast to : " << c->getLogin() << std::endl;
 					send(c->getSd(), chan_message.c_str(), chan_message.length(), 0);
 				}
 			}
@@ -46,7 +49,6 @@ void privmsg::execute(std::string buf, client *cli, channel *chan, client *cli_l
 	else /* is user */
 	{
 		std::cout << "IS CLI !" << std::endl;
-		(void)cli_list;
 		int i = 0;
 
 		while (i < 30)
@@ -88,4 +90,15 @@ void privmsg::getCmd(std::string buf)
 
 	cmd.clear();
 	cmd = cmd_tmp;
+}
+
+channel*	privmsg::_getChan(std::string name, std::vector<channel *> channels)
+{
+	for (std::vector<channel *>::iterator it = channels.begin(); it != channels.end(); it++)
+	{
+		channel *c = *it;
+		if (c->getName() == name)
+			return c;
+	}
+	return NULL;
 }

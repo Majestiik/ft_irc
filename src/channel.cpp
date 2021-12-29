@@ -1,11 +1,10 @@
 #include "../includes/channel.hpp"
 
-channel::channel(std::string name):_name(name),_exists(true)
+channel::channel(std::string name, client *cli):_name(name)
 {
-}
-
-channel::channel():_exists(false)
-{
+	_members.push_back(cli);
+	_op.push_back(cli);
+	_creator = cli;
 }
 
 channel::~channel()
@@ -27,11 +26,6 @@ std::string	channel::getPassword() const
 	return _password;
 }
 
-bool	channel::getExists() const
-{
-	return _exists;
-}
-
 void		channel::setName(std::string name)
 {
 	_name = name;
@@ -40,11 +34,6 @@ void		channel::setName(std::string name)
 void		channel::setPassword(std::string password)
 {
 	_password = password;
-}
-
-void	channel::setExists(bool b)
-{
-	_exists = b;
 }
 
 void		channel::addClient(client *cli)
@@ -70,10 +59,6 @@ void		channel::deleteClient(client *cli)
 	}
 }
 
-void		channel::create()
-{
-	
-}
 
 std::string	channel::listClients()
 {
