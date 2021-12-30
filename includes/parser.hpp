@@ -11,7 +11,6 @@ class server;
 class client;
 class channel;
 
-
 class parser{
 	private:
 		parser(parser const& other);
@@ -21,12 +20,13 @@ class parser{
 		privmsg _privmsg;
 		part	_part;
 		quit	_quit;
+		std::vector<channel *>	channels;
 
 
 	public:
 		parser();
 		~parser();
-		void	parse(std::string buf, client *cli, std::vector<channel *> *channels);
+		void	parse(std::string buf, client *cli);
 		void	setServ(server *serv);
 };
 

@@ -2,13 +2,7 @@
 
 server::server(char **av)
 {
-	//parser parse;
 	pars.setServ(this);
-	online = true;
-	//message = ":127.0.0.1 001 leickmay :Welcome to the IRMEGASTONKS network, you'll see it's incredible\r\n";
-	//initialise all clientSocket[] to 0 so not checked
-	//for (int i = 0; i < maxClients; i++)
-	//	clientSocket[i] = 0;
 
 	//create a master socket
 	if ( (masterSocket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -47,7 +41,6 @@ server::server(char **av)
 	}
 
 	//accept the incoming connection
-	addrlen = sizeof(address);
 	std::cout << "waiting for connections..." << std::endl;
 }
 
@@ -57,8 +50,11 @@ server::~server()
 
 void	server::start()
 {
+	int maxSd;
+	int	sd;
+	int	activity;
 
-	while (online)
+	while (true)
 	{
 		//clear the socket set
 		FD_ZERO(&readfds);
@@ -67,23 +63,7 @@ void	server::start()
 		FD_SET(masterSocket, &readfds);
 		maxSd = masterSocket;
 
-		//add child sockets to set
-		/*for (int i = 0; i < maxClients; i++)
-		{
-			//socket descriptor
-			//sd = clientSocket[i];
-			sd = clients[i].getSd();
-
-			//if valid socket descriptor then aff to read list
-			if (sd > 0)
-				FD_SET(sd, &readfds);
-			
-			//highest file descriptor number, need it for the select function
-			if (sd > maxSd)
-				maxSd = sd;
-		}*/
-
-		for(std::vector<client *>::iterator it = cls.begin(); it != cls.end(); it++)
+		for(std::vector<client *>::iterator it = clients.begin(); it != clients.end(); it++)
 		{
 			client *c = *it;
 			sd = c->getSd();
@@ -116,6 +96,9 @@ void	server::start()
 
 void	server::_incomingConnexion()
 {
+	int newSocket;
+	int addrlen = sizeof(address);
+
 	if ((newSocket = accept(masterSocket, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
 	{
 		std::cerr << "accept" << std::endl;
@@ -125,34 +108,19 @@ void	server::_incomingConnexion()
 	//inform user f socket number - used in send and receive commands
 	std::cout << "New connection, socket fd is " << newSocket << " ip is " << inet_ntoa(address.sin_addr) << " port : " << ntohs(address.sin_port) << std::endl;
 
-	//send new connection greeting message
-	//if (send(newSocket, message.c_str(), message.length(), 0) != (long)message.length())
-	//	std::cerr << "send" << std::endl;
-	//else
-	//	std::cout << "Welcome message sent successfully" << std::endl;
-
 	//add new socket to array of sockets
-	/*for (int i = 0; i < maxClients; i++)
-	{
-		if (clients[i].getSd() == 0)
-		{
-			//clientSocket[i] = newSocket;
-			std::cout << "Adding to list of sockets as " << i << std::endl;
-			clients[i].setSd(newSocket);
-			clients[i].setAddr(address);
-			break ;
-		}
-	}*/
-
-	cls.push_back(new client(newSocket, address));
+	clients.push_back(new client(newSocket, address));
 }
 
 void	server::_ioOperation()
 {
+	int sd;
+	int valread;
+	int addrlen = sizeof(address);
+	char	buffer[1024];
 
-	for (std::vector<client *>::iterator it = cls.begin(); it != cls.end(); it++)
+	for (std::vector<client *>::iterator it = clients.begin(); it != clients.end(); it++)
 	{
-		
 		client *c = *it;
 		sd = c->getSd();
 
@@ -167,66 +135,20 @@ void	server::_ioOperation()
 
 				//close tge socket and mark as 0 in list for reuse
 				close(sd);
-				cls.erase(it);
+				clients.erase(it);
 			}
 			else
 			{
 				buffer[valread] = '\0';
 				std::cout << "===BUFFER : " << buffer << std::endl;
 				std::string buf = buffer;
-				pars.parse(buf, c, &chl);
-				std::cout << "existing channels :\n";
-				for(std::vector<channel*>::iterator it = chl.begin(); it != chl.end(); it++)
-				{
-					channel *c = *it;
-					std::cout << c->getName() << std::endl;
-				}
+				pars.parse(buf, c);
 			}
 		}
 	}
-
-	/*for (int i = 0; i < maxClients; i++)
-	{
-		//sd = clientSocket[i];
-		sd = clients[i].getSd();
-
-		if (FD_ISSET(sd, &readfds))
-		{
-			//check if it was for closing, and also read the incoming message
-			if ((valread = read(sd, buffer, 1024)) == 0)
-			{
-				//somebody disconnected, get his details and print
-				getpeername(sd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
-				std::cout << "Host disconnected, ip " << inet_ntoa(address.sin_addr) << " port " << ntohs(address.sin_port) << std::endl;
-
-				//close tge socket and mark as 0 in list for reuse
-				close(sd);
-				//clientSocket[i] = 0;
-				clients[i].setSd(0);
-			}
-			//Echo back the message that came in
-			else
-			{
-				//set the string terminating NULL byte on the end of the data read
-				buffer[valread] = '\0';
-				//send(sd, buffer, strlen(buffer), 0);
-				std::cout << "===BUFFER : " << buffer << "| SD : " << sd << std::endl;
-				std::string buf = buffer;
-				pars.parse(buf, &clients[i], channels);
-				//std::cout << "parsed : i = " << i << " nick : ||" << clients[i].getNick() << "|| login : " << clients[i].getLogin() << " real name : " << clients[i].getRealName() << std::endl;
-				std::cout << "existing channels : " << std::endl;
-				for (int j = 0; j < 30; j++)
-				{
-					if (channels[j].getExists() == true)
-						std::cout << channels[j].getName() << std::endl;
-				}
-			}
-		}
-	}*/
-
 }
 
 std::vector<client *> *server::getClients()
 {
-	return (&cls);
+	return (&clients);
 }

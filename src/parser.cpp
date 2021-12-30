@@ -8,8 +8,7 @@ parser::~parser()
 {
 }
 
-
-void	parser::parse(std::string buf, client *cli, std::vector<channel *> *channels)
+void	parser::parse(std::string buf, client *cli)
 {
 	int space = buf.find(' ');
 	(void)cli;
@@ -50,19 +49,19 @@ void	parser::parse(std::string buf, client *cli, std::vector<channel *> *channel
 	if (command == "JOIN")
 	{
 		buf = buf.substr(space + 1, buf.length() - (space + 3));
-		_join.execute(buf, cli, channels);
+		_join.execute(buf, cli, &channels);
 	}
 
 	if (command == "PRIVMSG")
 	{
 		std::cout << "PRIVMSG COMMAND DETECTED" << std::endl;
-		_privmsg.execute(buf, cli, channels, _serv->getClients());
+		_privmsg.execute(buf, cli, &channels, _serv->getClients());
 	}
 
 	if (command == "PART")
 	{
 		buf = buf.substr(space + 1, buf.length() - (space + 3));
-		_part.execute(buf, cli, channels);
+		_part.execute(buf, cli, &channels);
 	}
 
 	if (command == "EXIT")
