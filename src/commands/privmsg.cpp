@@ -10,7 +10,7 @@ privmsg::~privmsg()
 
 }
 
-void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *channels, client *cli_list)
+void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *cli_list)
 {
 	getCmd(buf);
 	channel *chan;
@@ -38,15 +38,26 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 	else /* is user */
 	{
 		//std::cout << "IS CLI !" << std::endl;
-		int i = 0;
+		/*int i = 0;
 
 		while (i < 30)
 		{
 			if (cmd[1] == cli_list[i].getNick())
 				break;
 			i++;
+		}*/
+		std::vector<client *>::iterator it = cli_list->begin();
+		client *c;
+		while (it != cli_list->end())
+		{
+			c = *it;
+			if (c->getNick() == cmd[1])
+				break;
+			it++;
 		}
-		if (i >= 30)
+
+		//if (i >= 30)
+		if (it == cli_list->end())
 		{
 			std::string tmp = ":server " + std::string(ERR_NOSUCHNICK) + " " + cmd[1] + " :No such nick\r\n";
 			send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
@@ -55,7 +66,7 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 		else
 		{
 			std::string cli_message = ":" + cli->getNick() + " PRIVMSG " + cmd[1] + " :" + cmd[2] + "\r\n";
-			send(cli_list[i].getSd(), cli_message.c_str(), cli_message.length(), 0);
+			send(c->getSd(), cli_message.c_str(), cli_message.length(), 0);
 		}
 	}
 }

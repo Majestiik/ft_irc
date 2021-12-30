@@ -23,8 +23,6 @@ class server
 		int masterSocket;
 		int addrlen;
 		int newSocket;
-		//nt clientSocket[30];
-		static const int maxClients = 30;
 		int activity;
 		int valread;
 		int sd;
@@ -34,22 +32,17 @@ class server
 		std::string	message;
 		fd_set	readfds;
 		bool	online;
-		void	_incomingConnexion();
-		void	_ioOperation();
-		client	clients[maxClients];
 		std::vector<client *> cls;
 		parser pars;
-		//channel channels[maxClients];
 		std::vector<channel *> chl;
-		//std::map<std::string, channel*> chan;
-
-
+		void	_incomingConnexion();
+		void	_ioOperation();
 
 	public:
 		server(char **av);
 		~server();
 		void	start();
-		client *getClients();
+		std::vector<client *> *getClients();
 
 };
 

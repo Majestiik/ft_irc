@@ -226,7 +226,7 @@ void	server::_ioOperation()
 
 }
 
-client *server::getClients()
+std::vector<client *> *server::getClients()
 {
-	return (clients);
+	return (&cls);
 }
