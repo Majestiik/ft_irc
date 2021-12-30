@@ -24,6 +24,11 @@ std::string	channel::getPassword() const
 	return _password;
 }
 
+std::string	channel::getMode() const
+{
+	return _mode;
+}
+
 void		channel::setName(std::string name)
 {
 	_name = name;
@@ -32,6 +37,11 @@ void		channel::setName(std::string name)
 void		channel::setPassword(std::string password)
 {
 	_password = password;
+}
+
+void		channel::setMode(std::string mode)
+{
+	_mode = mode;
 }
 
 void		channel::addClient(client *cli)

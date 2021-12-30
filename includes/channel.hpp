@@ -8,6 +8,7 @@ class channel
 	private:
 		std::string	_name;
 		std::string	_password;
+		std::string	_mode;
 		channel(channel const& other);
 		channel	operator=(channel const& other);
 		client *_creator;
@@ -22,10 +23,11 @@ class channel
 		~channel();
 		std::string	getName() const;
 		std::string	getPassword() const;
+		std::string	getMode() const;
 		std::vector<client*>	getMembers();
-		bool		getExists() const;
 		void		setName(std::string name);
 		void		setPassword(std::string password);
+		void		setMode(std::string mode);
 		void		addClient(client *cli);
 		void		addOp(client *cli);
 		void		deleteClient(client *cli);
