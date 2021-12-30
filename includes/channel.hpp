@@ -27,8 +27,12 @@ class channel
 		void		setName(std::string name);
 		void		setPassword(std::string password);
 		void		addClient(client *cli);
+		void		addOp(client *cli);
 		void		deleteClient(client *cli);
+		void		deleteOp(client *cli);
 		std::string	listClients();
+		bool		isMember(client *cli) const;
+		bool		isOp(client *cli) const;
 };
 
 

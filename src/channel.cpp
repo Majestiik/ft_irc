@@ -45,6 +45,12 @@ void		channel::addClient(client *cli)
 	}
 }
 
+void		channel::addOp(client *cli)
+{
+	if (isMember(cli))
+		_op.push_back(cli);
+}
+
 void		channel::deleteClient(client *cli)
 {
 	for (std::vector<client *>::iterator it = _members.begin(); it != _members.end(); it++)
@@ -57,6 +63,17 @@ void		channel::deleteClient(client *cli)
 	}
 }
 
+void		channel::deleteOp(client *cli)
+{
+	for (std::vector<client *>::iterator it = _op.begin(); it != _op.end(); it++)
+	{
+		if (*it == cli)
+		{
+			_members.erase(it);
+			break ;
+		}
+	}
+}
 
 std::string	channel::listClients()
 {
@@ -67,4 +84,26 @@ std::string	channel::listClients()
 		ret += c->getNick() + " ";
 	}
 	return ret;
+}
+
+bool		channel::isMember(client *cli) const
+{
+	for (std::vector<client*>::const_iterator it = _members.begin(); it != _members.end(); it++)
+	{
+		client *c = *it;
+		if (c->getNick() == cli->getNick())
+			return true;
+	}
+	return false;
+}
+
+bool		channel::isOp(client *cli) const
+{
+	for (std::vector<client*>::const_iterator it = _op.begin(); it != _op.end(); it++)
+	{
+		client *c = *it;
+		if (c->getNick() == cli->getNick())
+			return true;
+	}
+	return false;
 }
