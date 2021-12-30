@@ -51,19 +51,6 @@ bool	join::_checkName(std::string name, std::vector<channel *> *channels)
 	return true;
 }
 
-bool	join::_checkClient(client *cli, channel *chan)
-{
-	std::vector<client *> members = chan->getMembers();
-	client *c;
-	for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
-	{
-		c = *it;
-		if (c->getSd() == cli->getSd())
-			return true;
-	}
-	return false;
-}
-
 void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *channels)
 {
 	bool new_cli = false;
@@ -107,15 +94,4 @@ void	join::_informMembers(std::string name, client *cli, channel *chan)
 		std::cout << "broadcast to : " << c->getLogin() << std::endl;
 		send(c->getSd(), message.c_str(), message.length(), 0);
 	}
-}
-
-channel*	join::_getChan(std::string name, std::vector<channel *> *channels)
-{
-	for (std::vector<channel *>::iterator it = channels->begin(); it != channels->end(); it++)
-	{
-		channel *c = *it;
-		if (c->getName() == name)
-			return c;
-	}
-	return NULL;
 }

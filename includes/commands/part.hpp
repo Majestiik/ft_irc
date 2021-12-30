@@ -1,16 +1,12 @@
 #pragma once
-#include <iostream>
-#include <sys/socket.h>
-//#include "../parser.hpp"
-#include "../client.hpp"
-#include "../channel.hpp"
-#include "../reply_codes.hpp"
 
-class part
+#include "command.hpp"
+
+class part : command
 {
 	private:
-	channel*	_getChan(std::string name, std::vector<channel *> *channels);
-	bool		_checkClient(client *cli, channel *chan);
+	//channel*	_getChan(std::string name, std::vector<channel *> *channels);
+	//bool		_checkClient(client *cli, channel *chan);
 
 	public:
 		part();

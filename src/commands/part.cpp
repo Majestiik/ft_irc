@@ -8,30 +8,6 @@ part::~part()
 {
 }
 
-channel*	part::_getChan(std::string name, std::vector<channel *> *channels)
-{
-	for (std::vector<channel *>::iterator it = channels->begin(); it != channels->end(); it++)
-	{
-		channel *c = *it;
-		if (c->getName() == name)
-			return c;
-	}
-	return NULL;
-}
-
-bool	part::_checkClient(client *cli, channel *chan)
-{
-	std::vector<client *> members = chan->getMembers();
-	client *c;
-	for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
-	{
-		c = *it;
-		if (c->getSd() == cli->getSd())
-			return true;
-	}
-	return false;
-}
-
 void	part::execute(std::string name, client *cli, std::vector<channel *> *chan)
 {
 	std::string message;

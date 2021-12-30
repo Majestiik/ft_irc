@@ -1,20 +1,14 @@
 #pragma once
 
-#include <iostream>
-#include <sstream>
-#include <sys/socket.h>
-
-#include "../reply_codes.hpp"
-//#include "../client.hpp"
-#include "../channel.hpp"
+#include "command.hpp"
 
 
-class privmsg
+class privmsg : command
 {
 	private :
 		std::vector<std::string> cmd;
 		void getCmd(std::string buf);
-		channel*	_getChan(std::string name, std::vector<channel *> *channels);
+		//channel*	_getChan(std::string name, std::vector<channel *> *channels);
 
 	public :
 		privmsg();
