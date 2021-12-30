@@ -60,7 +60,14 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 
 	if (!_checkClient(cli, chan))
 	{
-		chan->addClient(cli);
+		if (chan->getMembers().size() == 0)
+		{
+			cli->setNick("#" + cli->getNick());
+			chan->addClient(cli);
+			chan->addOp(cli);
+		}
+		else
+			chan->addClient(cli);
 		new_cli = true;
 	}
 	else

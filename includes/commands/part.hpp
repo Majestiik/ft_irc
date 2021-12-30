@@ -12,5 +12,4 @@ class part : command
 		part();
 		~part();
 		void	execute(std::string buf, client *cli, std::vector<channel *> *chan);
-		void	broadcastMsg(std::string buf, client *cli, channel *chan);
 };

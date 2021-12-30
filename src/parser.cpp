@@ -54,7 +54,6 @@ void	parser::parse(std::string buf, client *cli)
 
 	if (command == "PRIVMSG")
 	{
-		std::cout << "PRIVMSG COMMAND DETECTED" << std::endl;
 		_privmsg.execute(buf, cli, &channels, _serv->getClients());
 	}
 

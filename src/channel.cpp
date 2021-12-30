@@ -29,6 +29,17 @@ std::string	channel::getMode() const
 	return _mode;
 }
 
+client *channel::getCli(std::string cli)
+{
+	for (std::vector<client*>::const_iterator it = _members.begin(); it != _members.end(); it++)
+	{
+		client *c = *it;
+		if (c->getNick() == cli)
+			return c;
+	}
+	return NULL;
+}
+
 void		channel::setName(std::string name)
 {
 	_name = name;
@@ -58,7 +69,10 @@ void		channel::addClient(client *cli)
 void		channel::addOp(client *cli)
 {
 	if (isMember(cli))
+	{
+		//cli->setNick("#" + cli->getNick());
 		_op.push_back(cli);
+	}
 }
 
 void		channel::deleteClient(client *cli)
@@ -107,6 +121,17 @@ bool		channel::isMember(client *cli) const
 	return false;
 }
 
+bool		channel::isMember(std::string cli) const
+{
+	for (std::vector<client*>::const_iterator it = _members.begin(); it != _members.end(); it++)
+	{
+		client *c = *it;
+		if (c->getNick() == cli)
+			return true;
+	}
+	return false;
+}
+
 bool		channel::isOp(client *cli) const
 {
 	for (std::vector<client*>::const_iterator it = _op.begin(); it != _op.end(); it++)
@@ -115,5 +140,12 @@ bool		channel::isOp(client *cli) const
 		if (c->getNick() == cli->getNick())
 			return true;
 	}
+	return false;
+}
+
+bool		channel::isMode(char mode)
+{
+	if (_mode.find(mode) != std::string::npos)
+		return (true);
 	return false;
 }
