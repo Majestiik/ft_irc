@@ -62,7 +62,7 @@ void	parser::parse(std::string buf, client *cli, std::vector<channel *> *channel
 	if (command == "PART")
 	{
 		buf = buf.substr(space + 1, buf.length() - (space + 3));
-		//_part.execute(buf, cli, channels);
+		_part.execute(buf, cli, channels);
 	}
 
 	if (command == "EXIT")

@@ -1,10 +1,8 @@
 #include "../includes/channel.hpp"
 
-channel::channel(std::string name, client *cli):_name(name)
+channel::channel(std::string name):_name(name)
 {
-	_members.push_back(cli);
-	_op.push_back(cli);
-	_creator = cli;
+
 }
 
 channel::~channel()

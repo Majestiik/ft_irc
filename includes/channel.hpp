@@ -17,7 +17,7 @@ class channel
 
 
 	public:
-		channel(std::string name, client *cli);
+		channel(std::string name);
 
 		~channel();
 		std::string	getName() const;

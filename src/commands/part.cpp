@@ -8,28 +8,62 @@ part::~part()
 {
 }
 
-int		part::_getChannel(std::string name, channel *chan)
+channel*	part::_getChan(std::string name, std::vector<channel *> *channels)
 {
-	int i = 0;
-	while (i < 30)
+	for (std::vector<channel *>::iterator it = channels->begin(); it != channels->end(); it++)
 	{
-		if (chan[i].getName() == name)
-			return i;
-		i++;
+		channel *c = *it;
+		if (c->getName() == name)
+			return c;
 	}
-	return -1;
+	return NULL;
 }
 
-void	part::execute(std::string name, client *cli, channel *chan)
+bool	part::_checkClient(client *cli, channel *chan)
 {
-	int i = _getChannel(name, chan);
-	if (i != -1)
+	std::vector<client *> members = chan->getMembers();
+	client *c;
+	for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
 	{
-		chan[i].deleteClient(cli);
-		std::string message = ":127.0.0.1|" + cli->getNick() + "!" + cli->getLogin() + "@" + "127.0.0.1" + " PART " + "\r\n";
-		send(cli->getSd(), message.c_str(), message.length(), 0);
+		c = *it;
+		if (c->getSd() == cli->getSd())
+			return true;
 	}
-	
-	
+	return false;
+}
 
+void	part::execute(std::string name, client *cli, std::vector<channel *> *chan)
+{
+	std::string message;
+	channel *cur_chan = _getChan(name, chan);
+
+	if (name == ":")
+	{
+		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " " + cli->getNick() + " :Part :Not enough parameters\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		return;
+	}
+	if (cur_chan != NULL && !_checkClient(cli, cur_chan))
+	{
+		message = ":server " + std::string(ERR_NOTONCHANNEL) + " " + cli->getNick() + " " + cur_chan->getName() + " :You're not on that channel\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		return;
+	}
+	if (cur_chan != NULL)
+	{
+		message = ":" + cli->getNick() + "!" + cli->getLogin() + "@" + cli->getIp() + " PART " + name + "\r\n";
+		std::vector<client*> members = cur_chan->getMembers();
+		for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
+		{
+			client *c = *it;
+			send(c->getSd(), message.c_str(), message.length(), 0);
+		}
+		cur_chan->deleteClient(cli);
+	}
+	else
+	{
+		message = ":server " + std::string(ERR_NOSUCHCHANNEL) + " " + cli->getNick() + " " + name + " :No such channel\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		return;
+	}
 }
