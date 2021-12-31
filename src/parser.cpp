@@ -13,6 +13,8 @@ void	parser::parse(std::string buf, client *cli)
 	int space = buf.find(' ');
 	(void)cli;
 	std::string command = buf.substr(0, space);
+
+	std::cout << BOLDRED << "command = |" << command << "|" << RESET << std::endl;
 	
 	if (command == "NICK")
 	{
@@ -61,6 +63,11 @@ void	parser::parse(std::string buf, client *cli)
 	{
 		buf = buf.substr(space + 1, buf.length() - (space + 3));
 		_part.execute(buf, cli, &channels);
+	}
+	
+	if (command == "MODE")
+	{
+		_mode.execute(buf, cli, &channels);
 	}
 
 	if (command == "EXIT")

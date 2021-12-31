@@ -62,7 +62,7 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 	{
 		if (chan->getMembers().size() == 0)
 		{
-			cli->setNick("#" + cli->getNick());
+			//cli->setNick("@" + cli->getNick());
 			chan->addClient(cli);
 			chan->addOp(cli);
 		}
@@ -98,7 +98,7 @@ void	join::_informMembers(std::string name, client *cli, channel *chan)
 	for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
 	{
 		client *c = *it;
-		std::cout << "broadcast to : " << c->getLogin() << std::endl;
+		std::cout << "broadcast to : " << c->getNick() << std::endl;
 		send(c->getSd(), message.c_str(), message.length(), 0);
 	}
 }

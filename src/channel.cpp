@@ -2,7 +2,6 @@
 
 channel::channel(std::string name):_name(name)
 {
-
 }
 
 channel::~channel()
@@ -22,11 +21,6 @@ std::vector<client*>	channel::getMembers()
 std::string	channel::getPassword() const
 {
 	return _password;
-}
-
-std::string	channel::getMode() const
-{
-	return _mode;
 }
 
 client *channel::getCli(std::string cli)
@@ -50,9 +44,20 @@ void		channel::setPassword(std::string password)
 	_password = password;
 }
 
-void		channel::setMode(std::string mode)
+void		channel::setMode(char mode, bool state)
 {
-	_mode = mode;
+	if (mode == 'p')
+		_isPrivate = state;
+	else if (mode == 's')
+		_isSecrect = state;
+	else if (mode == 't')
+		_isTopicLimited  = state;
+	else if (mode == 'n')
+		_isExtMessAllow = state;
+	else if (mode == 'm')
+		_isModerated = state;
+	else if (mode == 'i')
+		_isInviteOnly = state;
 }
 
 void		channel::addClient(client *cli)
@@ -75,6 +80,33 @@ void		channel::addOp(client *cli)
 	}
 }
 
+void		channel::addBan(client *cli)
+{
+	if (isMember(cli))
+	{
+		//cli->setNick("#" + cli->getNick());
+		_banned.push_back(cli);
+	}
+}
+
+void		channel::addCanSpeak(client *cli)
+{
+	if (isMember(cli))
+	{
+		//cli->setNick("#" + cli->getNick());
+		_canSpeakOnModerated.push_back(cli);
+	}
+}
+
+void		channel::addInvisible(client *cli)
+{
+	if (isMember(cli))
+	{
+		//cli->setNick("#" + cli->getNick());
+		_invisibles.push_back(cli);
+	}
+}
+
 void		channel::deleteClient(client *cli)
 {
 	for (std::vector<client *>::iterator it = _members.begin(); it != _members.end(); it++)
@@ -93,7 +125,43 @@ void		channel::deleteOp(client *cli)
 	{
 		if (*it == cli)
 		{
-			_members.erase(it);
+			_op.erase(it);
+			break ;
+		}
+	}
+}
+
+void		channel::deleteCanSpeak(client *cli)
+{
+	for (std::vector<client *>::iterator it = _canSpeakOnModerated.begin(); it != _canSpeakOnModerated.end(); it++)
+	{
+		if (*it == cli)
+		{
+			_canSpeakOnModerated.erase(it);
+			break ;
+		}
+	}
+}
+
+void		channel::deleteBan(client *cli)
+{
+	for (std::vector<client *>::iterator it = _banned.begin(); it != _banned.end(); it++)
+	{
+		if (*it == cli)
+		{
+			_banned.erase(it);
+			break ;
+		}
+	}
+}
+
+void		channel::deleteInvisible(client *cli)
+{
+	for (std::vector<client *>::iterator it = _invisibles.begin(); it != _invisibles.end(); it++)
+	{
+		if (*it == cli)
+		{
+			_invisibles.erase(it);
 			break ;
 		}
 	}
@@ -145,7 +213,17 @@ bool		channel::isOp(client *cli) const
 
 bool		channel::isMode(char mode)
 {
-	if (_mode.find(mode) != std::string::npos)
-		return (true);
+	if (mode == 'p' && _isPrivate)
+		return true;
+	else if (mode == 's' && _isSecrect)
+		return true;
+	else if (mode == 't' && _isTopicLimited)
+		return true;
+	else if (mode == 'n' && _isExtMessAllow)
+		return true;
+	else if (mode == 'm' && _isModerated)
+		return true;
+	else if (mode == 'i' && _isInviteOnly)
+		return true;
 	return false;
 }

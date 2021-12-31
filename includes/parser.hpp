@@ -5,6 +5,7 @@
 #include "commands/join.hpp"
 #include "commands/privmsg.hpp"
 #include "commands/part.hpp"
+#include "commands/mode.hpp"
 #include "commands/quit.hpp"
 
 class server;
@@ -19,6 +20,7 @@ class parser{
 		join	_join;
 		privmsg _privmsg;
 		part	_part;
+		mode	_mode;
 		quit	_quit;
 		std::vector<channel *>	channels;
 
