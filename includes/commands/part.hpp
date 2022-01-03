@@ -2,7 +2,7 @@
 
 #include "command.hpp"
 
-class part : command
+class part : public command
 {
 	private:
 	//channel*	_getChan(std::string name, std::vector<channel *> *channels);

@@ -2,7 +2,7 @@
 
 #include "command.hpp"
 
-class join : command
+class join : public command
 {
 	private:
 		bool	_checkName(std::string name, std::vector<channel *> *channels);

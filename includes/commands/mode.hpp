@@ -2,7 +2,7 @@
 
 #include "command.hpp"
 
-class mode : command
+class mode : public command
 {
 	private:
 		std::vector<std::string> _cmd;

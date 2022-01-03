@@ -3,7 +3,7 @@
 #include "command.hpp"
 
 
-class privmsg : command
+class privmsg : public command
 {
 	private :
 		std::vector<std::string> cmd;

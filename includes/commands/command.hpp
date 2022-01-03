@@ -15,6 +15,6 @@ class command
 		bool		_checkClient(client *cli, channel *chan);
 	public:
 		command();
-		~command();
+		virtual ~command();
 		
 };
