@@ -19,7 +19,7 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 	if (cmd[1][0] == '#') /* is chan */
 	{
 		//std::cout << "IS CHAN !" << std::endl;
-		if ((chan = _getChan(cmd[1], channels)) != NULL)
+		if ((chan = _getChan(cmd[1], channels)) != NULL && chan->isMember(cli))
 		{
 			std::string chan_message = ":" + cli->getNick() + " PRIVMSG " + cmd[1] + " :" + cmd[2] + "\r\n";
 			std::vector<client*> members = chan->getMembers();

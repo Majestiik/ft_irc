@@ -58,37 +58,42 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 
 	channel *chan = _getChan(name, channels);
 
-	if (!_checkClient(cli, chan))
+	if (chan->isBanned(cli))
 	{
-		chan->addClient(cli);
-		chan->addInvisible(cli);
-		if (chan->getMembers().size() == 0)
-			chan->addOp(cli);
-		new_cli = true;
-	}
-	else if (chan->isBanned(cli))
-	{
+		std::cout << BOLDMAGENTA << "2" << RESET << std::endl;
 		tmp = ":server " + std::string(ERR_BANNEDFROMCHAN) + " " + name + " :Cannot join channel (+b)\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
 	else if (chan->isInviteOnly && !cli->isInvited(chan->getName()))
 	{
+		std::cout << BOLDMAGENTA << "3" << RESET << std::endl;
 		tmp = ":server " + std::string(ERR_INVITEONLYCHAN) + " " + name + " :Cannot join channel (+i)\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
 	else if (chan->limit_nbr > 0 && chan->limit_nbr >= chan->getMembers().size())
 	{
+		std::cout << BOLDMAGENTA << "4" << RESET << std::endl;
 		tmp = ":server " + std::string(ERR_CHANNELISFULL) + " " + name + " :Cannot join channel (+l)\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
-	else
+	else if (chan->isMember(cli))
 	{
+		std::cout << BOLDMAGENTA << "5" << RESET << std::endl;
 		tmp = ":server " + std::string(ERR_USERONCHANNEL) + " " + cli->getNick() + " " + name + " :is already on channel\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
+	}
+	else if (!_checkClient(cli, chan))
+	{
+		std::cout << BOLDMAGENTA << "1" << RESET << std::endl;
+		chan->addInvisible(cli);
+		chan->addClient(cli);
+		if (chan->getMembers().size() == 1)
+			chan->addOp(cli);
+		new_cli = true;
 	}
 
 	_informMembers(name, cli, chan);

@@ -84,7 +84,6 @@ void		channel::addBan(client *cli)
 {
 	if (isMember(cli))
 	{
-		//cli->setNick("#" + cli->getNick());
 		_banned.push_back(cli);
 	}
 }
@@ -93,7 +92,6 @@ void		channel::addCanSpeak(client *cli)
 {
 	if (isMember(cli))
 	{
-		//cli->setNick("#" + cli->getNick());
 		_canSpeakOnModerated.push_back(cli);
 	}
 }
@@ -102,7 +100,6 @@ void		channel::addInvisible(client *cli)
 {
 	if (isMember(cli))
 	{
-		//cli->setNick("#" + cli->getNick());
 		_invisibles.push_back(cli);
 	}
 }
@@ -205,6 +202,7 @@ bool		channel::isOp(client *cli) const
 	for (std::vector<client*>::const_iterator it = _op.begin(); it != _op.end(); it++)
 	{
 		client *c = *it;
+		std::cout << "IS OP NAME : c nickname = " + c->getNick() + " cli nickname = " + cli->getNick() << std::endl;
 		if (c->getNick() == cli->getNick())
 			return true;
 	}

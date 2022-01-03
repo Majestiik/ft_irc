@@ -33,7 +33,7 @@ void	mode::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 			send(cli->getSd(), message.c_str(), message.length(), 0);
 			return;
 		}
-		else if (!cur_chan->isOp(cli))
+		else if (!cur_chan->isOp(cli) && _cmd[2].empty())
 		{
 			std::cout << BOLDRED << "3" << RESET << std::endl;
 			message = ":server " + std::string(ERR_CHANOPRIVSNEEDED) + " " + cli->getNick() + " :" + _cmd[1] + " You're not channel operator\r\n";
@@ -49,6 +49,7 @@ void	mode::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 		}
 		else if (_cmd[2].size() > 1)
 		{
+			std::cout << BOLDRED << "5" << RESET << std::endl;
 			if (_cmd[2][1] == 'o')
 				_o_mode_chan(cli, cur_chan);
 			else if (_cmd[2][1] == 'p')
@@ -75,9 +76,9 @@ void	mode::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 	}
 	else /* is mode for cli */
 	{
-		std::cout << BOLDRED << "5" << RESET << std::endl;
+		std::cout << BOLDRED << "6" << RESET << std::endl;
 	}
-	std::cout << BOLDRED << "6" << RESET << std::endl;
+	std::cout << BOLDRED << "7" << RESET << std::endl;
 }
 
 void mode::_getCmd(std::string buf)
@@ -115,7 +116,7 @@ void mode::_o_mode_chan(client *cli, channel *chan)
 
 	if (_cmd[3].empty())
 	{
-		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " :Mode :Not enough parameters\r\n";
+		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " Mode :Not enough parameters\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
@@ -201,7 +202,7 @@ void mode::_b_mode_chan(client *cli, channel *chan)
 
 	if (_cmd[3].empty())
 	{
-		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " " + cli->getNick() + " :Mode :Not enough parameters\r\n";
+		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " :Mode :Not enough parameters\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
