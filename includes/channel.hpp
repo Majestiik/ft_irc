@@ -9,13 +9,6 @@ class channel
 		std::string _topic;
 		std::string	_name;
 		std::string	_password;
-		bool _isPrivate;
-		bool _isSecrect;
-		bool _isTopicLimited;
-		bool _isExtMessAllow;
-		bool _isModerated;
-		bool _isInviteOnly;
-		int _limit_nbr;
 		client *_creator;
 		std::vector<client*> _members;
 		std::vector<client*> _op;
@@ -29,6 +22,14 @@ class channel
 	public:
 		channel(std::string name);
 		~channel();
+
+		bool isPrivate;
+		bool isSecrect;
+		bool isTopicLimited;
+		bool isExtMessAllow;
+		bool isModerated;
+		bool isInviteOnly;
+		size_t limit_nbr;
 
 		std::string	getName() const;
 		std::string	getPassword() const;
@@ -52,6 +53,7 @@ class channel
 		bool		isMember(client *cli) const;
 		bool		isMember(std::string cli) const;
 		bool		isOp(client *cli) const;
+		bool		isBanned(client *cli) const;
 		bool		isMode(char mode);
 };
 

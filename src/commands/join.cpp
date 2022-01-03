@@ -60,15 +60,29 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 
 	if (!_checkClient(cli, chan))
 	{
+		chan->addClient(cli);
+		chan->addInvisible(cli);
 		if (chan->getMembers().size() == 0)
-		{
-			//cli->setNick("@" + cli->getNick());
-			chan->addClient(cli);
 			chan->addOp(cli);
-		}
-		else
-			chan->addClient(cli);
 		new_cli = true;
+	}
+	else if (chan->isBanned(cli))
+	{
+		tmp = ":server " + std::string(ERR_BANNEDFROMCHAN) + " " + name + " :Cannot join channel (+b)\r\n";
+		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
+		return;
+	}
+	else if (chan->isInviteOnly && !cli->isInvited(chan->getName()))
+	{
+		tmp = ":server " + std::string(ERR_INVITEONLYCHAN) + " " + name + " :Cannot join channel (+i)\r\n";
+		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
+		return;
+	}
+	else if (chan->limit_nbr > 0 && chan->limit_nbr >= chan->getMembers().size())
+	{
+		tmp = ":server " + std::string(ERR_CHANNELISFULL) + " " + name + " :Cannot join channel (+l)\r\n";
+		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
+		return;
 	}
 	else
 	{

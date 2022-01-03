@@ -47,17 +47,17 @@ void		channel::setPassword(std::string password)
 void		channel::setMode(char mode, bool state)
 {
 	if (mode == 'p')
-		_isPrivate = state;
+		isPrivate = state;
 	else if (mode == 's')
-		_isSecrect = state;
+		isSecrect = state;
 	else if (mode == 't')
-		_isTopicLimited  = state;
+		isTopicLimited  = state;
 	else if (mode == 'n')
-		_isExtMessAllow = state;
+		isExtMessAllow = state;
 	else if (mode == 'm')
-		_isModerated = state;
+		isModerated = state;
 	else if (mode == 'i')
-		_isInviteOnly = state;
+		isInviteOnly = state;
 }
 
 void		channel::addClient(client *cli)
@@ -211,19 +211,30 @@ bool		channel::isOp(client *cli) const
 	return false;
 }
 
+bool		channel::isBanned(client *cli) const
+{
+	for (std::vector<client*>::const_iterator it = _banned.begin(); it != _banned.end(); it++)
+	{
+		client *c = *it;
+		if (c->getNick() == cli->getNick())
+			return true;
+	}
+	return false;
+}
+
 bool		channel::isMode(char mode)
 {
-	if (mode == 'p' && _isPrivate)
+	if (mode == 'p' && isPrivate)
 		return true;
-	else if (mode == 's' && _isSecrect)
+	else if (mode == 's' && isSecrect)
 		return true;
-	else if (mode == 't' && _isTopicLimited)
+	else if (mode == 't' && isTopicLimited)
 		return true;
-	else if (mode == 'n' && _isExtMessAllow)
+	else if (mode == 'n' && isExtMessAllow)
 		return true;
-	else if (mode == 'm' && _isModerated)
+	else if (mode == 'm' && isModerated)
 		return true;
-	else if (mode == 'i' && _isInviteOnly)
+	else if (mode == 'i' && isInviteOnly)
 		return true;
 	return false;
 }

@@ -17,7 +17,7 @@ class mode : public command
 		void _l_mode_chan(channel *chan);
 		void _b_mode_chan(client *cli, channel *chan);
 		void _v_mode_chan(client *cli, channel *chan);
-		void _k_mode_chan(std::string key, client *cli, channel *chan);
+		void _k_mode_chan(client *cli, channel *chan);
 		void _i_mode_cli(client *cli, channel *chan);
 		void _s_mode_cli(client *cli, channel *chan);
 		void _w_mode_cli(client *cli, channel *chan);

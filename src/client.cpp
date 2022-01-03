@@ -66,3 +66,21 @@ std::string	client::getIp() const
 	std::string ip = inet_ntoa(_address.sin_addr);
 	return ip;
 }
+
+void		client::addChanInvitation(std::string name)
+{
+	if (!isInvited(name))
+	{
+		_chan_invitation.push_back(name);
+	}
+}
+
+bool		client::isInvited(std::string name)
+{
+	for (std::vector<std::string>::iterator it = _chan_invitation.begin(); it != _chan_invitation.end(); it++)
+	{
+		if (*it == name)
+			return (true);
+	}
+	return (false);
+}
