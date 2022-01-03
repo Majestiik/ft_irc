@@ -19,6 +19,7 @@ class server
 		fd_set					readfds;
 		parser					pars;
 		std::vector<client *>	clients;
+		std::string				_pass;
 
 		server();
 		server(server const& other);
@@ -31,5 +32,7 @@ class server
 		~server();
 		void					start();
 		std::vector<client *>	*getClients();
+		void					setPass(std::string pass);
+		std::string				getPass() const;
 };
 

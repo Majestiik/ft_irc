@@ -1,14 +1,14 @@
 #include "../includes/client.hpp"
 
-client::client(): _sd(0)
+client::client(): _sd(0), _accessAccepted(false)
 {
 }
 
-client::client(int sd):_sd(sd)
+client::client(int sd):_sd(sd), _accessAccepted(false)
 {
 }
 
-client::client(int sd, sockaddr_in address):_sd(sd), _address(address)
+client::client(int sd, sockaddr_in address):_sd(sd), _address(address), _accessAccepted(false)
 {
 }
 
@@ -36,6 +36,11 @@ int			client::getSd() const
 	return _sd;
 }
 
+bool		client::getAccept() const
+{
+	return _accessAccepted;
+}
+
 void	client::setNick(std::string nick)
 {
 	_nick = nick;
@@ -54,6 +59,11 @@ void	client::setRealName(std::string realName)
 void	client::setSd(int sd)
 {
 	_sd = sd;
+}
+
+void	client::setAccept(bool b)
+{
+	_accessAccepted = b;
 }
 
 void	client::setAddr(sockaddr_in address)

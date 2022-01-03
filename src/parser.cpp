@@ -11,11 +11,16 @@ parser::~parser()
 void	parser::parse(std::string buf, client *cli)
 {
 	int space = buf.find(' ');
-	(void)cli;
+
 	std::string command = buf.substr(0, space);
 
 	std::cout << BOLDRED << "command = |" << command << "|" << RESET << std::endl;
 	
+	if(command == "PASS")
+	{
+		std::string err = ":server " + std::string(ERR_ALREADYREGISTRED) + " pass :You may not reregister\r\n";
+		send(cli->getSd(), err.c_str(), err.length(), 0);
+	}
 	if (command == "NICK")
 	{
 		buf = buf.substr(space + 1, buf.length() - space - 1);

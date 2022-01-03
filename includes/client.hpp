@@ -14,6 +14,7 @@ class client
 		int			_sd;
 		sockaddr_in	_address;
 		std::vector<std::string> _chan_invitation;
+		bool		_accessAccepted;
 		client(client const& other);
 		client operator=(client const& other);
 
@@ -27,11 +28,13 @@ class client
 		std::string	getRealName() const;
 		std::string	getIp() const;
 		int			getSd() const;
+		bool		getAccept() const;
 		void		setNick(std::string nick);
 		void		setLogin(std::string login);
 		void		setRealName(std::string realName);
 		void		setSd(int sd);
 		void		setAddr(sockaddr_in address);
+		void		setAccept(bool b);
 		void		addChanInvitation(std::string name);
 		bool		isInvited(std::string name);
 };

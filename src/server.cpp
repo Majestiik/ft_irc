@@ -3,6 +3,7 @@
 server::server(char **av)
 {
 	pars.setServ(this);
+	_pass = av[2];
 
 	//create a master socket
 	if ( (masterSocket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -135,14 +136,37 @@ void	server::_ioOperation()
 
 				//close tge socket and mark as 0 in list for reuse
 				close(sd);
-				clients.erase(it);
+				//clients.erase(it);
 			}
 			else
 			{
 				buffer[valread] = '\0';
 				std::cout << "===BUFFER : " << buffer << std::endl;
 				std::string buf = buffer;
-				pars.parse(buf, c);
+				int space = buf.find(' ');
+				std::string command = buf.substr(0, space);
+				if (command == "PASS")
+				{
+					std::string str = buf.substr(5, buf.length() - 7);
+					std::cout << "str : |" << str << "|" << std::endl;
+					if (str != _pass)
+					{
+						std::cout << "Wrong password" << std::endl;
+						std::string err2 = ":server " + std::string(ERR_PASSWDMISMATCH) + " pass :Password incorrect\r\n";
+						send(sd, err2.c_str(), err2.length(), 0);
+						close(sd);
+					}
+					else
+						(c->setAccept(true));
+				}
+				if (c->getAccept() == true)
+					pars.parse(buf, c);
+				else
+				{
+					std::string err = ":server " + std::string(ERR_NEEDMOREPARAMS) + " pass :Not enough parameters\r\n";
+					send(sd, err.c_str(), err.length(), 0);
+					close(sd);
+				}
 			}
 		}
 	}
