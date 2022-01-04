@@ -26,6 +26,7 @@ class server
 		server	operator=(server const& other);
 		void	_incomingConnexion();
 		void	_ioOperation();
+		void	_eraseClient(client *c);
 
 	public:
 		server(char **av);

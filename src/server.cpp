@@ -113,6 +113,20 @@ void	server::_incomingConnexion()
 	clients.push_back(new client(newSocket, address));
 }
 
+void	server::_eraseClient(client *c)
+{
+	std::vector<client *>::iterator it = clients.begin();
+	while (it != clients.end())
+	{
+		if (*it == c)
+			break ;
+		it++;
+	}
+	std::cout << "seg\n";
+	clients.erase(it);
+	std::cout << "fault\n";
+}
+
 void	server::_ioOperation()
 {
 	int sd;
@@ -134,9 +148,12 @@ void	server::_ioOperation()
 				getpeername(sd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
 				std::cout << "Host disconnected, ip " << inet_ntoa(address.sin_addr) << " port " << ntohs(address.sin_port) << std::endl;
 
-				//close tge socket and mark as 0 in list for reuse
+				//close the socket and mark as 0 in list for reuse
 				close(sd);
+				sd = 0;
 				//clients.erase(it);
+				_eraseClient(c);
+				return ;
 			}
 			else
 			{
@@ -155,9 +172,16 @@ void	server::_ioOperation()
 						std::string err2 = ":server " + std::string(ERR_PASSWDMISMATCH) + " pass :Password incorrect\r\n";
 						send(sd, err2.c_str(), err2.length(), 0);
 						close(sd);
+						sd = 0;
+						//clients.erase(it);
+						_eraseClient(c);
+						return ;
 					}
 					else
+					{
 						(c->setAccept(true));
+						return ;
+					}
 				}
 				if (c->getAccept() == true)
 					pars.parse(buf, c);
@@ -166,6 +190,9 @@ void	server::_ioOperation()
 					std::string err = ":server " + std::string(ERR_NEEDMOREPARAMS) + " pass :Not enough parameters\r\n";
 					send(sd, err.c_str(), err.length(), 0);
 					close(sd);
+					sd = 0;
+					_eraseClient(c);
+					return ;
 				}
 			}
 		}
