@@ -55,6 +55,7 @@ class channel
 		bool		isOp(client *cli) const;
 		bool		isBanned(client *cli) const;
 		bool		isMode(char mode);
+		std::string	getAllCurrentModes();
 };
 
 

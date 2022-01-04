@@ -170,6 +170,8 @@ std::string	channel::listClients()
 	for (std::vector<client *>::iterator it = _members.begin(); it != _members.end(); it++)
 	{
 		client *c = *it;
+		if (isOp(c))
+			ret += "@";
 		ret += c->getNick() + " ";
 	}
 	return ret;
@@ -235,4 +237,30 @@ bool		channel::isMode(char mode)
 	else if (mode == 'i' && isInviteOnly)
 		return true;
 	return false;
+}
+
+std::string	channel::getAllCurrentModes()
+{
+	std::string allCurrentModes;
+
+	allCurrentModes.push_back('+');
+
+	if (isPrivate)
+		allCurrentModes.push_back('p');
+	if (isSecrect)
+		allCurrentModes.push_back('s');
+	if (isInviteOnly)
+		allCurrentModes.push_back('i');
+	if (isTopicLimited)
+		allCurrentModes.push_back('t');
+	if (isExtMessAllow)
+		allCurrentModes.push_back('n');
+	if (isModerated)
+		allCurrentModes.push_back('m');
+	if (limit_nbr > 0)
+		allCurrentModes.push_back('l' + limit_nbr);
+	if (_password.size() > 0)
+		allCurrentModes.push_back('k');
+	
+	return (allCurrentModes);
 }

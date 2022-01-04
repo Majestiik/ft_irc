@@ -12,71 +12,82 @@ void	mode::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 {
 	std::string message;
 	std::string mode = "opsitnmlbvk";
+	size_t i = 0;
 
+	std::cout << BOLDRED << "0" << RESET << std::endl;
 	_getCmd(buf);
 
-	if (_cmd[1][0] == '#') /* is mode for chan */
+	if (_cmd.size() > 1 && _cmd[1][0] == '#') /* is mode for chan */
 	{
 		channel *cur_chan = _getChan(_cmd[1], chan);
-		//std::cout << BOLDRED << "cmd[2] = |" << _cmd[2] << "|" << RESET << std::endl;
-		if (_cmd[2].empty())
-		{
-			std::cout << BOLDRED << "1" << RESET << std::endl;
-			message = ":server " + std::string(RPL_CHANNELMODEIS) + " " + cur_chan->getName() + " allmode test\r\n";
-			send(cli->getSd(), message.c_str(), message.length(), 0);
-			return;
-		}
-		else if (cur_chan == NULL)
+		if (cur_chan == NULL)
 		{
 			std::cout << BOLDRED << "2" << RESET << std::endl;
 			message = ":server " + std::string(ERR_NOSUCHCHANNEL) + " " + cli->getNick() + " :" + _cmd[1] + " No such channel\r\n";
 			send(cli->getSd(), message.c_str(), message.length(), 0);
 			return;
 		}
-		else if (!cur_chan->isOp(cli) && _cmd[2].empty())
+		if (_cmd.size() == 2)
+		{
+			std::cout << BOLDRED << "1 " + cur_chan->getAllCurrentModes() << RESET << std::endl;
+			message = ":server " + std::string(RPL_CHANNELMODEIS) + " " + cli->getNick() + " " + cur_chan->getName() + " :" + cur_chan->getAllCurrentModes() + "\r\n";
+			send(cli->getSd(), message.c_str(), message.length(), 0);
+			return;
+		}
+		if (!cur_chan->isOp(cli))
 		{
 			std::cout << BOLDRED << "3" << RESET << std::endl;
 			message = ":server " + std::string(ERR_CHANOPRIVSNEEDED) + " " + cli->getNick() + " :" + _cmd[1] + " You're not channel operator\r\n";
 			send(cli->getSd(), message.c_str(), message.length(), 0);
 			return;
 		}
-		else if (_cmd[2].size() > 1 && mode.find(_cmd[2][1]) == std::string::npos)
+		if (_cmd.size() > 2 && mode.find(_cmd[2][1]) == std::string::npos)
 		{
 			std::cout << BOLDRED << "4" << RESET << std::endl;
 			message = ":server " + std::string(ERR_UNKNOWNMODE) + " " + _cmd[2][1] + " :is unknown mode char\r\n";
 			send(cli->getSd(), message.c_str(), message.length(), 0);
 			return;
 		}
-		else if (_cmd[2].size() > 1)
+		if (_cmd.size() > 2)
 		{
 			std::cout << BOLDRED << "5" << RESET << std::endl;
-			if (_cmd[2][1] == 'o')
-				_o_mode_chan(cli, cur_chan);
-			else if (_cmd[2][1] == 'p')
-				_p_mode_chan(cur_chan);
-			else if (_cmd[2][1] == 's')
-				_s_mode_chan(cur_chan);
-			else if (_cmd[2][1] == 'i')
-				_i_mode_chan(cur_chan);
-			else if (_cmd[2][1] == 't')
-				_t_mode_chan(cur_chan);
-			else if (_cmd[2][1] == 'n')
-				_n_mode_chan(cur_chan);
-			else if (_cmd[2][1] == 'm')
-				_m_mode_chan(cur_chan);
-			else if (_cmd[2][1] == 'l')
-				_l_mode_chan(cur_chan);
-			else if(_cmd[2][1] == 'b')
-				_b_mode_chan(cli, cur_chan);
-			else if(_cmd[2][1] == 'v')
-				_v_mode_chan(cli, cur_chan);
-			else if(_cmd[2][1] == 'k')
-				_k_mode_chan(cli, cur_chan);
+			while (_cmd[2].size() > i)
+			{
+				if (_cmd[2][i + 1] == 'o')
+					_o_mode_chan(cli, cur_chan);
+				else if (_cmd[2][i + 1] == 'p')
+					_p_mode_chan(cur_chan);
+				else if (_cmd[2][i + 1] == 's')
+					_s_mode_chan(cur_chan);
+				else if (_cmd[2][i + 1] == 'i')
+					_i_mode_chan(cur_chan);
+				else if (_cmd[2][i + 1] == 't')
+					_t_mode_chan(cur_chan);
+				else if (_cmd[2][i + 1] == 'n')
+					_n_mode_chan(cur_chan);
+				else if (_cmd[2][i + 1] == 'm')
+					_m_mode_chan(cur_chan);
+				else if (_cmd[2][i + 1] == 'l')
+					_l_mode_chan(cur_chan);
+				else if(_cmd[2][i + 1] == 'b')
+					_b_mode_chan(cli, cur_chan);
+				else if(_cmd[2][i + 1] == 'v')
+					_v_mode_chan(cli, cur_chan);
+				else if(_cmd[2][i + 1] == 'k')
+					_k_mode_chan(cli, cur_chan);
+				i++;
+			}
 		}
 	}
-	else /* is mode for cli */
+	else if (_cmd.size() > 1)/* is mode for cli */
 	{
 		std::cout << BOLDRED << "6" << RESET << std::endl;
+	}
+	else
+	{
+		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " Mode :Not enough parameters\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		return;
 	}
 	std::cout << BOLDRED << "7" << RESET << std::endl;
 }
@@ -91,11 +102,8 @@ void mode::_getCmd(std::string buf)
 	while (std::getline(ss, line, delimiter))
 	{
 		std::cout << BOLDRED << "Display last char int |" << (int)line.back() << "|" << RESET << std::endl;
-		if (line.back() == '\n')
-		{
+		while (line.back() == '\n' || line.back() == '\r')
 			line.pop_back();
-			line.pop_back();
-		}
 		cmd_tmp.push_back(line);
 	}
 

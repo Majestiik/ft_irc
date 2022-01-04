@@ -14,6 +14,9 @@ void	parser::parse(std::string buf, client *cli)
 
 	std::string command = buf.substr(0, space);
 
+	while (command.back() == '\n' || command.back() == '\r')
+		command.pop_back();
+
 	std::cout << BOLDRED << "command = |" << command << "|" << RESET << std::endl;
 	
 	if(command == "PASS")
