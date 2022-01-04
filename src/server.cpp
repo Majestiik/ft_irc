@@ -23,7 +23,8 @@ server::server(char **av)
 	//type of socket created
 	int			port = std::atoi(av[1]);
 	address.sin_family = AF_INET;
-	address.sin_addr.s_addr = INADDR_ANY;
+	address.sin_addr.s_addr =  INADDR_ANY;
+	//inet_pton(AF_INET, "127.0.0.1", &address.sin_addr);
 	address.sin_port = htons(port);
 
 	//bind the socket to localhost port 8080
