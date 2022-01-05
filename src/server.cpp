@@ -6,6 +6,7 @@ server::server(char **av)
 	_pass = av[2];
 
 	//create a master socket
+	//awesome
 	if ( (masterSocket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
 	{
 		std::exit(EXIT_FAILURE);
