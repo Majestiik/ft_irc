@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include "commands/invite.hpp"
 #include "commands/join.hpp"
 #include "commands/privmsg.hpp"
 #include "commands/part.hpp"
@@ -17,6 +18,7 @@ class parser{
 		parser(parser const& other);
 		parser	operator=(parser const& other);
 		server	*_serv;
+		invite	_invite;
 		join	_join;
 		privmsg _privmsg;
 		part	_part;
