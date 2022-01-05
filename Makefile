@@ -4,6 +4,7 @@ INCLUDES =	includes/server.hpp\
 			includes/channel.hpp\
 			includes/reply_codes.hpp\
 			includes/commands/command.hpp\
+			includes/commands/invite.hpp\
 			includes/commands/join.hpp\
 			includes/commands/privmsg.hpp\
 			includes/commands/part.hpp\
@@ -16,6 +17,7 @@ SRCS =	src/server.cpp\
 		src/client.cpp\
 		src/channel.cpp\
 		src/commands/command.cpp\
+		src/commands/invite.cpp\
 		src/commands/join.cpp\
 		src/commands/privmsg.cpp\
 		src/commands/part.cpp\

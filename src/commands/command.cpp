@@ -32,3 +32,28 @@ bool	command::_checkClient(client *cli, channel *chan)
 	}
 	return false;
 }
+
+void command::_getCmd(std::string buf)
+{
+	char delimiter = ' ';
+	std::vector<std::string> cmd_tmp;
+	std::string line;
+	std::stringstream ss(buf);
+
+	while (std::getline(ss, line, delimiter))
+	{
+		while (line.back() == '\n' || line.back() == '\r')
+			line.pop_back();
+		cmd_tmp.push_back(line);
+	}
+
+	_cmd.clear();
+	_cmd = cmd_tmp;
+
+	std::cout << BOLDRED << "Display split command mode :" << RESET << std::endl;
+	for (std::vector<std::string>::iterator it = _cmd.begin(); it != _cmd.end(); it++)
+	{
+		std::string c = *it;
+		std::cout << "cmd = |" << c << "|" << std::endl;
+	}
+}

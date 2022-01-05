@@ -11,8 +11,11 @@
 class command
 {
 	protected:
+		std::vector<std::string> _cmd;
+
 		channel*	_getChan(std::string name, std::vector<channel *> *channels);
 		bool		_checkClient(client *cli, channel *chan);
+		void		_getCmd(std::string buf);
 	public:
 		command();
 		virtual ~command();

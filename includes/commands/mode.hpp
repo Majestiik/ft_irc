@@ -5,8 +5,6 @@
 class mode : public command
 {
 	private:
-		std::vector<std::string> _cmd;
-		void _getCmd(std::string buf);
 		void _o_mode_chan(client *cli, channel *chan);
 		void _p_mode_chan(channel *chan);
 		void _s_mode_chan(channel *chan);

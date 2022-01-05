@@ -23,7 +23,7 @@ void	mode::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 		if (cur_chan == NULL)
 		{
 			std::cout << BOLDRED << "2" << RESET << std::endl;
-			message = ":server " + std::string(ERR_NOSUCHCHANNEL) + " " + cli->getNick() + " :" + _cmd[1] + " No such channel\r\n";
+			message = ":server " + std::string(ERR_NOSUCHCHANNEL) + " " + cli->getNick() + " " + _cmd[1] + " :No such channel\r\n";
 			send(cli->getSd(), message.c_str(), message.length(), 0);
 			return;
 		}
@@ -37,7 +37,7 @@ void	mode::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 		if (!cur_chan->isOp(cli))
 		{
 			std::cout << BOLDRED << "3" << RESET << std::endl;
-			message = ":server " + std::string(ERR_CHANOPRIVSNEEDED) + " " + cli->getNick() + " :" + _cmd[1] + " You're not channel operator\r\n";
+			message = ":server " + std::string(ERR_CHANOPRIVSNEEDED) + " " + cli->getNick() + " " + cur_chan->getName() + " :You're not channel operator\r\n";
 			send(cli->getSd(), message.c_str(), message.length(), 0);
 			return;
 		}
@@ -77,6 +77,8 @@ void	mode::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 					_k_mode_chan(cli, cur_chan);
 				i++;
 			}
+			message = ":server " + std::string(RPL_CHANNELMODEIS) + " " + cli->getNick() + " " + cur_chan->getName() + " :" + cur_chan->getAllCurrentModes() + "\r\n";
+			send(cli->getSd(), message.c_str(), message.length(), 0);
 		}
 	}
 	else if (_cmd.size() > 1)/* is mode for cli */
@@ -90,32 +92,6 @@ void	mode::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 		return;
 	}
 	std::cout << BOLDRED << "7" << RESET << std::endl;
-}
-
-void mode::_getCmd(std::string buf)
-{
-	char delimiter = ' ';
-	std::vector<std::string> cmd_tmp;
-	std::string line;
-	std::stringstream ss(buf);
-
-	while (std::getline(ss, line, delimiter))
-	{
-		std::cout << BOLDRED << "Display last char int |" << (int)line.back() << "|" << RESET << std::endl;
-		while (line.back() == '\n' || line.back() == '\r')
-			line.pop_back();
-		cmd_tmp.push_back(line);
-	}
-
-	_cmd.clear();
-	_cmd = cmd_tmp;
-
-	std::cout << BOLDRED << "Display spli command mode :" << RESET << std::endl;
-	for (std::vector<std::string>::iterator it = _cmd.begin(); it != _cmd.end(); it++)
-	{
-		std::string c = *it;
-		std::cout << "cmd = |" << c << "|" << std::endl;
-	}
 }
 
 void mode::_o_mode_chan(client *cli, channel *chan)
@@ -140,8 +116,6 @@ void mode::_o_mode_chan(client *cli, channel *chan)
 			chan->addOp(chan->getCli(_cmd[3]));
 		else if (_cmd[2][0] == '-' && chan->isOp(chan->getCli(_cmd[3])))
 			chan->deleteOp(chan->getCli(_cmd[3]));
-		message = ":server " + std::string(RPL_UMODEIS) + " " + _cmd[2] + " o chan mod set\r\n";
-		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
 }
@@ -226,8 +200,6 @@ void mode::_b_mode_chan(client *cli, channel *chan)
 			chan->addBan(chan->getCli(_cmd[3]));
 		else if (_cmd[2][0] == '-' && chan->isOp(chan->getCli(_cmd[3])))
 			chan->deleteBan(chan->getCli(_cmd[3]));
-		message = ":server " + std::string(RPL_UMODEIS) + " " + _cmd[3] + " b chan mod set\r\n";
-		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
 }
@@ -254,8 +226,6 @@ void mode::_v_mode_chan(client *cli, channel *chan)
 			chan->addCanSpeak(chan->getCli(_cmd[3]));
 		else if (_cmd[2][0] == '-' && chan->isOp(chan->getCli(_cmd[3])))
 			chan->deleteCanSpeak(chan->getCli(_cmd[3]));
-		message = ":server " + std::string(RPL_UMODEIS) + " " + _cmd[3] + " v chan mod set\r\n";
-		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
 }
@@ -301,8 +271,6 @@ void mode::_i_mode_cli(client *cli, channel *chan)
 			chan->addInvisible(chan->getCli(_cmd[2]));
 		else if (_cmd[1][0] == '-' && chan->isOp(chan->getCli(_cmd[2])))
 			chan->deleteInvisible(chan->getCli(_cmd[2]));
-		message = ":server " + std::string(RPL_UMODEIS) + " " + _cmd[2] + " i user mod set\r\n";
-		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
 }

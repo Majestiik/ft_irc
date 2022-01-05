@@ -56,6 +56,11 @@ void	parser::parse(std::string buf, client *cli)
 			std::cout << "Welcome message sent successfully" << std::endl;
 	}
 
+	if (command == "INVITE")
+	{
+		_invite.execute(buf, cli, &channels, _serv->getClients());
+	}
+
 	if (command == "JOIN")
 	{
 		buf = buf.substr(space + 1, buf.length() - (space + 3));
