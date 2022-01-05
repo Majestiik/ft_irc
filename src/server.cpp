@@ -123,9 +123,37 @@ void	server::_eraseClient(client *c)
 			break ;
 		it++;
 	}
-	std::cout << "seg\n";
 	clients.erase(it);
-	std::cout << "fault\n";
+}
+
+bool	server::_checkPass(client *c, std::string buf, int sd)
+{
+	std::string command = buf.substr(0, buf.find(' '));
+
+	if (command == "PASS")
+	{
+		std::string pass = buf.substr(5, buf.length() - 7);
+		if (pass == _pass)
+		{
+			c->setAccept("true");
+			return true;
+		}
+		else
+		{
+			std::string passErr = ":server " + std::string(ERR_PASSWDMISMATCH) + " pass :Password incorrect\r\n";
+			send(sd, passErr.c_str(), passErr.length(), 0);
+		}
+	}
+	else
+	{
+		std::string err = ":server " + std::string(ERR_NEEDMOREPARAMS) + " pass :Not enough parameters\r\n";
+		send(sd, err.c_str(), err.length(), 0);
+	}
+	close(sd);
+	sd = 0;
+	_eraseClient(c);
+	return false;
+
 }
 
 void	server::_ioOperation()
@@ -152,7 +180,6 @@ void	server::_ioOperation()
 				//close the socket and mark as 0 in list for reuse
 				close(sd);
 				sd = 0;
-				//clients.erase(it);
 				_eraseClient(c);
 				return ;
 			}
@@ -163,38 +190,11 @@ void	server::_ioOperation()
 				std::string buf = buffer;
 				int space = buf.find(' ');
 				std::string command = buf.substr(0, space);
-				if (command == "PASS")
-				{
-					std::string str = buf.substr(5, buf.length() - 7);
-					std::cout << "str : |" << str << "|" << std::endl;
-					if (str != _pass)
-					{
-						std::cout << "Wrong password" << std::endl;
-						std::string err2 = ":server " + std::string(ERR_PASSWDMISMATCH) + " pass :Password incorrect\r\n";
-						send(sd, err2.c_str(), err2.length(), 0);
-						close(sd);
-						sd = 0;
-						//clients.erase(it);
-						_eraseClient(c);
-						return ;
-					}
-					else
-					{
-						(c->setAccept(true));
-						return ;
-					}
-				}
 				if (c->getAccept() == true)
 					pars.parse(buf, c);
 				else
-				{
-					std::string err = ":server " + std::string(ERR_NEEDMOREPARAMS) + " pass :Not enough parameters\r\n";
-					send(sd, err.c_str(), err.length(), 0);
-					close(sd);
-					sd = 0;
-					_eraseClient(c);
-					return ;
-				}
+					if (!_checkPass(c, buf, sd))
+						return ;
 			}
 		}
 	}

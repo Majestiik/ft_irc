@@ -27,6 +27,7 @@ class server
 		void	_incomingConnexion();
 		void	_ioOperation();
 		void	_eraseClient(client *c);
+		bool	_checkPass(client *c, std::string buf, int sd);
 
 	public:
 		server(char **av);
