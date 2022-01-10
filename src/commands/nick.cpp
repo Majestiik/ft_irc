@@ -1,11 +1,22 @@
 #include "../../includes/commands/nick.hpp"
 
-nick ::nick ()
+nick ::nick()
 {
 }
 
-nick ::~nick ()
+nick ::~nick()
 {
+}
+
+bool	_checkUser(std::string user, std::vector<client *> *clients)
+{
+	for (std::vector<client *>::iterator it = clients->begin(); it != clients->end(); it++)
+	{
+		client *c = *it;
+		if (c->getNick() == user)
+			return false;
+	}
+	return true;
 }
 
 bool	_alreadyInformed(client *dest, std::vector<client *> informed)
@@ -43,6 +54,8 @@ void	_informChange(std::string message, client *cli, std::vector<channel *> *cha
 		}
 	}
 }
+
+
 
 bool	nick::execute(std::string buf, client *cli, std::vector<channel *> *channels)
 {

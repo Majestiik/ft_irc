@@ -41,6 +41,8 @@ void	parser::parse(std::string buf, client *cli)
 
 	if (command == "USER")
 	{
+		_user.execute(buf, cli);
+		/*
 		buf = buf.substr(space + 1, buf.length() - (space + 3));
 		space = buf.find(' ');
 		cli->setLogin(buf.substr(0, space));
@@ -53,7 +55,7 @@ void	parser::parse(std::string buf, client *cli)
 		if (send(cli->getSd(), message.c_str(), message.length(), 0) != (long)message.length())
 			std::cerr << "send" << std::endl;
 		else
-			std::cout << "Welcome message sent successfully" << std::endl;
+			std::cout << "Welcome message sent successfully" << std::endl;*/
 	}
 
 	if (command == "INVITE")
