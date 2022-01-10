@@ -20,14 +20,16 @@ class server
 		parser					pars;
 		std::vector<client *>	clients;
 		std::string				_pass;
+		bool					online;
 
 		server();
 		server(server const& other);
 		server	operator=(server const& other);
 		void	_incomingConnexion();
-		void	_ioOperation();
+		void	_operation();
 		void	_eraseClient(client *c);
 		bool	_checkPass(client *c, std::string buf, int sd);
+		std::string	_convertCommand(std::string command);
 
 	public:
 		server(char **av);
@@ -36,5 +38,6 @@ class server
 		std::vector<client *>	*getClients();
 		void					setPass(std::string pass);
 		std::string				getPass() const;
+		void					setOffline();
 };
 

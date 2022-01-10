@@ -24,7 +24,8 @@ void	user::execute(std::string buf, client *cli)
 {
 	std::string message;
 
-	buf = buf.substr(5, buf.length() - 7);
+	buf = buf.substr(5, buf.length() - 5);
+
 	std::cout << "buf dans user : |" << buf << "|" << std::endl;
 
 	std::string user = buf.substr(0, buf.find(' '));
@@ -37,6 +38,10 @@ void	user::execute(std::string buf, client *cli)
 		realName = buf.substr(buf.find('*') + 2, buf.length() - buf.find('*') + 2);
 		if (realName[0] == ':')
 			realName = realName.substr(1, realName.length() - 1);
+		if (realName.find('\r') != buf.npos)
+			realName = realName.substr(0, realName.length() - 2);
+		else
+			realName.pop_back();
 	}
 	std::cout << "realName : |" << realName << "|" << std::endl;
 
@@ -59,7 +64,10 @@ void	user::execute(std::string buf, client *cli)
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return ;
 	}
-	message = ":" + cli->getIp() + " 001 " + cli->getNick() + " :Welcome to the IRMEGASTONKS network, you'll see it's incredible\r\n";
-	send(cli->getSd(), message.c_str(), message.length(), 0);
+	if (!cli->getNick().empty())
+	{
+		message = ":" + cli->getIp() + " 001 " + cli->getNick() + " :Welcome to the IRMEGASTONKS network, you'll see it's incredible\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+	}
 
 }
