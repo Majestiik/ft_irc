@@ -6,6 +6,12 @@ parser::parser()
 
 parser::~parser()
 {
+	channel *c;
+	for (std::vector<channel *>::iterator it = channels.begin(); it != channels.end(); it++)
+	{
+		c = *it;
+		delete c;
+	}
 }
 
 std::string	parser::_detectUser(std::string buf, std::string *command)
@@ -17,11 +23,30 @@ std::string	parser::_detectUser(std::string buf, std::string *command)
 	return buf;
 }
 
+std::string _convertCommand(std::string command)
+{
+	command = command.substr(1, command.length() - 1);
+	int i = 0;
+	while (command[i])
+	{
+		if (command[i] >= 97 && command[i] <= 122)
+			command[i] -= 32;
+		i++;
+	}
+	return command;
+}
+
 void	parser::parse(std::string buf, client *cli)
 {
 	int space = buf.find(' ');
 
 	std::string command = buf.substr(0, space);
+
+	if (command[0] == '/')
+	{
+		command = _convertCommand(command);
+		buf = buf.substr(1, buf.length() - 1);
+	}
 
 	while (command.back() == '\n' || command.back() == '\r')
 		command.pop_back();
@@ -42,20 +67,6 @@ void	parser::parse(std::string buf, client *cli)
 	if (command == "USER")
 	{
 		_user.execute(buf, cli);
-		/*
-		buf = buf.substr(space + 1, buf.length() - (space + 3));
-		space = buf.find(' ');
-		cli->setLogin(buf.substr(0, space));
-		space = buf.find(':');
-		if (space < 0)
-			space = buf.find('*') + 1;
-		buf = buf.substr(space + 1, buf.length() - (space + 1));
-		cli->setRealName(buf);
-		std::string message = ":" + cli->getIp() + " 001 " + cli->getNick() + " :Welcome to the IRMEGASTONKS network, you'll see it's incredible\r\n";
-		if (send(cli->getSd(), message.c_str(), message.length(), 0) != (long)message.length())
-			std::cerr << "send" << std::endl;
-		else
-			std::cout << "Welcome message sent successfully" << std::endl;*/
 	}
 
 	if (command == "INVITE")
@@ -86,7 +97,7 @@ void	parser::parse(std::string buf, client *cli)
 	}
 
 	if (command == "EXIT")
-		std::exit(0);
+		_serv->setOffline();
 
 	//if (command == "QUIT")
 		//_quit.execute(buf, cli, channels);

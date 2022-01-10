@@ -48,6 +48,12 @@ server::server(char **av)
 
 server::~server()
 {
+	client *c;
+	for (std::vector<client *>::iterator it = clients.begin(); it != clients.end(); it++)
+	{
+		c = *it;
+		delete c;
+	}
 }
 
 void	server::start()
@@ -55,8 +61,9 @@ void	server::start()
 	int maxSd;
 	int	sd;
 	int	activity;
+	online = true;
 
-	while (true)
+	while (online)
 	{
 		//clear the socket set
 		FD_ZERO(&readfds);
@@ -94,7 +101,7 @@ void	server::start()
 		if (FD_ISSET(masterSocket, &readfds))
 			_incomingConnexion();
 		//else its some IO operation one some other socket
-		_ioOperation();
+		_operation();
 	}
 }
 
@@ -125,16 +132,45 @@ void	server::_eraseClient(client *c)
 			break ;
 		it++;
 	}
+	delete c;
 	clients.erase(it);
+}
+
+std::string server::_convertCommand(std::string command)
+{
+	command = command.substr(1, command.length() - 1);
+	int i = 0;
+	while (command[i])
+	{
+		if (command[i] >= 97 && command[i] <= 122)
+			command[i] -= 32;
+		i++;
+	}
+	return command;
 }
 
 bool	server::_checkPass(client *c, std::string buf, int sd)
 {
 	std::string command = buf.substr(0, buf.find(' '));
 
+	if (command[0] == '/')
+	{
+		command = _convertCommand(command);
+		buf = buf.substr(1, buf.length() - 1);
+	}
+	
+	std::cout << "command dans serv : " << command << std::endl;
+
 	if (command == "PASS")
 	{
-		std::string pass = buf.substr(5, buf.length() - 7);
+		std::string pass = buf.substr(5, buf.length() - 6);
+		if (buf.find('\r') != buf.npos)
+		{
+			std::cout << "coucou\n";
+			pass = buf.substr(5, buf.length() - 7);
+		}
+			
+		std::cout << "pass : |" << pass << "|" << std::endl;
 		if (pass == _pass)
 		{
 			c->setAccept("true");
@@ -158,7 +194,7 @@ bool	server::_checkPass(client *c, std::string buf, int sd)
 
 }
 
-void	server::_ioOperation()
+void	server::_operation()
 {
 	int sd;
 	int valread;
@@ -177,7 +213,7 @@ void	server::_ioOperation()
 			{
 				//somebody disconnected, get his details and print
 				getpeername(sd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
-				std::cout << "Host disconnected, ip " << inet_ntoa(address.sin_addr) << " port " << ntohs(address.sin_port) << std::endl;
+				std::cout << "client disconnected, ip " << inet_ntoa(address.sin_addr) << " port " << ntohs(address.sin_port) << std::endl;
 
 				//close the socket and mark as 0 in list for reuse
 				close(sd);
@@ -205,4 +241,9 @@ void	server::_ioOperation()
 std::vector<client *> *server::getClients()
 {
 	return (&clients);
+}
+
+void	server::setOffline()
+{
+	online = false;
 }

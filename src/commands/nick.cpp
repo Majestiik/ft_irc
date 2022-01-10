@@ -79,10 +79,15 @@ void	nick::execute(std::string buf, client *cli, std::vector<channel *> *channel
 	}
 
 	int begin = buf.find(' ') + 1;
-	int length = buf.find('\r') - begin;
+	int length = buf.length() - begin - 1;
+	if (buf.find('\r') != buf.npos)
+		length = buf.find('\r') - begin;
+		
+	std::cout << "begin - length : " << begin << " - " << length << std::endl;
 	std::string nick = buf.substr(begin, length);
 	if (nick[0] == ':')
 		nick = nick.substr(1, nick.length() - 1);
+	std::cout << "nick apres parsing : |" << nick << "|" << std::endl;
 	if (!_validChars(nick))
 	{
 		message = ":server " + std::string(ERR_ERRONEUSNICKNAME) + " nick: Erroneus nickname\r\n";
