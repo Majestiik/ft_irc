@@ -35,6 +35,7 @@ void	part::execute(std::string name, client *cli, std::vector<channel *> *chan)
 			send(c->getSd(), message.c_str(), message.length(), 0);
 		}
 		cur_chan->deleteClient(cli);
+		cur_chan->deleteOp(cli);
 	}
 	else
 	{

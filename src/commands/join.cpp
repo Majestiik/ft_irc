@@ -15,22 +15,20 @@ join::~join()
 
 void	join::execute(std::string buf, client *cli, std::vector<channel *> *channels)
 {
-	if (buf == "#")
+	_getCmd(buf);
+	if (_cmd.size() < 2)
 	{
 		std::string tmp = ":server " + std::string(ERR_NEEDMOREPARAMS) + " " + cli->getNick() + " " + " :Join :Not enough parameters\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
 
-	int space = buf.find(' ');
-	std::string name = buf.substr(0, space);
-
-	if (_checkName(name, channels))
+	if (_checkName(_cmd[1], channels))
 	{
-		channels->push_back(new channel(name));
+		channels->push_back(new channel(_cmd[1]));
 	}
 
-	_joinChan(name, cli, channels);
+	_joinChan(_cmd[1], cli, channels);
 }
 
 void	join::broadcastMsg(std::string buf, client *cli, channel *chan)
@@ -86,6 +84,13 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
+	else if (chan->getPassword() != "" && _cmd[2] != chan->getPassword())
+	{
+		std::cout << BOLDMAGENTA << "6" << RESET << std::endl;
+		tmp = ":server " + std::string(ERR_BADCHANNELKEY) + " " + name + " :Cannot join channel (+k)\r\n";
+		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
+		return;
+	}
 	else if (!_checkClient(cli, chan))
 	{
 		std::cout << BOLDMAGENTA << "1" << RESET << std::endl;
@@ -104,8 +109,9 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		tmp = ":server " + std::string(RPL_NAMREPLY) + " " + cli->getNick() + " = " + name + " :" + chan->listClients() + "\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
-		tmp = ":server " + std::string(RPL_ENDOFNAMES) + " " + cli->getNick() + " " + name + " : End of NAMES list\r\n";
+		tmp = ":server " + std::string(RPL_ENDOFNAMES) + " " + name + " :End of NAMES list\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
+		
 	}
 	//std::cout << "=-=-=-=-=-chan list clients : " << chan->listClients() << std::endl ;
 }
@@ -120,4 +126,9 @@ void	join::_informMembers(std::string name, client *cli, channel *chan)
 		std::cout << "broadcast to : " << c->getNick() << std::endl;
 		send(c->getSd(), message.c_str(), message.length(), 0);
 	}
+}
+
+void	join::_broadcastCreatedAt()
+{
+	
 }

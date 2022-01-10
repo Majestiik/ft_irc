@@ -65,7 +65,6 @@ void	parser::parse(std::string buf, client *cli)
 
 	if (command == "JOIN")
 	{
-		buf = buf.substr(space + 1, buf.length() - (space + 3));
 		_join.execute(buf, cli, &channels);
 	}
 

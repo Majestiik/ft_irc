@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <sys/socket.h>
+#include <ctime>
 
 #include "../client.hpp"
 #include "../channel.hpp"
