@@ -35,7 +35,7 @@ void	parser::parse(std::string buf, client *cli)
 	}
 	if (command == "NICK")
 	{
-		_nick.execute(buf, cli, &channels);
+		_nick.execute(buf, cli, &channels, _serv->getClients());
 		buf = _detectUser(buf, &command);
 	}
 

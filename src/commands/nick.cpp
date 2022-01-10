@@ -8,7 +8,7 @@ nick ::~nick()
 {
 }
 
-bool	_checkUser(std::string user, std::vector<client *> *clients)
+bool	nick::_checkUser(std::string user, std::vector<client *> *clients)
 {
 	for (std::vector<client *>::iterator it = clients->begin(); it != clients->end(); it++)
 	{
@@ -19,7 +19,7 @@ bool	_checkUser(std::string user, std::vector<client *> *clients)
 	return true;
 }
 
-bool	_alreadyInformed(client *dest, std::vector<client *> informed)
+bool	nick::_alreadyInformed(client *dest, std::vector<client *> informed)
 {
 	for (std::vector<client *>::iterator it = informed.begin(); it != informed.end(); it++)
 	{
@@ -30,7 +30,7 @@ bool	_alreadyInformed(client *dest, std::vector<client *> informed)
 	return false;
 }
 
-void	_informChange(std::string message, client *cli, std::vector<channel *> *channels)
+void	nick::_informChange(std::string message, client *cli, std::vector<channel *> *channels)
 {
 	std::vector<client *> informed;
 
@@ -55,20 +55,50 @@ void	_informChange(std::string message, client *cli, std::vector<channel *> *cha
 	}
 }
 
-
-
-bool	nick::execute(std::string buf, client *cli, std::vector<channel *> *channels)
+bool	nick::_validChars(std::string nick)
 {
-	//int space = 0;
-	bool ret = false;
+	size_t i = 0;
+	while (i < nick.length())
+	{
+		if (nick[i] <= 32 || nick[i] > 126 || nick[i] == ':')
+			return false;
+		i++;
+	}
+	return true;
+}
+
+void	nick::execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *clients)
+{
+	std::string message;
 	std::cout << "buf dans nick : |" << buf << "|" << std::endl;
+	if (buf.find(' ') == buf.npos)
+	{
+		message = ":server " + std::string(ERR_NONICKNAMEGIVEN) + " nick: No nickname given\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		return ;
+	}
+
 	int begin = buf.find(' ') + 1;
 	int length = buf.find('\r') - begin;
 	std::string nick = buf.substr(begin, length);
+	if (nick[0] == ':')
+		nick = nick.substr(1, nick.length() - 1);
+	if (!_validChars(nick))
+	{
+		message = ":server " + std::string(ERR_ERRONEUSNICKNAME) + " nick: Erroneus nickname\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		return ;
+	}
+	if (!_checkUser(nick, clients))
+	{
+		message = ":server " + std::string(ERR_NICKNAMEINUSE) + " nick: Nickname is already in use\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		return ;
+	}
 	std::cout << "nick : |" << nick << "|\n";
-	std::string message = ":" + cli->getNick() + " NICK " + nick +"\r\n";
+
+	message = ":" + cli->getNick() + " NICK " + nick +"\r\n";
 	cli->setNick(nick);
 
 	_informChange(message, cli, channels);
-	return ret;
 }
