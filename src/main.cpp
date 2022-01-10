@@ -23,7 +23,7 @@ int main(int ac, char **av)
 		std::cerr << "Invalid port, must be digit" << std::endl;
 		std::exit(1);
 	}
-		
+	
 	server serv(av);
 	serv.start();
 	

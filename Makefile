@@ -9,7 +9,9 @@ INCLUDES =	includes/server.hpp\
 			includes/commands/privmsg.hpp\
 			includes/commands/part.hpp\
 			includes/commands/mode.hpp\
-			includes/commands/quit.hpp
+			includes/commands/quit.hpp\
+			includes/commands/nick.hpp\
+			includes/commands/user.hpp
 
 SRCS =	src/server.cpp\
 		src/main.cpp\
@@ -22,7 +24,9 @@ SRCS =	src/server.cpp\
 		src/commands/privmsg.cpp\
 		src/commands/part.cpp\
 		src/commands/mode.cpp\
-		src/commands/quit.cpp
+		src/commands/quit.cpp\
+		src/commands/nick.cpp\
+		src/commands/user.cpp
 
 
 NAME = ircserv

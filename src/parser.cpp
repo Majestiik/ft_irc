@@ -8,6 +8,15 @@ parser::~parser()
 {
 }
 
+std::string	parser::_detectUser(std::string buf, std::string *command)
+{
+	buf = buf.substr(buf.find('\n') +1 , buf.length() - buf.find('\n') +1 );
+	if (buf.substr(0, 4) == "USER")
+		*command = "USER";
+
+	return buf;
+}
+
 void	parser::parse(std::string buf, client *cli)
 {
 	int space = buf.find(' ');
@@ -18,7 +27,7 @@ void	parser::parse(std::string buf, client *cli)
 		command.pop_back();
 
 	std::cout << BOLDRED << "command = |" << command << "|" << RESET << std::endl;
-	
+
 	if(command == "PASS")
 	{
 		std::string err = ":server " + std::string(ERR_ALREADYREGISTRED) + " pass :You may not reregister\r\n";
@@ -26,19 +35,10 @@ void	parser::parse(std::string buf, client *cli)
 	}
 	if (command == "NICK")
 	{
-		buf = buf.substr(space + 1, buf.length() - space - 1);
-		space = buf.find('U');
-		if (space > 0)
-		{
-			cli->setNick(buf.substr(0, space - 1));
-			buf = buf.substr(space, buf.length() - space);
-			command = "USER";
-			space = buf.find(' ');
-		}
-		else
-			cli->setNick(buf.substr(0, buf.length() - 2));
+		_nick.execute(buf, cli, &channels);
+		buf = _detectUser(buf, &command);
 	}
-		
+
 	if (command == "USER")
 	{
 		buf = buf.substr(space + 1, buf.length() - (space + 3));

@@ -8,6 +8,8 @@
 #include "commands/part.hpp"
 #include "commands/mode.hpp"
 #include "commands/quit.hpp"
+#include "commands/nick.hpp"
+#include "commands/user.hpp"
 
 class server;
 class client;
@@ -24,8 +26,10 @@ class parser{
 		part	_part;
 		mode	_mode;
 		quit	_quit;
+		nick	_nick;
+		user	_user;
 		std::vector<channel *>	channels;
-
+		std::string				_detectUser(std::string buf, std::string *command);
 
 	public:
 		parser();

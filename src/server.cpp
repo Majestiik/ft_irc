@@ -6,7 +6,6 @@ server::server(char **av)
 	_pass = av[2];
 
 	//create a master socket
-	//awesome
 	if ( (masterSocket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
 	{
 		std::exit(EXIT_FAILURE);
@@ -83,7 +82,9 @@ void	server::start()
 
 		//wait for an activity on one of the socketsm timeout is NULL
 		//so wait indefinitely
+		std::cout << "avant select\n";
 		activity = select(maxSd + 1, &readfds, NULL, NULL, NULL);
+		std::cout << "apres select\n";
 
 		if ((activity < 0) && (errno!=EINTR))
 			std::cerr << "select error" << std::endl;
