@@ -13,6 +13,20 @@ bool	checkPort(char *str)
 
 int main(int ac, char **av)
 {
+	try
+	{
+		if (ac != 3)
+			throw servException::argument();
+		if (!checkPort(av[1]))
+			throw servException::non_numeric();
+		server serv(av);
+		serv.start();
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	/*
 	if (ac != 3)
 	{
 		std::cerr << "Argument is missing, please type the port and password" << std::endl;
@@ -25,6 +39,7 @@ int main(int ac, char **av)
 	}
 	
 	server serv(av);
-	serv.start();
+	serv.start();*/
+	return 1;
 	
 }

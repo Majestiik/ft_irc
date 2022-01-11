@@ -10,9 +10,11 @@ nick ::~nick()
 
 bool	nick::_checkUser(std::string user, std::vector<client *> *clients)
 {
+	std::cout << "==list of nicks :==\n";
 	for (std::vector<client *>::iterator it = clients->begin(); it != clients->end(); it++)
 	{
 		client *c = *it;
+		std::cout << c->getNick() << std::endl;
 		if (c->getNick() == user)
 			return false;
 	}
@@ -39,14 +41,12 @@ void	nick::_informChange(std::string message, client *cli, std::vector<channel *
 		channel *c = *it;
 		if (c->isMember(cli->getNick()))
 		{
-			std::cout << "on avance bb\n";
 			std::vector<client *> cls = c->getMembers();
 			for (std::vector<client *>::iterator it2 = cls.begin(); it2 != cls.end(); it2++)
 			{
 				client *dest = *it2;
 				if (!_alreadyInformed(dest, informed))
 				{
-					std::cout << "envoie du message a " << dest->getNick() << std::endl;
 					send(dest->getSd(), message.c_str(), message.length(), 0);
 					informed.push_back(dest);
 				}
@@ -73,9 +73,10 @@ void	nick::execute(std::string buf, client *cli, std::vector<channel *> *channel
 	std::cout << "buf dans nick : |" << buf << "|" << std::endl;
 	if (buf.find(' ') == buf.npos)
 	{
-		message = ":server " + std::string(ERR_NONICKNAMEGIVEN) + " nick: No nickname given\r\n";
+		throw commandException::nick_no_nick();
+		/*message = ":server " + std::string(ERR_NONICKNAMEGIVEN) + " nick: No nickname given\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
-		return ;
+		return ;*/
 	}
 
 	int begin = buf.find(' ') + 1;
@@ -90,17 +91,25 @@ void	nick::execute(std::string buf, client *cli, std::vector<channel *> *channel
 	std::cout << "nick apres parsing : |" << nick << "|" << std::endl;
 	if (!_validChars(nick))
 	{
-		message = ":server " + std::string(ERR_ERRONEUSNICKNAME) + " nick: Erroneus nickname\r\n";
-		send(cli->getSd(), message.c_str(), message.length(), 0);
-		return ;
+		throw commandException::nick_erroneus();
+		//message = ":server " + std::string(ERR_ERRONEUSNICKNAME) + " nick: Erroneus nickname\r\n";
+		//send(cli->getSd(), message.c_str(), message.length(), 0);
+		//return ;
 	}
 	if (!_checkUser(nick, clients))
 	{
-		message = ":server " + std::string(ERR_NICKNAMEINUSE) + " nick: Nickname is already in use\r\n";
-		send(cli->getSd(), message.c_str(), message.length(), 0);
-		return ;
+		//while (!_checkUser(nick, clients))
+		//	nick += '_';
+		//std::cout << "nick apres boucle " << nick << std::endl;
+		//message = ":" + cli->getNick() + " NICK " + nick +"\r\n";
+		//cli->setNick(nick);
+		throw commandException::nick_inuse();
+		//std::cout << "ca degage ou pas\n";
+		//message = ":server " + std::string(ERR_NICKNAMEINUSE) + " nick: Nickname is already in use\r\n";
+		//send(cli->getSd(), message.c_str(), message.length(), 0);
+		//return ;
 	}
-	std::cout << "nick : |" << nick << "|\n";
+	std::cout << "nick avant set : |" << nick << "|\n";
 
 	message = ":" + cli->getNick() + " NICK " + nick +"\r\n";
 	cli->setNick(nick);

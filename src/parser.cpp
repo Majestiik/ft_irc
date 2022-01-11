@@ -54,10 +54,11 @@ void	parser::parse(std::string buf, client *cli)
 	std::cout << BOLDRED << "command = |" << command << "|" << RESET << std::endl;
 
 	if(command == "PASS")
-	{
-		std::string err = ":server " + std::string(ERR_ALREADYREGISTRED) + " pass :You may not reregister\r\n";
-		send(cli->getSd(), err.c_str(), err.length(), 0);
-	}
+		throw commandException::pass_registred();
+	//{
+		//std::string err = ":server " + std::string(ERR_ALREADYREGISTRED) + " pass :You may not reregister\r\n";
+		//send(cli->getSd(), err.c_str(), err.length(), 0);
+	//}
 	if (command == "NICK")
 	{
 		_nick.execute(buf, cli, &channels, _serv->getClients());

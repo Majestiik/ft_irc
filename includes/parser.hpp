@@ -10,6 +10,7 @@
 #include "commands/quit.hpp"
 #include "commands/nick.hpp"
 #include "commands/user.hpp"
+#include "commands/commandException.hpp"
 
 class server;
 class client;

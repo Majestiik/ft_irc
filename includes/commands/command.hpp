@@ -8,6 +8,7 @@
 #include "../client.hpp"
 #include "../channel.hpp"
 #include "../reply_codes.hpp"
+#include "commandException.hpp"
 
 class command
 {

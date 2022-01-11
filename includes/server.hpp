@@ -10,6 +10,7 @@
 #include "client.hpp"
 #include "channel.hpp"
 #include "parser.hpp"
+#include "servException.hpp"
 
 class server
 {
@@ -28,7 +29,7 @@ class server
 		void	_incomingConnexion();
 		void	_operation();
 		void	_eraseClient(client *c);
-		bool	_checkPass(client *c, std::string buf, int sd);
+		void	_checkPass(client *c, std::string buf);
 		std::string	_convertCommand(std::string command);
 
 	public:
