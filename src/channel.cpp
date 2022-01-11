@@ -175,6 +175,14 @@ void		channel::deleteInvisible(client *cli)
 	}
 }
 
+void		channel::deleteEverywhere(client *cli)
+{
+	deleteCanSpeak(cli);
+	deleteClient(cli);
+	deleteInvisible(cli);
+	deleteOp(cli);
+}
+
 std::string	channel::listClients()
 {
 	std::string ret;

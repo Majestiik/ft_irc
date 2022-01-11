@@ -240,28 +240,8 @@ void	server::_operation()
 				std::cout << "buffer apres agregation : " << c->getBuffer() << std::endl;
 				int space = c->getBuffer().find(' ');
 				std::string command = c->getBuffer().substr(0, space);
-				/*try
-				{
-					pars.parse(buf, c);
-				}
-				catch(const std::exception& e)
-				{
-					//std::cerr << e.what() << '\n';
-					send(c->getSd(), e.what(), std::strlen(e.what()), 0);
-				}*/
-				
 				if (c->getAccept() == true)
-				{
-					try
-					{
-						pars.parse(c->getBuffer(), c);
-					}
-					catch(const std::exception& e)
-					{
-						send(c->getSd(), e.what(), std::strlen(e.what()), 0);
-					}
-					
-				}
+					pars.parse(c->getBuffer(), c);
 				else
 				{
 					try
@@ -279,6 +259,13 @@ void	server::_operation()
 					
 				}
 				c->cleanBuffer();
+				if (command == "QUIT")
+				{
+					close(sd);
+					sd = 0;
+					_eraseClient(c);
+					return ;
+				}
 					//if (!_checkPass(c, buf, sd))
 					//	return ;
 			}

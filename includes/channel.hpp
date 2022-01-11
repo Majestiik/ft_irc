@@ -51,6 +51,7 @@ class channel
 		void		deleteBan(client *cli);
 		void		deleteCanSpeak(client *cli);
 		void		deleteInvisible(client *cli);
+		void		deleteEverywhere(client *cli);
 		std::string	listClients();
 		bool		isMember(client *cli) const;
 		bool		isMember(std::string cli) const;

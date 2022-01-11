@@ -108,8 +108,10 @@ void	parser::parse(std::string buf, client *cli)
 	if (command == "EXIT")
 		_serv->setOffline();
 
-	//if (command == "QUIT")
-		//_quit.execute(buf, cli, channels);
+	if (command == "QUIT")
+	{
+		_quit.execute(buf, cli, &channels);
+	}
 }
 
 void	parser::setServ(server *serv)
