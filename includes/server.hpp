@@ -23,6 +23,7 @@ class server
 		std::string				_pass;
 		bool					online;
 
+
 		server();
 		server(server const& other);
 		server	operator=(server const& other);

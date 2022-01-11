@@ -226,9 +226,20 @@ void	server::_operation()
 			{
 				buffer[valread] = '\0';
 				std::cout << "===BUFFER : " << buffer << std::endl;
-				std::string buf = buffer;
-				int space = buf.find(' ');
-				std::string command = buf.substr(0, space);
+				if (buffer[valread - 1] != '\n')
+				{
+					c->setBuffer(c->getBuffer() + buffer);
+					return;
+				}
+				if (c->getBuffer().empty())
+					c->setBuffer(buffer);
+				else
+				{
+					c->setBuffer(c->getBuffer() + buffer);
+				}
+				std::cout << "buffer apres agregation : " << c->getBuffer() << std::endl;
+				int space = c->getBuffer().find(' ');
+				std::string command = c->getBuffer().substr(0, space);
 				/*try
 				{
 					pars.parse(buf, c);
@@ -243,7 +254,7 @@ void	server::_operation()
 				{
 					try
 					{
-						pars.parse(buf, c);
+						pars.parse(c->getBuffer(), c);
 					}
 					catch(const std::exception& e)
 					{
@@ -255,7 +266,7 @@ void	server::_operation()
 				{
 					try
 					{
-						_checkPass(c, buf);
+						_checkPass(c, c->getBuffer());
 					}
 					catch(const std::exception& e)
 					{
@@ -267,6 +278,7 @@ void	server::_operation()
 					}
 					
 				}
+				c->cleanBuffer();
 					//if (!_checkPass(c, buf, sd))
 					//	return ;
 			}

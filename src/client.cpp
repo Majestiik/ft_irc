@@ -31,6 +31,11 @@ std::string	client::getRealName() const
 	return _realName;
 }
 
+std::string	client::getBuffer() const
+{
+	return _buffer;
+}
+
 int			client::getSd() const
 {
 	return _sd;
@@ -54,6 +59,16 @@ void	client::setLogin(std::string login)
 void	client::setRealName(std::string realName)
 {
 	_realName = realName;
+}
+
+void	client::setBuffer(std::string buffer)
+{
+	_buffer = buffer;
+}
+
+void	client::cleanBuffer()
+{
+	_buffer.clear();
 }
 
 void	client::setSd(int sd)
