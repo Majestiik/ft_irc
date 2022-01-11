@@ -11,7 +11,6 @@
 #include "commands/nick.hpp"
 #include "commands/user.hpp"
 #include "commands/topic.hpp"
-#include "commands/commandException.hpp"
 
 class server;
 class client;

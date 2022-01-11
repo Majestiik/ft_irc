@@ -49,10 +49,10 @@ void	user::execute(std::string buf, client *cli)
 
 	if (realName.empty() || _nbArgs(buf) < 3)
 	{
-		/*message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " user :Not enough parameters\r\n";
+		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " user :Not enough parameters\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
-		return ;*/
-		throw commandException::user_params();
+		return ;
+		//throw commandException(ERR_NEEDMOREPARAMS, "user", "Not enough parameters");
 	}
 	if (cli->getLogin().empty() && cli->getRealName().empty())
 	{
@@ -61,10 +61,10 @@ void	user::execute(std::string buf, client *cli)
 	}
 	else
 	{
-		//message = ":server " + std::string(ERR_ALREADYREGISTRED) + " user :You may not reregister\r\n";
-		//send(cli->getSd(), message.c_str(), message.length(), 0);
-		//return ;
-		throw commandException::user_registred();
+		message = ":server " + std::string(ERR_ALREADYREGISTRED) + " user :You may not reregister\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		return ;
+		//throw commandException(ERR_ALREADYREGISTRED, "user", "You may not reregister");
 	}
 	if (!cli->getNick().empty())
 	{

@@ -5,7 +5,6 @@ INCLUDES =	includes/server.hpp\
 			includes/reply_codes.hpp\
 			includes/servException.hpp\
 			includes/commands/command.hpp\
-			includes/commands/commandException.hpp\
 			includes/commands/invite.hpp\
 			includes/commands/join.hpp\
 			includes/commands/privmsg.hpp\
