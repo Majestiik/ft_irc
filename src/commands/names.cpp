@@ -21,9 +21,9 @@ void names::execute(std::string buf, client *cli, std::vector<channel *> *channe
 		while (i < _cmd.size())
 		{
 			cur_chan = _getChan(_cmd[i], channels);
-			if (cur_chan != NULL)
+			if (cur_chan != NULL && !cur_chan->isPrivate && !cur_chan->isSecrect)
 			{
-				client_list.append(cur_chan->listClients() + " ");
+				client_list.append(cur_chan->listClients());
 			}
 			i++;
 		}
