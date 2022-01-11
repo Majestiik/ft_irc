@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <cstring>
 
 #include "client.hpp"
 #include "channel.hpp"

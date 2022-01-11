@@ -46,7 +46,10 @@ void topic::execute(std::string buf, client *cli, std::vector<channel *> *channe
 		}
 		else
 		{
-			cur_chan->setTopic(_cmd[2]);
+			if (_cmd[2].front() == ':')
+				cur_chan->setTopic(&_cmd[2][1]);
+			else
+				cur_chan->setTopic(_cmd[2]);
 		}
 	}
 }

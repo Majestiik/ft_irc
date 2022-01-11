@@ -65,8 +65,8 @@ public:
 	{
 		const char *what() const throw()
 		{
-			std::string message = ":server " + std::string(ERR_PASSWDMISMATCH) + " pass :Password incorrect\r\n";
-			return message.c_str();
+			std::string *message = new std::string(":server " + std::string(ERR_PASSWDMISMATCH) + " pass :Password incorrect\r\n");
+			return message->c_str();
 		}
 	};
 
@@ -74,8 +74,8 @@ public:
 	{
 		const char *what() const throw()
 		{
-			std::string message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " pass :Not enough parameters\r\n";
-			return message.c_str();
+			std::string *message = new std::string(":server " + std::string(ERR_NEEDMOREPARAMS) + " pass :Not enough parameters\r\n");
+			return message->c_str();
 		}
 	};
 };
