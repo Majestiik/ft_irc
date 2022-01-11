@@ -10,6 +10,7 @@
 #include "commands/quit.hpp"
 #include "commands/nick.hpp"
 #include "commands/user.hpp"
+#include "commands/topic.hpp"
 #include "commands/commandException.hpp"
 
 class server;
@@ -29,6 +30,8 @@ class parser{
 		quit	_quit;
 		nick	_nick;
 		user	_user;
+		topic	_topic;
+
 		std::vector<channel *>	channels;
 		std::string				_detectUser(std::string buf, std::string *command);
 

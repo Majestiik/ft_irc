@@ -105,7 +105,7 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 
 	if (new_cli)
 	{
-		tmp = ":server " + std::string(RPL_TOPIC) + " " + cli->getNick() + " " + name + " :Undefined topic\r\n";
+		tmp = ":server " + std::string(RPL_TOPIC) + " " + cli->getNick() + " " + name + " :" + chan->getTopic() + "\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		tmp = ":server " + std::string(RPL_NAMREPLY) + " " + cli->getNick() + " = " + name + " :" + chan->listClients() + "\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);

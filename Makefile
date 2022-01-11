@@ -13,7 +13,8 @@ INCLUDES =	includes/server.hpp\
 			includes/commands/mode.hpp\
 			includes/commands/quit.hpp\
 			includes/commands/nick.hpp\
-			includes/commands/user.hpp
+			includes/commands/user.hpp\
+			includes/commands/topic.hpp
 
 SRCS =	src/server.cpp\
 		src/main.cpp\
@@ -28,7 +29,8 @@ SRCS =	src/server.cpp\
 		src/commands/mode.cpp\
 		src/commands/quit.cpp\
 		src/commands/nick.cpp\
-		src/commands/user.cpp
+		src/commands/user.cpp\
+		src/commands/topic.cpp
 
 
 NAME = ircserv

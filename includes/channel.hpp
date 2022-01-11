@@ -33,11 +33,13 @@ class channel
 
 		std::string	getName() const;
 		std::string	getPassword() const;
+		std::string getTopic() const;
 		std::vector<client*>	getMembers();
 		client *getCli(std::string cli);
 	
 		void		setName(std::string name);
 		void		setPassword(std::string password);
+		void		setTopic(std::string topic);
 		void		setMode(char mode, bool state);
 		void		addClient(client *cli);
 		void		addOp(client *cli);

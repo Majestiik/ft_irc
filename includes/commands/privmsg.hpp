@@ -8,7 +8,6 @@ class privmsg : public command
 	private :
 		std::vector<std::string> cmd;
 		void getCmd(std::string buf);
-		//channel*	_getChan(std::string name, std::vector<channel *> *channels);
 
 	public :
 		privmsg();

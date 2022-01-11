@@ -2,6 +2,7 @@
 
 channel::channel(std::string name):_name(name)
 {
+	_topic = "Topic not set";
 }
 
 channel::~channel()
@@ -23,6 +24,11 @@ std::string	channel::getPassword() const
 	return _password;
 }
 
+std::string channel::getTopic() const
+{
+	return _topic;
+}
+
 client *channel::getCli(std::string cli)
 {
 	for (std::vector<client*>::const_iterator it = _members.begin(); it != _members.end(); it++)
@@ -42,6 +48,11 @@ void		channel::setName(std::string name)
 void		channel::setPassword(std::string password)
 {
 	_password = password;
+}
+
+void		channel::setTopic(std::string topic)
+{
+	_topic = topic;
 }
 
 void		channel::setMode(char mode, bool state)
