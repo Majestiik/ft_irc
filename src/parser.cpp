@@ -100,6 +100,11 @@ void	parser::parse(std::string buf, client *cli)
 		_topic.execute(buf, cli, &channels);
 	}
 
+	if (command == "NAMES")
+	{
+		_names.execute(buf, cli, &channels);
+	}
+
 	if (command == "EXIT")
 		_serv->setOffline();
 

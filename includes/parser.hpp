@@ -11,6 +11,7 @@
 #include "commands/nick.hpp"
 #include "commands/user.hpp"
 #include "commands/topic.hpp"
+#include "commands/names.hpp"
 
 class server;
 class client;
@@ -30,6 +31,7 @@ class parser{
 		nick	_nick;
 		user	_user;
 		topic	_topic;
+		names	_names;
 
 		std::vector<channel *>	channels;
 		std::string				_detectUser(std::string buf, std::string *command);

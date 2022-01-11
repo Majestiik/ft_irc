@@ -2,15 +2,11 @@
 
 #include "command.hpp"
 
-class topic : public command
+class names : public command
 {
-	private :
-
-		void getCmd(std::string buf);
-
 	public :
-		topic();
-		~topic();
+		names();
+		~names();
 
 		void execute(std::string buf, client *cli, std::vector<channel *> *channels);
 };

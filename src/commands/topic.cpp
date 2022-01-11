@@ -7,6 +7,7 @@ topic::topic()
 topic::~topic()
 {
 }
+
 void topic::execute(std::string buf, client *cli, std::vector<channel *> *channels)
 {
 	std::string message;
