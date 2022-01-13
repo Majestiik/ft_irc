@@ -258,7 +258,7 @@ void mode::_b_mode_chan(client *cli, channel *chan)
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
-	else if (!chan->isMember(_cmd[3]))
+	else if (!chan->isMember(_cmd[3]) && !chan->isBanned(_cmd[3]))
 	{
 		message = ":server " + std::string(ERR_NOSUCHNICK) + " " + _cmd[3] + " :No such nick\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);

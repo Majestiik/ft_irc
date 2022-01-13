@@ -313,6 +313,17 @@ bool		channel::isBanned(client *cli) const
 	return false;
 }
 
+bool		channel::isBanned(std::string cli) const
+{
+	for (std::vector<client*>::const_iterator it = _banned.begin(); it != _banned.end(); it++)
+	{
+		client *c = *it;
+		if (c->getNick() == cli)
+			return true;
+	}
+	return false;
+}
+
 bool		channel::isCanSpeakM(client *cli) const
 {
 	for (std::vector<client*>::const_iterator it = _canSpeakOnModerated.begin(); it != _canSpeakOnModerated.end(); it++)

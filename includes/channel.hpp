@@ -77,6 +77,7 @@ class channel
 		bool		isMember(std::string cli) const;
 		bool		isOp(client *cli) const;
 		bool		isBanned(client *cli) const;
+		bool		isBanned(std::string cli) const;
 		bool		isCanSpeakM(client *cli) const;
 		bool		isMode(char mode);
 		std::string	getAllCurrentModes();
