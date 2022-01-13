@@ -237,12 +237,12 @@ void mode::_l_mode_chan(client *cli, channel *chan)
 {
 	if (_cmd[2][0] == '+')
 	{
-		chan->limit_nbr = atoi(_cmd[3].c_str());
+		chan->setLimitNbr(atoi(_cmd[3].c_str()));
 		_inform_mode_change("+l " + _cmd[3], cli, chan);
 	}
 	else if (_cmd[2][0] == '-')
 	{
-		chan->limit_nbr = 0;
+		chan->setLimitNbr(0);
 		_inform_mode_change("-l", cli, chan);
 	}
 }

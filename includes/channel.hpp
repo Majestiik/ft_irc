@@ -15,6 +15,13 @@ class channel
 		std::vector<client*> _banned;
 		std::vector<client*> _canSpeakOnModerated;
 		std::vector<client*> _invisibles;
+		bool _isPrivate;
+		bool _isSecret;
+		bool _isTopicLimited;
+		bool _isExtMessAllow;
+		bool _isModerated;
+		bool _isInviteOnly;
+		size_t _limit_nbr;
 		channel();
 		channel(channel const& other);
 		channel	operator=(channel const& other);
@@ -23,24 +30,37 @@ class channel
 		channel(std::string name);
 		~channel();
 
-		bool isPrivate;
-		bool isSecrect;
-		bool isTopicLimited;
-		bool isExtMessAllow;
-		bool isModerated;
-		bool isInviteOnly;
-		size_t limit_nbr;
+/*****GETTERS*****/
 
 		std::string	getName() const;
 		std::string	getPassword() const;
 		std::string getTopic() const;
 		std::vector<client*>	getMembers();
 		client *getCli(std::string cli);
+		bool	getPrivate() const;
+		bool	getSecret() const;
+		bool	getTopicLimited() const;
+		bool	getExtMessAllow() const;
+		bool	getModerated() const;
+		bool	getInviteOnly() const;
+		size_t	getLimitNbr() const;
+
+/*****SETTERS*****/
 	
 		void		setName(std::string name);
 		void		setPassword(std::string password);
 		void		setTopic(std::string topic);
 		void		setMode(char mode, bool state);
+		void		setPrivate(bool b);
+		void		setSecret(bool b);
+		void		setTopicLimited(bool b);
+		void		setExtMessAllow(bool b);
+		void		setModerated(bool b);
+		void		setInviteOnly(bool b);
+		void		setLimitNbr(size_t i);
+
+
+/*****FONCTIONS****/
 		void		addClient(client *cli);
 		void		addOp(client *cli);
 		void		addBan(client *cli);

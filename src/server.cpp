@@ -259,15 +259,14 @@ void	server::_operation()
 					
 				}
 				c->cleanBuffer();
-				if (command == "QUIT" || command == "/quit")
+
+				if (command == "QUIT" || command == "/quit\n")
 				{
 					close(sd);
 					sd = 0;
 					_eraseClient(c);
 					return ;
 				}
-					//if (!_checkPass(c, buf, sd))
-					//	return ;
 			}
 		}
 	}

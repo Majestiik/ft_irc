@@ -63,14 +63,14 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
-	else if (chan->isInviteOnly && !cli->isInvited(chan->getName()))
+	else if (chan->getInviteOnly() && !cli->isInvited(chan->getName()))
 	{
 		std::cout << BOLDMAGENTA << "3" << RESET << std::endl;
 		tmp = ":server " + std::string(ERR_INVITEONLYCHAN) + " " + name + " :Cannot join channel (+i)\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
-	else if (chan->limit_nbr > 0 && chan->limit_nbr >= chan->getMembers().size())
+	else if (chan->getLimitNbr() > 0 && chan->getLimitNbr() >= chan->getMembers().size())
 	{
 		std::cout << BOLDMAGENTA << "4" << RESET << std::endl;
 		tmp = ":server " + std::string(ERR_CHANNELISFULL) + " " + name + " :Cannot join channel (+l)\r\n";

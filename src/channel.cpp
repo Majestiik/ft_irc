@@ -1,6 +1,6 @@
 #include "../includes/channel.hpp"
 
-channel::channel(std::string name):_name(name)
+channel::channel(std::string name):_name(name), _isPrivate(false), _isSecret(false), _isTopicLimited(false), _isExtMessAllow(false), _isModerated(false), _isInviteOnly(false), _limit_nbr(0)
 {
 	_topic = "Topic not set";
 }
@@ -40,6 +40,78 @@ client *channel::getCli(std::string cli)
 	return NULL;
 }
 
+bool channel::getPrivate() const
+{
+	return _isPrivate;
+}
+
+bool channel::getSecret() const
+{
+	return _isSecret;
+}
+
+bool channel::getTopicLimited() const
+{
+	return _isTopicLimited;
+}
+
+bool channel::getExtMessAllow() const
+{
+	return _isExtMessAllow;
+}
+
+size_t channel::getLimitNbr() const
+{
+	return _limit_nbr;
+}
+
+bool channel::getInviteOnly() const
+{
+	return _isInviteOnly;
+}
+
+bool channel::getModerated() const
+{
+	return _isModerated;
+}
+/****************/
+
+void	channel::setPrivate(bool b)
+{
+	_isPrivate = b;
+}
+
+void	channel::setSecret(bool b)
+{
+	_isSecret = b;
+}
+
+void	channel::setTopicLimited(bool b)
+{
+	_isTopicLimited = b;
+}
+
+void	channel::setExtMessAllow(bool b)
+{
+	_isExtMessAllow = b;
+}
+
+void	channel::setLimitNbr(size_t i)
+{
+	_limit_nbr = i;
+}
+
+void	channel::setInviteOnly(bool b)
+{
+	_isInviteOnly = b;
+}
+
+void	channel::setModerated(bool b)
+{
+	_isModerated = b;
+}
+
+
 void		channel::setName(std::string name)
 {
 	_name = name;
@@ -58,17 +130,17 @@ void		channel::setTopic(std::string topic)
 void		channel::setMode(char mode, bool state)
 {
 	if (mode == 'p')
-		isPrivate = state;
+		setPrivate(state);
 	else if (mode == 's')
-		isSecrect = state;
+		setSecret(state);
 	else if (mode == 't')
-		isTopicLimited  = state;
+		setTopicLimited(state);
 	else if (mode == 'n')
-		isExtMessAllow = state;
+		setExtMessAllow(state);
 	else if (mode == 'm')
-		isModerated = state;
+		setModerated(state);
 	else if (mode == 'i')
-		isInviteOnly = state;
+		setInviteOnly(state);
 }
 
 void		channel::addClient(client *cli)
@@ -243,17 +315,17 @@ bool		channel::isBanned(client *cli) const
 
 bool		channel::isMode(char mode)
 {
-	if (mode == 'p' && isPrivate)
+	if (mode == 'p' && getPrivate())
 		return true;
-	else if (mode == 's' && isSecrect)
+	else if (mode == 's' && getSecret())
 		return true;
-	else if (mode == 't' && isTopicLimited)
+	else if (mode == 't' && getTopicLimited())
 		return true;
-	else if (mode == 'n' && isExtMessAllow)
+	else if (mode == 'n' && getExtMessAllow())
 		return true;
-	else if (mode == 'm' && isModerated)
+	else if (mode == 'm' && getModerated())
 		return true;
-	else if (mode == 'i' && isInviteOnly)
+	else if (mode == 'i' && getInviteOnly())
 		return true;
 	return false;
 }
@@ -264,20 +336,20 @@ std::string	channel::getAllCurrentModes()
 
 	allCurrentModes.push_back('+');
 
-	if (isPrivate)
+	if (getPrivate())
 		allCurrentModes.push_back('p');
-	if (isSecrect)
+	if (getSecret())
 		allCurrentModes.push_back('s');
-	if (isInviteOnly)
+	if (getInviteOnly())
 		allCurrentModes.push_back('i');
-	if (isTopicLimited)
+	if (getTopicLimited())
 		allCurrentModes.push_back('t');
-	if (isExtMessAllow)
+	if (getExtMessAllow())
 		allCurrentModes.push_back('n');
-	if (isModerated)
+	if (getModerated())
 		allCurrentModes.push_back('m');
-	if (limit_nbr > 0)
-		allCurrentModes.push_back('l' + limit_nbr);
+	if (getLimitNbr() > 0)
+		allCurrentModes.push_back('l' + getLimitNbr());
 	if (_password.size() > 0)
 		allCurrentModes.push_back('k');
 	
