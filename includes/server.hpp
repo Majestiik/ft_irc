@@ -32,7 +32,6 @@ class server
 		void	_operation();
 		void	_eraseClient(client *c);
 		void	_checkPass(client *c, std::string buf);
-		std::string	_convertCommand(std::string command);
 
 	public:
 		server(char **av);

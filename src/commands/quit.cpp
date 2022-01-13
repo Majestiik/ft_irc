@@ -44,16 +44,12 @@ void	quit::_informChange(std::string message, client *cli, std::vector<channel *
 	}
 }
 
-
-
 void	quit::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 {
-	std::cout << "buf dans quit : " << buf << std::endl;
 	std::string bye = buf.substr(5, buf.length() - 5);
 	if (bye[0] == ':')
 		bye = bye.substr(1, bye.length() - 1);
-	//buf = "QUIT : " + cli->getNick() + "\r\n";
-	std::cout << "bye : " << bye << std::endl;
+
 	buf = ":" + cli->getNick() + "!" + cli->getLogin() + "@" + cli->getIp() + " QUIT :Quit: " + bye + "\r\n";
 	_informChange(buf, cli, chan);
 

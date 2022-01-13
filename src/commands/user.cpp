@@ -8,7 +8,6 @@ user::~user()
 {
 }
 
-
 int		user::_nbArgs(std::string buf)
 {
 	int i = 0;
@@ -26,10 +25,7 @@ void	user::execute(std::string buf, client *cli)
 
 	buf = buf.substr(5, buf.length() - 5);
 
-	std::cout << "buf dans user : |" << buf << "|" << std::endl;
-
 	std::string user = buf.substr(0, buf.find(' '));
-	std::cout << "---user : " << user << std::endl;
 
 	std::string realName;
 
@@ -43,16 +39,12 @@ void	user::execute(std::string buf, client *cli)
 		else
 			realName.pop_back();
 	}
-	std::cout << "realName : |" << realName << "|" << std::endl;
-
-	std::cout << "getlogin.empty() : " << cli->getLogin().empty() << std::endl;
 
 	if (realName.empty() || _nbArgs(buf) < 3)
 	{
 		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " user :Not enough parameters\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return ;
-		//throw commandException(ERR_NEEDMOREPARAMS, "user", "Not enough parameters");
 	}
 	if (cli->getLogin().empty() && cli->getRealName().empty())
 	{
@@ -64,12 +56,10 @@ void	user::execute(std::string buf, client *cli)
 		message = ":server " + std::string(ERR_ALREADYREGISTRED) + " user :You may not reregister\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return ;
-		//throw commandException(ERR_ALREADYREGISTRED, "user", "You may not reregister");
 	}
 	if (!cli->getNick().empty())
 	{
 		message = ":" + cli->getIp() + " 001 " + cli->getNick() + " :Welcome to the IRMEGASTONKS network, you'll see it's incredible\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 	}
-
 }

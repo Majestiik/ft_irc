@@ -6,12 +6,11 @@
 class privmsg : public command
 {
 	private :
-		//std::vector<std::string> cmd;
-		//void getCmd(std::string buf);
+		privmsg(privmsg const& other);
+		privmsg	operator=(privmsg const& other);
 
 	public :
 		privmsg();
 		~privmsg();
-
 		void execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *cli_list);
 };

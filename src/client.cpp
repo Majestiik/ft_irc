@@ -1,20 +1,12 @@
 #include "../includes/client.hpp"
 
-client::client(): _sd(0), _accessAccepted(false)
-{
-}
-
-client::client(int sd):_sd(sd), _accessAccepted(false)
-{
-}
-
 client::client(int sd, sockaddr_in address):_sd(sd), _address(address), _accessAccepted(false)
 {
 }
 
-//client::~client()
-//{
-//}
+client::~client()
+{
+}
 
 std::string	client::getNick() const
 {

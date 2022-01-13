@@ -26,20 +26,6 @@ int main(int ac, char **av)
 	{
 		std::cerr << e.what() << '\n';
 	}
-	/*
-	if (ac != 3)
-	{
-		std::cerr << "Argument is missing, please type the port and password" << std::endl;
-		std::exit(1);
-	}
-	if (!checkPort(av[1]))
-	{
-		std::cerr << "Invalid port, must be digit" << std::endl;
-		std::exit(1);
-	}
-	
-	server serv(av);
-	serv.start();*/
 	return 1;
 	
 }

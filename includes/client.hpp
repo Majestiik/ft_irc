@@ -16,14 +16,14 @@ class client
 		std::string	_buffer;
 		std::vector<std::string> _chan_invitation;
 		bool		_accessAccepted;
+		client();
 		client(client const& other);
 		client operator=(client const& other);
 
 	public:
-		client();
-		client(int sd);
+		
 		client(int sd, sockaddr_in address);
-		//~client();
+		~client();
 		std::string	getNick() const;
 		std::string	getLogin() const;
 		std::string	getRealName() const;

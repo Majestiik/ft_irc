@@ -5,8 +5,8 @@
 class part : public command
 {
 	private:
-	//channel*	_getChan(std::string name, std::vector<channel *> *channels);
-	//bool		_checkClient(client *cli, channel *chan);
+		part(part const& other);
+		part	operator=(part const& other);
 
 	public:
 		part();

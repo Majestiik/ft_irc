@@ -21,8 +21,6 @@ class channel;
 
 class parser{
 	private:
-		parser(parser const& other);
-		parser	operator=(parser const& other);
 		server	*_serv;
 		invite	_invite;
 		join	_join;
@@ -39,6 +37,9 @@ class parser{
 
 		std::vector<channel *>	channels;
 		std::string				_detectUser(std::string buf, std::string *command);
+		std::string				_convertCommand(std::string command);
+		parser(parser const& other);
+		parser	operator=(parser const& other);
 
 	public:
 		parser();

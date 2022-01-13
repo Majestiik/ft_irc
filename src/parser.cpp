@@ -23,7 +23,7 @@ std::string	parser::_detectUser(std::string buf, std::string *command)
 	return buf;
 }
 
-std::string _convertCommand(std::string command)
+std::string parser::_convertCommand(std::string command)
 {
 	command = command.substr(1, command.length() - 1);
 	int i = 0;
@@ -58,67 +58,54 @@ void	parser::parse(std::string buf, client *cli)
 		std::string err = ":server " + std::string(ERR_ALREADYREGISTRED) + " pass :You may not reregister\r\n";
 		send(cli->getSd(), err.c_str(), err.length(), 0);
 	}
-	if (command == "NICK")
+	else if (command == "NICK")
 	{
 		_nick.execute(buf, cli, &channels, _serv->getClients());
 		buf = _detectUser(buf, &command);
+		if (command == "USER")
+			_user.execute(buf, cli);
 	}
 
-	if (command == "USER")
-	{
+	else if (command == "USER")
 		_user.execute(buf, cli);
-	}
 
-	if (command == "INVITE")
-	{
+	else if (command == "INVITE")
 		_invite.execute(buf, cli, &channels, _serv->getClients());
-	}
 
-	if (command == "JOIN")
-	{
+	else if (command == "JOIN")
 		_join.execute(buf, cli, &channels);
-	}
 
-	if (command == "PRIVMSG")
-	{
+	else if (command == "PRIVMSG")
 		_privmsg.execute(buf, cli, &channels, _serv->getClients());
-	}
 
-	if (command == "PART")
-	{
-		//buf = buf.substr(space + 1, buf.length() - (space + 3));
+	else if (command == "PART")
 		_part.execute(buf, cli, &channels);
-	}
 	
-	if (command == "MODE")
-	{
+	else if (command == "MODE")
 		_mode.execute(buf, cli, &channels);
-	}
 
-	if (command == "TOPIC")
-	{
+	else if (command == "TOPIC")
 		_topic.execute(buf, cli, &channels);
-	}
 
-	if (command == "NAMES")
-	{
+	else if (command == "NAMES")
 		_names.execute(buf, cli, &channels);
-	}
 
-	if (command == "LIST")
-	{
+	else if (command == "LIST")
 		_list.execute(buf, cli, &channels);
-	}
 
-	if (command == "KICK")
+	else if (command == "KICK")
 		_kick.execute(buf, cli, &channels);
 
-	if (command == "EXIT")
+	else if (command == "EXIT")
 		_serv->setOffline();
 
-	if (command == "QUIT")
-	{
+	else if (command == "QUIT")
 		_quit.execute(buf, cli, &channels);
+
+	else if (command != "PONG")
+	{
+		std::string message = ":server " + std::string(ERR_UNKNOWNCOMMAND) + " " + command + " :Unknown command\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
 	}
 }
 

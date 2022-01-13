@@ -4,9 +4,9 @@
 class user : public command
 {
 	private:
+		int		_nbArgs(std::string buf);
 		user(user const& other);
 		user	operator=(user const& other);
-		int		_nbArgs(std::string buf);
 
 	public:
 		user();

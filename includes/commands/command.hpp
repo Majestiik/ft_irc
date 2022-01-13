@@ -11,6 +11,10 @@
 
 class command
 {
+	private:
+		command(command const& other);
+		command	operator=(command const& other);
+
 	protected:
 		std::vector<std::string> _cmd;
 		static std::string _c;
