@@ -68,7 +68,7 @@ class channel
 		void		addInvisible(client *cli);
 		void		deleteClient(client *cli);
 		void		deleteOp(client *cli);
-		void		deleteBan(client *cli);
+		void		deleteBan(std::string cli);
 		void		deleteCanSpeak(client *cli);
 		void		deleteInvisible(client *cli);
 		void		deleteEverywhere(client *cli);
