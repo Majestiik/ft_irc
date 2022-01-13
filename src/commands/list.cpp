@@ -42,6 +42,8 @@ void list::execute(std::string buf, client *cli, std::vector<channel *> *channel
 	}
 	if (_cmd.size() == 1)
 	{
+		message = ":server " + std::string(RPL_LISTSTART) + " Channel :Users Name\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
 		for (std::vector<channel *>::iterator it = channels->begin(); it != channels->end(); it++)
 		{
 			if (!(*it)->getSecret() || (*it)->isMember(cli))
@@ -49,8 +51,6 @@ void list::execute(std::string buf, client *cli, std::vector<channel *> *channel
 				chan_list.append(cli->getNick() + " " + (*it)->getName() + " " + std::to_string((*it)->getMembers().size()));
 				if (!(*it)->getPrivate() || (*it)->isMember(cli))
 					chan_list.append(" :" + (*it)->getTopic());
-				message = ":server " + std::string(RPL_LISTSTART) + " Channel :Users Name\r\n";
-				send(cli->getSd(), message.c_str(), message.length(), 0);
 				message = ":server " + std::string(RPL_LIST) + " " + chan_list + "\r\n";
 				send(cli->getSd(), message.c_str(), message.length(), 0);
 			}
