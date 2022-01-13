@@ -71,7 +71,7 @@ void	invite::execute(std::string buf, client *cli, std::vector<channel *> *chann
 		message = ":" + cli->getNick() + " INVITE " + _cmd[1] + " " + _cmd[2] + "\r\n";
 		send(c->getSd(), message.c_str(), message.length(), 0);
 
-		message = ":server " + std::string(RPL_INVITING) + " " + cur_chan->getName() + " nick " + c->getNick() + "\r\n";
+		message = ":server " + std::string(RPL_INVITING) + " nick " + c->getNick() + " " + cur_chan->getName() + "\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 	}
 
