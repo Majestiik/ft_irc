@@ -8,6 +8,7 @@ INCLUDES =	includes/server.hpp\
 			includes/commands/invite.hpp\
 			includes/commands/join.hpp\
 			includes/commands/privmsg.hpp\
+			includes/commands/notice.hpp\
 			includes/commands/part.hpp\
 			includes/commands/mode.hpp\
 			includes/commands/quit.hpp\
@@ -27,6 +28,7 @@ SRCS =	src/server.cpp\
 		src/commands/invite.cpp\
 		src/commands/join.cpp\
 		src/commands/privmsg.cpp\
+		src/commands/notice.cpp\
 		src/commands/part.cpp\
 		src/commands/mode.cpp\
 		src/commands/quit.cpp\

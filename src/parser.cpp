@@ -78,6 +78,9 @@ void	parser::parse(std::string buf, client *cli)
 	else if (command == "PRIVMSG")
 		_privmsg.execute(buf, cli, &channels, _serv->getClients());
 
+	else if (command == "NOTICE")
+		_notice.execute(buf, cli, &channels, _serv->getClients());
+
 	else if (command == "PART")
 		_part.execute(buf, cli, &channels);
 	

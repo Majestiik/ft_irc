@@ -5,6 +5,7 @@
 #include "commands/invite.hpp"
 #include "commands/join.hpp"
 #include "commands/privmsg.hpp"
+#include "commands/notice.hpp"
 #include "commands/part.hpp"
 #include "commands/mode.hpp"
 #include "commands/quit.hpp"
@@ -25,6 +26,7 @@ class parser{
 		invite	_invite;
 		join	_join;
 		privmsg _privmsg;
+		notice	_notice;
 		part	_part;
 		mode	_mode;
 		quit	_quit;
