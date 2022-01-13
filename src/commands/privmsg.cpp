@@ -12,15 +12,33 @@ privmsg::~privmsg()
 
 void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *cli_list)
 {
+	std::string message;
 	std::string privmsg;
 	_getCmd(buf);
 	channel *chan;
 
-	/* Sends <message> to <msgtarget>, which is usually a user or channel. */
+	if (_cmd.size() < 3)
+	{
+		message = ":server " + std::string(ERR_NOTEXTTOSEND) + " " + cli->getNick() + " :No text to send\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		return;
+	}
 	if (_cmd[1][0] == '#') /* is chan */
 	{
-		//std::cout << "IS CHAN !" << std::endl;
-		if ((chan = _getChan(_cmd[1], channels)) != NULL && chan->isMember(cli))
+		chan = _getChan(_cmd[1], channels);
+		if (chan == NULL)
+		{
+			message = ":server " + std::string(ERR_NOSUCHCHANNEL) + " " + cli->getNick() + " " + _cmd[1] + " :No such channel\r\n";
+			send(cli->getSd(), message.c_str(), message.length(), 0);
+			return;
+		}
+		if ((chan != NULL && chan->getExtMessAllow() && !chan->isMember(cli)) || (chan != NULL && chan->getModerated() && (!chan->isOp(cli) && !chan->isCanSpeakM(cli))))
+		{
+			message = ":server " + std::string(ERR_CANNOTSENDTOCHAN) + " " + cli->getNick() + " " + _cmd[1] + " :Cannot send to channel\r\n";
+			send(cli->getSd(), message.c_str(), message.length(), 0);
+			return;
+		}
+		if (chan != NULL)
 		{
 			for (size_t i = 2; i < _cmd.size(); i++)
 			{
@@ -44,17 +62,8 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 			}
 		}
 	}
-	else /* is user */
+	else
 	{
-		//std::cout << "IS CLI !" << std::endl;
-		/*int i = 0;
-
-		while (i < 30)
-		{
-			if (cmd[1] == cli_list[i].getNick())
-				break;
-			i++;
-		}*/
 		std::vector<client *>::iterator it = cli_list->begin();
 		client *c;
 		while (it != cli_list->end())
@@ -64,8 +73,6 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 				break;
 			it++;
 		}
-
-		//if (i >= 30)
 		if (it == cli_list->end())
 		{
 			std::string tmp = ":server " + std::string(ERR_NOSUCHNICK) + " " + _cmd[1] + " :No such nick\r\n";
@@ -80,31 +87,3 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 	}
 }
 
-/*void privmsg::getCmd(std::string buf)
-{
-	char delimiter = ' ';
-	std::vector<std::string> cmd_tmp;
-	std::string line;
-	std::stringstream ss(buf);
-
-	while (std::getline(ss, line, delimiter))
-	{
-		if (line[0] == ':')
-		{
-			line.append(" ");
-			std::string tmp;
-			while (std::getline(ss, tmp, '\n'))
-				line.append(tmp);
-		}
-		cmd_tmp.push_back(line);
-	}
-
-	cmd.clear();
-	cmd = cmd_tmp;
-
-	for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end(); it++)
-	{
-		std::cout << BOLDGREEN << "cmd = " << (*it) << RESET << std::endl;
-	}
-	
-}*/
