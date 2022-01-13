@@ -45,7 +45,6 @@ client*	kick::_getClient(std::string name, channel *chan)
 	return NULL;
 }
 
-
 void	kick::execute(std::string buf, client *cli, std::vector<channel *> *channels)
 {
 	_getCmd(buf);
@@ -82,6 +81,7 @@ void	kick::execute(std::string buf, client *cli, std::vector<channel *> *channel
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return ;
 	}
+
 	std::string reason;
 	if (_cmd.size() > 3)
 	{

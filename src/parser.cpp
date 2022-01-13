@@ -86,7 +86,7 @@ void	parser::parse(std::string buf, client *cli)
 
 	if (command == "PART")
 	{
-		buf = buf.substr(space + 1, buf.length() - (space + 3));
+		//buf = buf.substr(space + 1, buf.length() - (space + 3));
 		_part.execute(buf, cli, &channels);
 	}
 	
