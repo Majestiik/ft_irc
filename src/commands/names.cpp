@@ -16,12 +16,15 @@ void names::execute(std::string buf, client *cli, std::vector<channel *> *channe
 
 	_getCmd(buf);
 
+	if (_cmd.size() == 2 && _cmd[1] == " ")
+		_cmd.pop_back();
+
 	if (_cmd.size() > 1)
 	{
 		while (i < _cmd.size())
 		{
 			cur_chan = _getChan(_cmd[i], channels);
-			if (cur_chan != NULL && !cur_chan->getPrivate() && !cur_chan->getSecret())
+			if ((cur_chan != NULL && !cur_chan->getPrivate() && !cur_chan->getSecret()) || (cur_chan != NULL && cur_chan->isMember(cli)))
 			{
 				client_list.append(cur_chan->listClients());
 			}

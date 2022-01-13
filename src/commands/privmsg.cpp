@@ -81,7 +81,15 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 		}
 		else
 		{
-			std::string cli_message = ":" + cli->getNick() + " PRIVMSG " + _cmd[1] + " :" + _cmd[2] + "\r\n";
+			for (size_t i = 2; i < _cmd.size(); i++)
+			{
+				privmsg.append(_cmd[i]);
+				if (i != _cmd.size() - 1)
+					privmsg.append(" ");
+			}
+			if (privmsg.front() == ':')
+				privmsg = &privmsg[1];
+			std::string cli_message = ":" + cli->getNick() + " PRIVMSG " + _cmd[1] + " :" + privmsg + "\r\n";
 			send(c->getSd(), cli_message.c_str(), cli_message.length(), 0);
 		}
 	}
