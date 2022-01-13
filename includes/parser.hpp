@@ -13,6 +13,7 @@
 #include "commands/topic.hpp"
 #include "commands/names.hpp"
 #include "commands/list.hpp"
+#include "commands/kick.hpp"
 
 class server;
 class client;
@@ -34,6 +35,7 @@ class parser{
 		topic	_topic;
 		names	_names;
 		list	_list;
+		kick	_kick;
 
 		std::vector<channel *>	channels;
 		std::string				_detectUser(std::string buf, std::string *command);

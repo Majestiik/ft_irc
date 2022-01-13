@@ -89,6 +89,8 @@ void	nick::execute(std::string buf, client *cli, std::vector<channel *> *channel
 	if (nick[0] == ':')
 		nick = nick.substr(1, nick.length() - 1);
 	std::cout << "nick apres parsing : |" << nick << "|" << std::endl;
+	if (nick == cli->getNick())
+		return ;
 	if (!_validChars(nick))
 	{
 		//throw commandException::nick_erroneus();

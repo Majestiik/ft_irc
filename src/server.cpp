@@ -259,7 +259,7 @@ void	server::_operation()
 					
 				}
 				c->cleanBuffer();
-				if (command == "QUIT")
+				if (command == "QUIT" || command == "/quit")
 				{
 					close(sd);
 					sd = 0;

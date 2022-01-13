@@ -110,6 +110,9 @@ void	parser::parse(std::string buf, client *cli)
 		_list.execute(buf, cli, &channels);
 	}
 
+	if (command == "KICK")
+		_kick.execute(buf, cli, &channels);
+
 	if (command == "EXIT")
 		_serv->setOffline();
 
