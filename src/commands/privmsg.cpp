@@ -12,16 +12,25 @@ privmsg::~privmsg()
 
 void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *cli_list)
 {
-	getCmd(buf);
+	std::string privmsg;
+	_getCmd(buf);
 	channel *chan;
 
 	/* Sends <message> to <msgtarget>, which is usually a user or channel. */
-	if (cmd[1][0] == '#') /* is chan */
+	if (_cmd[1][0] == '#') /* is chan */
 	{
 		//std::cout << "IS CHAN !" << std::endl;
-		if ((chan = _getChan(cmd[1], channels)) != NULL && chan->isMember(cli))
+		if ((chan = _getChan(_cmd[1], channels)) != NULL && chan->isMember(cli))
 		{
-			std::string chan_message = ":" + cli->getNick() + " PRIVMSG " + cmd[1] + " :" + cmd[2] + "\r\n";
+			for (size_t i = 2; i < _cmd.size(); i++)
+			{
+				privmsg.append(_cmd[i]);
+				if (i != _cmd.size() - 1)
+					privmsg.append(" ");
+			}
+			if (privmsg.front() == ':')
+				privmsg = &privmsg[1];
+			std::string chan_message = ":" + cli->getNick() + " PRIVMSG " + _cmd[1] + " :" + privmsg + "\r\n";
 			std::vector<client*> members = chan->getMembers();
 			for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
 			{
@@ -51,7 +60,7 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 		while (it != cli_list->end())
 		{
 			c = *it;
-			if (c->getNick() == cmd[1])
+			if (c->getNick() == _cmd[1])
 				break;
 			it++;
 		}
@@ -59,19 +68,19 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 		//if (i >= 30)
 		if (it == cli_list->end())
 		{
-			std::string tmp = ":server " + std::string(ERR_NOSUCHNICK) + " " + cmd[1] + " :No such nick\r\n";
+			std::string tmp = ":server " + std::string(ERR_NOSUCHNICK) + " " + _cmd[1] + " :No such nick\r\n";
 			send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 			return;
 		}
 		else
 		{
-			std::string cli_message = ":" + cli->getNick() + " PRIVMSG " + cmd[1] + " :" + cmd[2] + "\r\n";
+			std::string cli_message = ":" + cli->getNick() + " PRIVMSG " + _cmd[1] + " :" + _cmd[2] + "\r\n";
 			send(c->getSd(), cli_message.c_str(), cli_message.length(), 0);
 		}
 	}
 }
 
-void privmsg::getCmd(std::string buf)
+/*void privmsg::getCmd(std::string buf)
 {
 	char delimiter = ' ';
 	std::vector<std::string> cmd_tmp;
@@ -92,4 +101,10 @@ void privmsg::getCmd(std::string buf)
 
 	cmd.clear();
 	cmd = cmd_tmp;
-}
+
+	for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end(); it++)
+	{
+		std::cout << BOLDGREEN << "cmd = " << (*it) << RESET << std::endl;
+	}
+	
+}*/

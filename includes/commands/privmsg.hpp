@@ -6,8 +6,8 @@
 class privmsg : public command
 {
 	private :
-		std::vector<std::string> cmd;
-		void getCmd(std::string buf);
+		//std::vector<std::string> cmd;
+		//void getCmd(std::string buf);
 
 	public :
 		privmsg();
