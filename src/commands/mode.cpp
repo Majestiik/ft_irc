@@ -47,6 +47,7 @@ void	mode::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 		{
 			while (_cmd[2].size() > i)
 			{
+				//std::cout << BOLDRED << "_cmd = " << _cmd[2][i] << RESET << std::endl;
 				if (_cmd[2][i] == 'o')
 					_o_mode_chan(cli, cur_chan);
 				else if (_cmd[2][i] == 'p')
@@ -74,7 +75,7 @@ void	mode::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 		}
 	}
 	else if (_cmd.size() > 1)
-		return ;
+		return;
 	else
 	{
 		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " Mode :Not enough parameters\r\n";
@@ -140,12 +141,12 @@ void mode::_o_mode_chan(client *cli, channel *chan)
 
 void mode::_p_mode_chan(client *cli, channel *chan)
 {
-	if (_cmd[2][0] == '+')
+	if (_cmd[2][0] == '+' && !chan->getPrivate())
 	{
 		chan->setMode('p', true);
 		_inform_mode_change("+p", cli, chan);
 	}
-	else if (_cmd[2][0] == '-')
+	else if (_cmd[2][0] == '-' && chan->getPrivate())
 	{
 		chan->setMode('p', false);
 		_inform_mode_change("-p", cli, chan);
@@ -154,12 +155,12 @@ void mode::_p_mode_chan(client *cli, channel *chan)
 
 void mode::_s_mode_chan(client *cli, channel *chan)
 {
-	if (_cmd[2][0] == '+')
+	if (_cmd[2][0] == '+' && !chan->getSecret())
 	{
 		chan->setMode('s', true);
 		_inform_mode_change("+s", cli, chan);
 	}
-	else if (_cmd[2][0] == '-')
+	else if (_cmd[2][0] == '-' && chan->getSecret())
 	{
 		chan->setMode('s', false);
 		_inform_mode_change("-s", cli, chan);
@@ -168,12 +169,12 @@ void mode::_s_mode_chan(client *cli, channel *chan)
 
 void mode::_i_mode_chan(client *cli, channel *chan)
 {
-	if (_cmd[2][0] == '+')
+	if (_cmd[2][0] == '+' && !chan->getInviteOnly())
 	{
 		chan->setMode('i', true);
 		_inform_mode_change("+i", cli, chan);
 	}
-	else if (_cmd[2][0] == '-')
+	else if (_cmd[2][0] == '-' && chan->getInviteOnly())
 	{
 		chan->setMode('i', false);
 		_inform_mode_change("-i", cli, chan);
@@ -182,12 +183,12 @@ void mode::_i_mode_chan(client *cli, channel *chan)
 
 void mode::_t_mode_chan(client *cli, channel *chan)
 {
-	if (_cmd[2][0] == '+')
+	if (_cmd[2][0] == '+' && !chan->getTopicLimited())
 	{
 		chan->setMode('t', true);
 		_inform_mode_change("+t", cli, chan);
 	}
-	else if (_cmd[2][0] == '-')
+	else if (_cmd[2][0] == '-' && chan->getTopicLimited())
 	{
 		chan->setMode('t', false);
 		_inform_mode_change("-t", cli, chan);
@@ -196,12 +197,12 @@ void mode::_t_mode_chan(client *cli, channel *chan)
 
 void mode::_n_mode_chan(client *cli, channel *chan)
 {
-	if (_cmd[2][0] == '+')
+	if (_cmd[2][0] == '+' && !chan->getExtMessAllow())
 	{
 		chan->setMode('n', true);
 		_inform_mode_change("+n", cli, chan);
 	}
-	else if (_cmd[2][0] == '-')
+	else if (_cmd[2][0] == '-' && chan->getExtMessAllow())
 	{
 		chan->setMode('n', false);
 		_inform_mode_change("-n", cli, chan);
@@ -210,12 +211,12 @@ void mode::_n_mode_chan(client *cli, channel *chan)
 
 void mode::_m_mode_chan(client *cli, channel *chan)
 {
-	if (_cmd[2][0] == '+')
+	if (_cmd[2][0] == '+' && !chan->getModerated())
 	{
 		chan->setMode('m', true);
 		_inform_mode_change("+m", cli, chan);
 	}
-	else if (_cmd[2][0] == '-')
+	else if (_cmd[2][0] == '-' && chan->getModerated())
 	{
 		chan->setMode('m', false);
 		_inform_mode_change("-m", cli, chan);
@@ -224,12 +225,20 @@ void mode::_m_mode_chan(client *cli, channel *chan)
 
 void mode::_l_mode_chan(client *cli, channel *chan)
 {
+	std::string message;
+	if (_cmd[3].empty())
+	{
+		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " :Mode :Not enough parameters\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		return;
+	}
 	if (_cmd[2][0] == '+')
 	{
+		//std::cout << BOLDRED << "size = " << atoi(_cmd[3].c_str()) << RESET << std::endl;
 		chan->setLimitNbr(atoi(_cmd[3].c_str()));
 		_inform_mode_change("+l " + _cmd[3], cli, chan);
 	}
-	else if (_cmd[2][0] == '-')
+	else if (_cmd[2][0] == '-' && chan->getLimitNbr() != 0)
 	{
 		chan->setLimitNbr(0);
 		_inform_mode_change("-l", cli, chan);
@@ -288,12 +297,12 @@ void mode::_v_mode_chan(client *cli, channel *chan)
 	}
 	else
 	{
-		if (_cmd[2][0] == '+' && !chan->isOp(chan->getCli(_cmd[3])))
+		if (_cmd[2][0] == '+' && !chan->isCanSpeakM(chan->getCli(_cmd[3])))
 		{
 			chan->addCanSpeak(chan->getCli(_cmd[3]));
 			_inform_mode_change( "+v on " + target_cli->getNick(), cli, chan);
 		}
-		else if (_cmd[2][0] == '-' && chan->isOp(chan->getCli(_cmd[3])))
+		else if (_cmd[2][0] == '-' && chan->isCanSpeakM(chan->getCli(_cmd[3])))
 		{
 			chan->deleteCanSpeak(chan->getCli(_cmd[3]));
 			_inform_mode_change( "-v on " + target_cli->getNick(), cli, chan);
@@ -319,7 +328,7 @@ void mode::_k_mode_chan(client *cli, channel *chan)
 			chan->setPassword(_cmd[3]);
 			_inform_mode_change( "+k", cli, chan);
 		}
-		else if (_cmd[2][0] == '-')
+		else if (_cmd[2][0] == '-' && chan->getPassword() != "")
 		{
 			chan->setPassword("");
 			_inform_mode_change( "-k", cli, chan);

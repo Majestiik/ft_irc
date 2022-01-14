@@ -56,8 +56,9 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
-	else if (chan->getLimitNbr() > 0 && chan->getLimitNbr() >= chan->getMembers().size())
+	else if (chan->getLimitNbr() > 0 && chan->getLimitNbr() <= chan->getMembers().size())
 	{
+		//std::cout << BOLDBLUE << "chan->getLimitNbr() = " << chan->getLimitNbr() << " chan->getMembers().size() = " << chan->getMembers().size() << RESET << std::endl;
 		tmp = ":server " + std::string(ERR_CHANNELISFULL) + " " + name + " :Cannot join channel (+l)\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;

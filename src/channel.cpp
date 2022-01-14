@@ -358,21 +358,46 @@ std::string	channel::getAllCurrentModes()
 	allCurrentModes.push_back('+');
 
 	if (getPrivate())
+	{
+		std::cout << BOLDRED << "p" << RESET << std::endl;
 		allCurrentModes.push_back('p');
+	}
 	if (getSecret())
+	{
+		std::cout << BOLDRED << "s" << RESET << std::endl;
 		allCurrentModes.push_back('s');
+	}
 	if (getInviteOnly())
+	{
+		std::cout << BOLDRED << "i" << RESET << std::endl;
 		allCurrentModes.push_back('i');
+	}
 	if (getTopicLimited())
+	{
+		std::cout << BOLDRED << "t" << RESET << std::endl;
 		allCurrentModes.push_back('t');
+	}
 	if (getExtMessAllow())
+	{
+		std::cout << BOLDRED << "n" << RESET << std::endl;
 		allCurrentModes.push_back('n');
+	}
 	if (getModerated())
+	{
+		std::cout << BOLDRED << "m" << RESET << std::endl;
 		allCurrentModes.push_back('m');
+	}
 	if (getLimitNbr() > 0)
-		allCurrentModes.push_back('l' + getLimitNbr());
+	{
+		std::cout << BOLDRED << "l" << RESET << std::endl;
+		allCurrentModes.push_back('l');
+		allCurrentModes.append(std::to_string(_limit_nbr));
+	}
 	if (_password.size() > 0)
+	{
+		std::cout << BOLDRED << "k" << RESET << std::endl;
 		allCurrentModes.push_back('k');
-	
+	}
+
 	return (allCurrentModes);
 }

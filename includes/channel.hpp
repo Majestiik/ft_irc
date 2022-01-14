@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "client.hpp"
+#include "reply_codes.hpp"
 
 class channel
 {
