@@ -7,6 +7,7 @@ class names : public command
 	private:
 		names(names const& other);
 		names	operator=(names const& other);
+		void _DisplayNames(channel *chan, client *cli);
 
 	public :
 		names();

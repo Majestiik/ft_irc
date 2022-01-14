@@ -24,15 +24,28 @@ void names::execute(std::string buf, client *cli, std::vector<channel *> *channe
 		while (i < _cmd.size())
 		{
 			cur_chan = _getChan(_cmd[i], channels);
-			if ((cur_chan != NULL && !cur_chan->getPrivate() && !cur_chan->getSecret()) || (cur_chan != NULL && cur_chan->isMember(cli)))
-			{
-				client_list.append(cur_chan->listClients());
-			}
+			if (cur_chan != NULL)
+				_DisplayNames(cur_chan, cli);
 			i++;
 		}
-		message = ":server " + std::string(RPL_NAMREPLY) + " " + cli->getNick() + " = " + "server" + " :" + client_list + "\r\n";
+	}
+}
+
+void names::_DisplayNames(channel *chan, client *cli)
+{
+	std::string message;
+	std::string client_list;
+	std::vector<client *> members = chan->getMembers();
+
+	if ((chan != NULL && !chan->getPrivate() && !chan->getSecret()) || (chan != NULL && chan->isMember(cli)))
+	{
+		for (std::vector<client *>::iterator it = members.begin(); it != members.end(); it++)
+		{
+				client_list.append((*it)->getNick() + " ");
+		}
+		message = ":server " + std::string(RPL_NAMREPLY) + " " + cli->getNick() + " = " + "-" + chan->getName() + " :" + client_list + "\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		message = ":server " + std::string(RPL_ENDOFNAMES) + " " + "server" + " :End of NAMES list\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
-	}
+	}	
 }
