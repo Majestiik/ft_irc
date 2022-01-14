@@ -271,10 +271,10 @@ void mode::_b_mode_chan(client *cli, channel *chan)
 			chan->addBan(chan->getCli(_cmd[3]));
 			_inform_mode_change( "+b on " + target_cli->getNick(), cli, chan);
 		}
-		else if (_cmd[2][0] == '-' && chan->isOp(chan->getCli(_cmd[3])))
+		else if (_cmd[2][0] == '-')
 		{
-			chan->deleteBan(chan->getCli(_cmd[3]));
-			_inform_mode_change( "-b on " + target_cli->getNick(), cli, chan);
+			chan->deleteBan(_cmd[3]);
+			_inform_mode_change( "-b on " + _cmd[3], cli, chan);
 		}
 		return;
 	}

@@ -223,11 +223,11 @@ void		channel::deleteCanSpeak(client *cli)
 	}
 }
 
-void		channel::deleteBan(client *cli)
+void		channel::deleteBan(std::string cli)
 {
 	for (std::vector<client *>::iterator it = _banned.begin(); it != _banned.end(); it++)
 	{
-		if (*it == cli)
+		if ((*it)->getNick() == cli)
 		{
 			_banned.erase(it);
 			break ;
