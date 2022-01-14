@@ -314,7 +314,7 @@ void mode::_k_mode_chan(client *cli, channel *chan)
 {
 		std::string message;
 
-	if (_cmd.size() < 4)
+	if (_cmd.size() < 4 && _cmd[2][0] != '-')
 	{
 		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " " + cli->getNick() + " :Mode :Not enough parameters\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);

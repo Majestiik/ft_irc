@@ -54,5 +54,4 @@ void command::_getCmd(std::string buf)
 	{
 		std::cout << BOLDYELLOW << "_cmd = " << (*it) << RESET << std::endl; 
 	}*/
-	
 }
