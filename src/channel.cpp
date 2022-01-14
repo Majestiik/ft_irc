@@ -74,7 +74,6 @@ bool channel::getModerated() const
 {
 	return _isModerated;
 }
-/****************/
 
 void	channel::setPrivate(bool b)
 {
@@ -111,7 +110,6 @@ void	channel::setModerated(bool b)
 	_isModerated = b;
 }
 
-
 void		channel::setName(std::string name)
 {
 	_name = name;
@@ -146,19 +144,12 @@ void		channel::setMode(char mode, bool state)
 void		channel::addClient(client *cli)
 {
 	_members.push_back(cli);
-	std::cout << "== Members vector : " << std::endl;
-	for (std::vector<client*>::iterator it = _members.begin(); it != _members.end(); it++)
-	{
-		client *c = *it;
-		std::cout << "- "<< c->getNick() << std::endl;
-	}
 }
 
 void		channel::addOp(client *cli)
 {
 	if (isMember(cli))
 	{
-		//cli->setNick("#" + cli->getNick());
 		_op.push_back(cli);
 	}
 }
@@ -359,43 +350,35 @@ std::string	channel::getAllCurrentModes()
 
 	if (getPrivate())
 	{
-		std::cout << BOLDRED << "p" << RESET << std::endl;
 		allCurrentModes.push_back('p');
 	}
 	if (getSecret())
 	{
-		std::cout << BOLDRED << "s" << RESET << std::endl;
 		allCurrentModes.push_back('s');
 	}
 	if (getInviteOnly())
 	{
-		std::cout << BOLDRED << "i" << RESET << std::endl;
 		allCurrentModes.push_back('i');
 	}
 	if (getTopicLimited())
 	{
-		std::cout << BOLDRED << "t" << RESET << std::endl;
 		allCurrentModes.push_back('t');
 	}
 	if (getExtMessAllow())
 	{
-		std::cout << BOLDRED << "n" << RESET << std::endl;
 		allCurrentModes.push_back('n');
 	}
 	if (getModerated())
 	{
-		std::cout << BOLDRED << "m" << RESET << std::endl;
 		allCurrentModes.push_back('m');
 	}
 	if (getLimitNbr() > 0)
 	{
-		std::cout << BOLDRED << "l" << RESET << std::endl;
 		allCurrentModes.push_back('l');
 		allCurrentModes.append(std::to_string(_limit_nbr));
 	}
 	if (_password.size() > 0)
 	{
-		std::cout << BOLDRED << "k" << RESET << std::endl;
 		allCurrentModes.push_back('k');
 	}
 

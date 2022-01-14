@@ -13,7 +13,6 @@ bool	nick::_checkUser(std::string user, std::vector<client *> *clients)
 	for (std::vector<client *>::iterator it = clients->begin(); it != clients->end(); it++)
 	{
 		client *c = *it;
-		std::cout << c->getNick() << std::endl;
 		if (c->getNick() == user)
 			return false;
 	}
