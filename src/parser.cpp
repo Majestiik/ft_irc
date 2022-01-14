@@ -51,7 +51,7 @@ void	parser::parse(std::string buf, client *cli)
 	while (command.back() == '\n' || command.back() == '\r')
 		command.pop_back();
 
-	std::cout << BOLDRED << "command = |" << command << "|" << RESET << std::endl;
+	std::cout << BOLDMAGENTA << "command = |" << command << "|" << RESET << std::endl;
 
 	if(command == "PASS")
 	{
@@ -65,7 +65,6 @@ void	parser::parse(std::string buf, client *cli)
 		if (command == "USER")
 			_user.execute(buf, cli);
 	}
-
 	else if (command == "USER")
 		_user.execute(buf, cli);
 

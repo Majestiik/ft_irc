@@ -1,10 +1,5 @@
 #include "../../includes/commands/join.hpp"
 
-
-//join::join(std::string name, client *cli, server *serv): _name(name), _cli(cli), _serv(serv)
-//{
-//}
-
 join::join()
 {
 }
@@ -31,13 +26,6 @@ void	join::execute(std::string buf, client *cli, std::vector<channel *> *channel
 	_joinChan(_cmd[1], cli, channels);
 }
 
-void	join::broadcastMsg(std::string buf, client *cli, channel *chan)
-{
-	std::string message = ":" + cli->getNick() + "!" + cli->getLogin() + "@" + cli->getIp() + " JOIN " + buf + "\r\n";
-	send(cli->getSd(), message.c_str(), message.length(), 0);
-	std::cout << "listClients : " << chan->listClients() << std::endl;
-}
-
 bool	join::_checkName(std::string name, std::vector<channel *> *channels)
 {
 	for (std::vector<channel *>::iterator it = channels->begin(); it != channels->end(); it++)
@@ -58,42 +46,36 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 
 	if (chan->isBanned(cli))
 	{
-		std::cout << BOLDMAGENTA << "2" << RESET << std::endl;
 		tmp = ":server " + std::string(ERR_BANNEDFROMCHAN) + " " + name + " :Cannot join channel (+b)\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
 	else if (chan->getInviteOnly() && !cli->isInvited(chan->getName()))
 	{
-		std::cout << BOLDMAGENTA << "3" << RESET << std::endl;
 		tmp = ":server " + std::string(ERR_INVITEONLYCHAN) + " " + name + " :Cannot join channel (+i)\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
 	else if (chan->getLimitNbr() > 0 && chan->getLimitNbr() >= chan->getMembers().size())
 	{
-		std::cout << BOLDMAGENTA << "4" << RESET << std::endl;
 		tmp = ":server " + std::string(ERR_CHANNELISFULL) + " " + name + " :Cannot join channel (+l)\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
 	else if (chan->isMember(cli))
 	{
-		std::cout << BOLDMAGENTA << "5" << RESET << std::endl;
 		tmp = ":server " + std::string(ERR_USERONCHANNEL) + " " + cli->getNick() + " " + name + " :is already on channel\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
 	else if (chan->getPassword() != "" && _cmd[2] != chan->getPassword())
 	{
-		std::cout << BOLDMAGENTA << "6" << RESET << std::endl;
 		tmp = ":server " + std::string(ERR_BADCHANNELKEY) + " " + name + " :Cannot join channel (+k)\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
 	else if (!_checkClient(cli, chan))
 	{
-		std::cout << BOLDMAGENTA << "1" << RESET << std::endl;
 		chan->addInvisible(cli);
 		chan->addClient(cli);
 		if (chan->getMembers().size() == 1)
@@ -113,7 +95,6 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		
 	}
-	//std::cout << "=-=-=-=-=-chan list clients : " << chan->listClients() << std::endl ;
 }
 
 void	join::_informMembers(std::string name, client *cli, channel *chan)
@@ -123,12 +104,7 @@ void	join::_informMembers(std::string name, client *cli, channel *chan)
 	for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
 	{
 		client *c = *it;
-		std::cout << "broadcast to : " << c->getNick() << std::endl;
 		send(c->getSd(), message.c_str(), message.length(), 0);
 	}
 }
 
-void	join::_broadcastCreatedAt()
-{
-	
-}

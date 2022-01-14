@@ -18,9 +18,6 @@ class mode : public command
 		void _v_mode_chan(client *cli, channel *chan);
 		void _k_mode_chan(client *cli, channel *chan);
 		void _i_mode_cli(client *cli, channel *chan);
-		void _s_mode_cli(client *cli, channel *chan);
-		void _w_mode_cli(client *cli, channel *chan);
-		void _o_mode_cli(client *cli, channel *chan);
 		mode(mode const& other);
 		mode	operator=(mode const& other);
 

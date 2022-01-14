@@ -22,11 +22,8 @@ int		user::_nbArgs(std::string buf)
 void	user::execute(std::string buf, client *cli)
 {
 	std::string message;
-
 	buf = buf.substr(5, buf.length() - 5);
-
 	std::string user = buf.substr(0, buf.find(' '));
-
 	std::string realName;
 
 	if (buf.find('*') != buf.npos)

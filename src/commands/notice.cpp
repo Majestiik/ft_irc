@@ -2,12 +2,10 @@
 
 notice::notice()
 {
-
 }
 
 notice::~notice()
 {
-
 }
 
 void notice::execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *cli_list)

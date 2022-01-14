@@ -53,7 +53,6 @@ void	invite::execute(std::string buf, client *cli, std::vector<channel *> *chann
 		if (c->getNick() == _cmd[1])
 		{
 			isExist = true;
-			std::cout << BOLDCYAN << " TRUE " << RESET << std::endl;
 			break;
 		}
 		it++;

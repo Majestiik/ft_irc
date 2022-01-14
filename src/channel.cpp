@@ -295,7 +295,6 @@ bool		channel::isOp(client *cli) const
 	for (std::vector<client*>::const_iterator it = _op.begin(); it != _op.end(); it++)
 	{
 		client *c = *it;
-		//std::cout << "IS OP NAME : c nickname = " + c->getNick() + " cli nickname = " + cli->getNick() << std::endl;
 		if (c->getNick() == cli->getNick())
 			return true;
 	}

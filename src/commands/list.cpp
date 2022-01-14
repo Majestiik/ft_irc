@@ -18,7 +18,6 @@ void list::execute(std::string buf, client *cli, std::vector<channel *> *channel
 	if (_cmd.size() > 1 && _cmd[1] == "")
 		_cmd.pop_back();
 
-	std::cout << BOLDBLUE << "_cmd.size() = " << _cmd.size() << RESET << std::endl;
 	if (_cmd.size() > 1)
 	{
 		message = ":server " + std::string(RPL_LISTSTART) + " Channel :Users Name\r\n";

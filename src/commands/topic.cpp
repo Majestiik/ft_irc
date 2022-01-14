@@ -12,11 +12,7 @@ void topic::execute(std::string buf, client *cli, std::vector<channel *> *channe
 {
 	std::string message;
 	channel *cur_chan;
-
 	getCmd(buf);
-
-
-	std::cout << BOLDYELLOW << "_cmd.size() = " << _cmd.size() << RESET << std::endl;
 
 	if (_cmd.size() < 2)
 	{
@@ -72,12 +68,6 @@ void topic::getCmd(std::string buf)
 
 	while (cmd_tmp.back().back() == '\n' || cmd_tmp.back().back() == '\r')
 		cmd_tmp.back().pop_back();
-
-	for (std::vector<std::string>::iterator it = cmd_tmp.begin(); it != cmd_tmp.end(); it++)
-	{
-			std::cout << BOLDYELLOW << "_cmd = |" << *it << "|" << RESET << std::endl;
-	}
-	
 
 	_cmd.clear();
 	if (cmd_tmp[1] == ":")

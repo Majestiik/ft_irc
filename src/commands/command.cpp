@@ -49,11 +49,4 @@ void command::_getCmd(std::string buf)
 
 	_cmd.clear();
 	_cmd = cmd_tmp;
-
-	std::cout << BOLDRED << "Display split command mode :" << RESET << std::endl;
-	for (std::vector<std::string>::iterator it = _cmd.begin(); it != _cmd.end(); it++)
-	{
-		std::string c = *it;
-		std::cout << "cmd = |" << c << "|" << std::endl;
-	}
 }

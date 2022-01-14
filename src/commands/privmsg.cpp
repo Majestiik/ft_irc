@@ -2,12 +2,10 @@
 
 privmsg::privmsg()
 {
-
 }
 
 privmsg::~privmsg()
 {
-
 }
 
 void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *cli_list)
@@ -53,12 +51,8 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 			for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
 			{
 				client *c = *it;
-				std::cout << "dans privmsg : c : " << c->getNick() << std::endl;
 				if (c->getNick() != cli->getNick())
-				{
-					std::cout << "broadcast to : " << c->getLogin() << std::endl;
 					send(c->getSd(), chan_message.c_str(), chan_message.length(), 0);
-				}
 			}
 		}
 	}
