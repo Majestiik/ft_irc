@@ -47,11 +47,14 @@ void command::_getCmd(std::string buf)
 		cmd_tmp.push_back(line);
 	}
 
+	while (cmd_tmp.back() == "\n" || cmd_tmp.back() == "\r" || cmd_tmp.back().size() == 0)
+		cmd_tmp.pop_back();
+
 	_cmd.clear();
 	_cmd = cmd_tmp;
 
 	/*for (std::vector<std::string>::iterator it = _cmd.begin(); it != _cmd.end(); it++)
 	{
-		std::cout << BOLDYELLOW << "_cmd = " << (*it) << RESET << std::endl; 
+		std::cout << BOLDYELLOW << "_cmd = |" << (*it) << "| size = " << (*it).size() << RESET << std::endl; 
 	}*/
 }
