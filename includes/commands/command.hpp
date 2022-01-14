@@ -26,6 +26,4 @@ class command
 	public:
 		command();
 		virtual ~command();
-		std::string	getCommand() const;
-
 };

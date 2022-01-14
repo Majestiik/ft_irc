@@ -50,6 +50,15 @@ void command::_getCmd(std::string buf)
 	while (cmd_tmp.back() == "\n" || cmd_tmp.back() == "\r" || cmd_tmp.back().size() == 0)
 		cmd_tmp.pop_back();
 
+	if (cmd_tmp[2][0] == ':')
+		cmd_tmp[2] = &cmd_tmp[2][1];
+
 	_cmd.clear();
 	_cmd = cmd_tmp;
+
+	for (std::vector<std::string>::iterator it = _cmd.begin(); it != _cmd.end(); it++)
+	{
+		std::cout << BOLDYELLOW << "_cmd = |" + (*it) + "|" << RESET << std::endl;
+	}
+	
 }

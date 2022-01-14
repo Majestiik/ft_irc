@@ -1,6 +1,7 @@
 #pragma once
 
 #include "command.hpp"
+#include "../bot.hpp"
 
 
 class privmsg : public command
@@ -8,6 +9,8 @@ class privmsg : public command
 	private :
 		privmsg(privmsg const& other);
 		privmsg	operator=(privmsg const& other);
+
+		bot	_bot;
 
 	public :
 		privmsg();

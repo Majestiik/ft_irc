@@ -4,6 +4,7 @@ INCLUDES =	includes/server.hpp\
 			includes/channel.hpp\
 			includes/reply_codes.hpp\
 			includes/servException.hpp\
+			includes/bot.hpp\
 			includes/commands/command.hpp\
 			includes/commands/invite.hpp\
 			includes/commands/join.hpp\
@@ -24,6 +25,7 @@ SRCS =	src/server.cpp\
 		src/parser.cpp\
 		src/client.cpp\
 		src/channel.cpp\
+		src/bot.cpp\
 		src/commands/command.cpp\
 		src/commands/invite.cpp\
 		src/commands/join.cpp\

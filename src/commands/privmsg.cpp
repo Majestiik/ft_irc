@@ -21,6 +21,10 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
+	if (_cmd[2] == "$B")
+	{
+		_bot.execute(buf, cli, channels);
+	}
 	if (_cmd[1][0] == '#') /* is chan */
 	{
 		chan = _getChan(_cmd[1], channels);
@@ -44,8 +48,8 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 				if (i != _cmd.size() - 1)
 					privmsg.append(" ");
 			}
-			if (privmsg.front() == ':')
-				privmsg = &privmsg[1];
+			/*if (privmsg.front() == ':')
+				privmsg = &privmsg[1];*/
 			std::string chan_message = ":" + cli->getNick() + " PRIVMSG " + _cmd[1] + " :" + privmsg + "\r\n";
 			std::vector<client*> members = chan->getMembers();
 			for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
@@ -81,8 +85,8 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 				if (i != _cmd.size() - 1)
 					privmsg.append(" ");
 			}
-			if (privmsg.front() == ':')
-				privmsg = &privmsg[1];
+			/*if (privmsg.front() == ':')
+				privmsg = &privmsg[1];*/
 			std::string cli_message = ":" + cli->getNick() + " PRIVMSG " + _cmd[1] + " :" + privmsg + "\r\n";
 			send(c->getSd(), cli_message.c_str(), cli_message.length(), 0);
 		}
