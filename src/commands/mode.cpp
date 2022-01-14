@@ -102,9 +102,9 @@ void mode::_o_mode_chan(client *cli, channel *chan)
 	client *target_cli;
 	std::vector<client *> cli_list;
 
-	if (_cmd[3].empty())
+	if (_cmd.size() < 4)
 	{
-		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " Mode :Not enough parameters\r\n";
+		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " " + cli->getNick() + " :Mode :Not enough parameters\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
@@ -226,15 +226,14 @@ void mode::_m_mode_chan(client *cli, channel *chan)
 void mode::_l_mode_chan(client *cli, channel *chan)
 {
 	std::string message;
-	if (_cmd[3].empty())
+	if (_cmd.size() < 4)
 	{
-		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " :Mode :Not enough parameters\r\n";
+		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " " + cli->getNick() + " :Mode :Not enough parameters\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
 	if (_cmd[2][0] == '+')
 	{
-		//std::cout << BOLDRED << "size = " << atoi(_cmd[3].c_str()) << RESET << std::endl;
 		chan->setLimitNbr(atoi(_cmd[3].c_str()));
 		_inform_mode_change("+l " + _cmd[3], cli, chan);
 	}
@@ -250,9 +249,9 @@ void mode::_b_mode_chan(client *cli, channel *chan)
 	std::string message;
 	client *target_cli = chan->getCli(_cmd[3]);
 
-	if (_cmd[3].empty())
+	if (_cmd.size() < 4)
 	{
-		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " :Mode :Not enough parameters\r\n";
+		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " " + cli->getNick() + " :Mode :Not enough parameters\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
@@ -283,7 +282,7 @@ void mode::_v_mode_chan(client *cli, channel *chan)
 	std::string message;
 	client *target_cli = chan->getCli(_cmd[3]);
 
-	if (_cmd[3].empty())
+	if (_cmd.size() < 4)
 	{
 		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " " + cli->getNick() + " :Mode :Not enough parameters\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
@@ -315,7 +314,7 @@ void mode::_k_mode_chan(client *cli, channel *chan)
 {
 		std::string message;
 
-	if (_cmd[3].empty())
+	if (_cmd.size() < 4)
 	{
 		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " " + cli->getNick() + " :Mode :Not enough parameters\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
@@ -342,7 +341,7 @@ void mode::_i_mode_cli(client *cli, channel *chan)
 
 	if (_cmd[2].empty())
 	{
-		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " " + cli->getNick() + " :Mode :Not enough parameters\r\n";
+		message = ":server " + std::string(ERR_NEEDMOREPARAMS) + " Mode :Not enough parameters\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}

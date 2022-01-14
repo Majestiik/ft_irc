@@ -49,4 +49,10 @@ void command::_getCmd(std::string buf)
 
 	_cmd.clear();
 	_cmd = cmd_tmp;
+
+	/*for (std::vector<std::string>::iterator it = _cmd.begin(); it != _cmd.end(); it++)
+	{
+		std::cout << BOLDYELLOW << "_cmd = " << (*it) << RESET << std::endl; 
+	}*/
+	
 }
