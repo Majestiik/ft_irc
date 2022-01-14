@@ -34,7 +34,7 @@ void topic::execute(std::string buf, client *cli, std::vector<channel *> *channe
 			message = ":server " + std::string(RPL_TOPIC) + " " + cli->getNick() + " " + cur_chan->getName() + " :" + cur_chan->getTopic() + "\r\n";
 			send(cli->getSd(), message.c_str(), message.length(), 0);
 		}
-		else if (!cur_chan->isOp(cli) && !cur_chan->isCanSpeakM(cli))
+		else if (!cur_chan->isOp(cli) && cur_chan->getTopicLimited())
 		{
 			message = ":server " + std::string(ERR_CHANOPRIVSNEEDED) + " " + cli->getNick() + " " + cur_chan->getName() + " :You're not channel operator\r\n";
 			send(cli->getSd(), message.c_str(), message.length(), 0);
