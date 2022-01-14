@@ -29,17 +29,15 @@ void	part::execute(std::string buf, client *cli, std::vector<channel *> *channel
 	if (cur_chan != NULL)
 	{
 		std::string reason;
-		if (_cmd.size() > 2)
+		for (size_t i = 2; i < _cmd.size(); i++)
 		{
-			size_t i = 2;
-			while (i < _cmd.size())
-			{
-				reason += _cmd[i] + " ";
-				i++;
-			}
-			reason.pop_back();
+			reason.append(_cmd[i]);
+			if (i != _cmd.size() - 1)
+				reason.append(" ");
 		}
-		message = ":" + cli->getNick() + "!" + cli->getLogin() + "@" + cli->getIp() + " PART " + _cmd[1] + " " + reason + "\r\n";
+		if (reason.front() == ':')
+			reason = &reason[1];
+		message = ":" + cli->getNick() + "!" + cli->getLogin() + "@" + cli->getIp() + " PART " + _cmd[1] + " :" + reason + "\r\n";
 		std::vector<client*> members = cur_chan->getMembers();
 		for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
 		{
