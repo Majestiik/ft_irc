@@ -38,6 +38,11 @@ bool		client::getAccept() const
 	return _accessAccepted;
 }
 
+sockaddr_in	client::getAddress() const
+{
+	return _address;
+}
+
 void	client::setNick(std::string nick)
 {
 	_nick = nick;

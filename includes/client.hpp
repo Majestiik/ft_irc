@@ -29,6 +29,7 @@ class client
 		std::string	getRealName() const;
 		std::string	getIp() const;
 		std::string getBuffer() const;
+		sockaddr_in	getAddress() const;
 		int			getSd() const;
 		bool		getAccept() const;
 		void		setNick(std::string nick);

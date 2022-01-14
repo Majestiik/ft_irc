@@ -185,7 +185,7 @@ void	server::_operation()
 					c->setBuffer(buffer);
 				else
 					c->setBuffer(c->getBuffer() + buffer);
-
+				std::cout << "===BUFFER===\n|" << c->getBuffer() << "|\n";
 				std::string command = c->getBuffer().substr(0, c->getBuffer().find(' '));
 				if (c->getAccept() == true)
 					pars.parse(c->getBuffer(), c);

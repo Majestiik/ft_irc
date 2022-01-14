@@ -15,6 +15,11 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 	_getCmd(buf);
 	channel *chan;
 
+
+	/*if (_cmd.size() > 5 && _cmd[2] == "DCC")
+	{
+		dcc.execute(buf, cli, cli_list);
+	}*/
 	if (_cmd.size() < 3)
 	{
 		message = ":server " + std::string(ERR_NOTEXTTOSEND) + " " + cli->getNick() + " :No text to send\r\n";
