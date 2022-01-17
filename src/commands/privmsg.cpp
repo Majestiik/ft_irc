@@ -21,7 +21,7 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
-	if (_cmd[2] == "$B")
+	if (_cmd[2][0] == '!')
 	{
 		_bot.execute(buf, cli, channels);
 	}

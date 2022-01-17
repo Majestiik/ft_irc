@@ -17,6 +17,7 @@ class bot : public command
 		bot(bot const& other);
 		bot operator=(bot const& other);
 		void _talk(client *cli, channel *chan);
+		void _help(client *cli, channel *chan);
 
 	public:
 		

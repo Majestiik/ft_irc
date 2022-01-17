@@ -344,10 +344,8 @@ bool		channel::isMode(char mode)
 
 std::string	channel::getAllCurrentModes()
 {
-	std::string allCurrentModes;
-
-	allCurrentModes.push_back('+');
-
+	std::string allCurrentModes("+");
+	std::cout << BOLDGREEN << "1" << RESET << std::endl;
 	if (getPrivate())
 	{
 		allCurrentModes.push_back('p');
@@ -381,6 +379,5 @@ std::string	channel::getAllCurrentModes()
 	{
 		allCurrentModes.push_back('k');
 	}
-
 	return (allCurrentModes);
 }

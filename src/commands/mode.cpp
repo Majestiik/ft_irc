@@ -25,7 +25,7 @@ void	mode::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 			send(cli->getSd(), message.c_str(), message.length(), 0);
 			return;
 		}
-		if (_cmd.size() == 2)
+		if (_cmd.size() > 2 && _cmd[2] == "+?")
 		{
 			message = ":server " + std::string(RPL_CHANNELMODEIS) + " " + cli->getNick() + " " + cur_chan->getName() + " :" + cur_chan->getAllCurrentModes() + "\r\n";
 			send(cli->getSd(), message.c_str(), message.length(), 0);
@@ -47,7 +47,6 @@ void	mode::execute(std::string buf, client *cli, std::vector<channel *> *chan)
 		{
 			while (_cmd[2].size() > i)
 			{
-				//std::cout << BOLDRED << "_cmd = " << _cmd[2][i] << RESET << std::endl;
 				if (_cmd[2][i] == 'o')
 					_o_mode_chan(cli, cur_chan);
 				else if (_cmd[2][i] == 'p')

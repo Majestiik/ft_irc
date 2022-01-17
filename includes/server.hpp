@@ -3,10 +3,12 @@
 #include <arpa/inet.h>
 #include <sys/select.h>
 #include <unistd.h>
+#include <errno.h> 
 #include <iostream>
 #include <vector>
 #include <map>
 #include <cstring>
+#include <cstdlib>
 
 #include "client.hpp"
 #include "channel.hpp"
