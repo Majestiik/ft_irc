@@ -4,7 +4,11 @@
 class dcc : public command
 {
 	private:
+		dcc(dcc const& other);
+		dcc	operator=(dcc const& other);
 
 	public:
-		void	execute(std::string buf, client *cli, std::vector<client *> *clients);
+		dcc();
+		~dcc();
+		void	execute(client *cli, std::vector<client *> *clients, std::vector<std::string> cmd);
 };

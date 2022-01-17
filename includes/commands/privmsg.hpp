@@ -2,6 +2,7 @@
 
 #include "command.hpp"
 #include "../bot.hpp"
+#include "dcc.hpp"
 
 
 class privmsg : public command
@@ -11,9 +12,11 @@ class privmsg : public command
 		privmsg	operator=(privmsg const& other);
 
 		bot	_bot;
+		dcc _dcc;
 
 	public :
 		privmsg();
 		~privmsg();
 		void execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *cli_list);
+
 };

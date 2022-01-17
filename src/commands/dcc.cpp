@@ -9,7 +9,12 @@ dcc::~dcc()
 {
 }
 
-void	dcc::execute(std::string buf, client *cli, std::vector<client *> *clients)
+void	dcc::execute(client *cli, std::vector<client *> *clients, std::vector<std::string> cmd)
 {
-	
+	for (std::vector<std::string>::iterator it = cmd.begin(); it != cmd.end(); it++)
+	{
+		std::cout << *it << std::endl;
+	}
+	(void)cli;
+	(void)clients;
 }

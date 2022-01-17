@@ -15,11 +15,6 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 	_getCmd(buf);
 	channel *chan;
 
-
-	/*if (_cmd.size() > 5 && _cmd[2] == "DCC")
-	{
-		dcc.execute(buf, cli, cli_list);
-	}*/
 	if (_cmd.size() < 3)
 	{
 		message = ":server " + std::string(ERR_NOTEXTTOSEND) + " " + cli->getNick() + " :No text to send\r\n";
@@ -29,6 +24,12 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 	if (_cmd[2] == "$B")
 	{
 		_bot.execute(buf, cli, channels);
+	}
+	//DCC for file transfer
+	if (_cmd[2] == "DCC" || _cmd[2].substr(1, 3) == "DCC")
+	{
+		_dcc.execute(cli, cli_list, _cmd);
+		return ;
 	}
 	if (_cmd[1][0] == '#') /* is chan */
 	{
