@@ -10,21 +10,17 @@ join::~join()
 
 void	join::execute(std::string buf, client *cli, std::vector<channel *> *channels)
 {
-	std::cout << BOLDMAGENTA << "|0|" << RESET << std::endl;
 	_getCmd(buf);
-	std::cout << BOLDMAGENTA << "|1|" << RESET << std::endl;
 	if (_cmd.size() < 2)
 	{
 		std::string tmp = ":server " + std::string(ERR_NEEDMOREPARAMS) + " " + cli->getNick() + " " + " :Join :Not enough parameters\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
-	std::cout << BOLDMAGENTA << "|2|" << RESET << std::endl;
 	if (_checkName(_cmd[1], channels))
 	{
 		channels->push_back(new channel(_cmd[1]));
 	}
-	std::cout << BOLDMAGENTA << "|3|" << RESET << std::endl;
 	_joinChan(_cmd[1], cli, channels);
 }
 
@@ -91,11 +87,9 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 	{
 		tmp = ":server " + std::string(RPL_TOPIC) + " " + cli->getNick() + " " + name + " :" + chan->getTopic() + "\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
-		tmp = ":server " + std::string(RPL_NAMREPLY) + " " + cli->getNick() + " = " + name + " :" + chan->listClients() + "\r\n";
-		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
-		tmp = ":server " + std::string(RPL_ENDOFNAMES) + " " + name + " :End of NAMES list\r\n";
-		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
-		
+		chan->updateClientList();
+		if (chan->getBot()->getIsActive())
+			chan->getBot()->welcomeMsg(cli->getNick(), chan->getName(), chan->getMembers());
 	}
 }
 

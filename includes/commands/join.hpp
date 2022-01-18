@@ -1,6 +1,7 @@
 #pragma once
 
 #include "command.hpp"
+#include "../bot.hpp"
 
 class join : public command
 {
@@ -10,6 +11,8 @@ class join : public command
 		void	_informMembers(std::string name, client *cli, channel *chan);
 		join(join const& other);
 		join	operator=(join const& other);
+
+		bot	_bot;
 
 	public:
 		join();

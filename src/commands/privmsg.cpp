@@ -21,10 +21,6 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
-	if (_cmd[2][0] == '!')
-	{
-		_bot.execute(buf, cli, channels);
-	}
 	//DCC for file transfer
 	if (_cmd[2] == "DCC" || _cmd[2].substr(1, 3) == "DCC")
 	{
@@ -54,8 +50,6 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 				if (i != _cmd.size() - 1)
 					privmsg.append(" ");
 			}
-			/*if (privmsg.front() == ':')
-				privmsg = &privmsg[1];*/
 			std::string chan_message = ":" + cli->getNick() + " PRIVMSG " + _cmd[1] + " :" + privmsg + "\r\n";
 			std::vector<client*> members = chan->getMembers();
 			for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
@@ -64,6 +58,10 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 				if (c->getNick() != cli->getNick())
 					send(c->getSd(), chan_message.c_str(), chan_message.length(), 0);
 			}
+		}
+		if (_cmd[2][0] == '!')
+		{
+			chan->getBot()->execute(_cmd, cli->getNick(), cli->getSd(), chan->getName(), chan->getMembers());
 		}
 	}
 	else

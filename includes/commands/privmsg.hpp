@@ -1,8 +1,9 @@
 #pragma once
 
 #include "command.hpp"
-#include "../bot.hpp"
 #include "dcc.hpp"
+#include "../bot.hpp"
+
 
 
 class privmsg : public command

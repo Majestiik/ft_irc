@@ -56,7 +56,23 @@ void	user::execute(std::string buf, client *cli)
 	}
 	if (!cli->getNick().empty())
 	{
-		message = ":" + cli->getIp() + " 001 " + cli->getNick() + " :Welcome to the IRMEGASTONKS network, you'll see it's incredible\r\n";
+		message = ":" + cli->getIp() + " 001 " + cli->getNick() + " :Welcome to the IRCMEGASTONKS network, you'll see it's incredible\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		message = ":server " + std::string(RPL_MYINFO) + " " + cli->getNick() + " : IRCMEGASTONKS Message of the day\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		message = ":server " + std::string(RPL_MYINFO) + " " + cli->getNick() + " :     - You can join a channel by type: /join <channel>\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		message = ":server " + std::string(RPL_MYINFO) + " " + cli->getNick() + " :        if channel do not exist, create automaticaly new one, with you as Operator\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		message = ":server " + std::string(RPL_MYINFO) + " " + cli->getNick() + " :     - You can See a list of visible channel by type: /list\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		message = ":server " + std::string(RPL_MYINFO) + " " + cli->getNick() + " :        and double click on a channel for join\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		message = ":server " + std::string(RPL_MYINFO) + " " + cli->getNick() + " :     - When you create a new channel, a _BOT_ is here by default\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		message = ":server " + std::string(RPL_MYINFO) + " " + cli->getNick() + " :        you can see the list of command for him with: !help\r\n";
+		send(cli->getSd(), message.c_str(), message.length(), 0);
+		message = ":server " + std::string(RPL_MYINFO) + " " + cli->getNick() + " : End of message of the day\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 	}
 }

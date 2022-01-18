@@ -6,25 +6,34 @@
 #include <ctime>
 
 #include "client.hpp"
-#include "channel.hpp"
+//#include "channel.hpp"
 #include "reply_codes.hpp"
-#include "commands/command.hpp"
+//#include "commands/command.hpp"
 
-class bot : public command
+class bot
 {
 	private:
 		std::string	_name;
+		bool _isActive;
 		bot(bot const& other);
 		bot operator=(bot const& other);
-		void _talk(client *cli, channel *chan);
-		void _help(client *cli, channel *chan);
+		void _talk(std::vector<std::string> _cmd, std::string cli, int cli_sd, std::string chan);
+		void _help(std::vector<std::string> _cmd, std::string cli, int cli_sd, std::string chan);
+		void _on(std::vector<client*> members, std::string chan);
+		void _off(std::vector<client*> members, std::string chan);
+
 
 	public:
 		
 		bot();
 		~bot();
+
 		std::string	getName() const;
+		bool 		getIsActive() const;
 
 		void		setName(std::string name);
-		void		execute(std::string buf, client *cli, std::vector<channel *> *channels)	;
+		void		setActive(bool state);
+
+		void		execute(std::vector<std::string> _cmd, std::string cli, int cli_sd, std::string chan, std::vector<client*> members);
+		void		welcomeMsg(std::string cli, std::string chan, std::vector<client*> members);
 };

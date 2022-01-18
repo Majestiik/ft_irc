@@ -3,6 +3,7 @@
 #include <vector>
 #include "client.hpp"
 #include "reply_codes.hpp"
+#include "bot.hpp"
 
 class channel
 {
@@ -23,6 +24,7 @@ class channel
 		bool _isModerated;
 		bool _isInviteOnly;
 		size_t _limit_nbr;
+		bot _bot;
 		channel();
 		channel(channel const& other);
 		channel	operator=(channel const& other);
@@ -45,6 +47,7 @@ class channel
 		bool	getModerated() const;
 		bool	getInviteOnly() const;
 		size_t	getLimitNbr() const;
+		bot 	*getBot();
 
 /*****SETTERS*****/
 	
@@ -82,6 +85,8 @@ class channel
 		bool		isCanSpeakM(client *cli) const;
 		bool		isMode(char mode);
 		std::string	getAllCurrentModes();
+		void		updateClientList();
 };
+
 
 

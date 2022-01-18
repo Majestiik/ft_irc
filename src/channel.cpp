@@ -75,6 +75,11 @@ bool channel::getModerated() const
 	return _isModerated;
 }
 
+bot *channel::getBot()
+{
+	return &_bot;
+}
+
 void	channel::setPrivate(bool b)
 {
 	_isPrivate = b;
@@ -380,4 +385,21 @@ std::string	channel::getAllCurrentModes()
 		allCurrentModes.push_back('k');
 	}
 	return (allCurrentModes);
+}
+
+void	channel::updateClientList()
+{
+	std::string tmp;
+
+	for (std::vector<client*>::iterator it = _members.begin(); it != _members.end(); it++)
+	{
+		std::cout << BOLDCYAN << "bot is actif = " << getBot()->getIsActive() << RESET << std::endl;
+		if (getBot()->getIsActive())
+			tmp = ":server " + std::string(RPL_NAMREPLY) + " " + (*it)->getNick() + " = " + getName() + " :" + listClients() + " " + getBot()->getName() + "\r\n";
+		else
+			tmp = ":server " + std::string(RPL_NAMREPLY) + " " + (*it)->getNick() + " = " + getName() + " :" + listClients() + "\r\n";
+		send((*it)->getSd(), tmp.c_str(), tmp.length(), 0);
+		tmp = ":server " + std::string(RPL_ENDOFNAMES) + " " + getName() + " :End of NAMES list\r\n";
+		send((*it)->getSd(), tmp.c_str(), tmp.length(), 0);
+	}
 }
