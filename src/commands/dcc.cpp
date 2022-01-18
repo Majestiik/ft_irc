@@ -17,4 +17,11 @@ void	dcc::execute(client *cli, std::vector<client *> *clients, std::vector<std::
 	}
 	(void)cli;
 	(void)clients;
+	if (_cmd[3] != "SEND")
+		return ;
+	//int sock = socket(AF_INET, SOCK_STREAM, 0);
+	//sendfile()
+	//std::string message = ""
+
+
 }
