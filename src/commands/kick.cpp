@@ -93,6 +93,9 @@ void	kick::execute(std::string buf, client *cli, std::vector<channel *> *channel
 		}
 		reason.pop_back();
 	}
+	std::cout << "reason : " << reason << std::endl;
+	if (reason.size() >= 1 && reason[0] != ':')
+		reason = ':' + reason;
 	message = ":" + cli->getNick() + " KICK " + _cmd[1] + " " + _cmd[2] + " " + reason + "\r\n";
 	_informMembers(message, chan);
 	chan->deleteEverywhere(_getClient(_cmd[2], chan));
