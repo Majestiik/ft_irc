@@ -2,7 +2,7 @@
 
 bot::bot()
 {
-	_name = "_BOT_";
+	_name = "BotteurDeFesse!";
 	_isActive = true;
 }
 
@@ -15,12 +15,29 @@ std::string	bot::getName() const
 	return _name;
 }
 
-bool bot::getIsActive() const
+bool	bot::getIsActive() const
 {
 	return _isActive;
 }
 
-void		bot::setName(std::string name)
+bool	bot::getIsBanWActive() const
+{
+	return _isBanWActive;
+}
+
+std::string	bot::getBanWords() const
+{
+	std::string banWlist;
+	for (std::vector<std::string>::const_iterator it = _banWordsList.begin(); it != _banWordsList.end(); it++)
+	{
+		banWlist.append((*it));
+		if (it + 1 != _banWordsList.end())
+			banWlist.append(", ");
+	}
+	return banWlist;
+}
+
+void	bot::setName(std::string name)
 {
 	_name = name + "_BOT_";
 }
@@ -28,6 +45,39 @@ void		bot::setName(std::string name)
 void	bot::setActive(bool state)
 {
 	_isActive = state;
+}
+
+void	bot::setBanWActive(bool state)
+{
+	_isBanWActive = state;
+}
+
+void	bot::addBanWord(std::string banWord)
+{
+	_banWordsList.push_back(banWord);
+}
+
+int	bot::delBanWord(std::string banWord)
+{
+	for (std::vector<std::string>::const_iterator it = _banWordsList.begin(); it != _banWordsList.end(); it++)
+	{
+		if ((*it) == banWord)
+		{
+			_banWordsList.erase(it);
+			return 1;
+		}
+	}
+	return 0;
+}
+
+bool	bot::isBanWorld(std::string message)
+{
+	for (std::vector<std::string>::iterator it = _banWordsList.begin(); it != _banWordsList.end(); it++)
+	{
+		if (message.find((*it)) != std::string::npos)
+			return true;
+	}
+	return false;
 }
 
 void	bot::execute(std::vector<std::string> _cmd, std::string cli_name, int cli_sd, std::string chan, std::vector<client*> members)
@@ -45,6 +95,10 @@ void	bot::execute(std::vector<std::string> _cmd, std::string cli_name, int cli_s
 			_help(_cmd, cli_name, cli_sd, chan);
 		}
 
+		if (_cmd.size() > 2 && (_cmd[2] == "!BANWORDS" || _cmd[2] == "!banwords"))
+		{
+			_banWords(_cmd, cli_name, cli_sd, chan);
+		}
 
 		if (_cmd.size() > 2 && (_cmd[2] == "!OFF" || _cmd[2] == "!off"))
 		{
@@ -60,7 +114,7 @@ void	bot::execute(std::vector<std::string> _cmd, std::string cli_name, int cli_s
 	}
 }
 
-void bot::welcomeMsg(std::string cli_name, std::string chan, std::vector<client*> members)
+void	bot::welcomeMsg(std::string cli_name, std::string chan, std::vector<client*> members)
 {
 	std::string message;
 	int r = rand() % 5 + 1;
@@ -83,7 +137,7 @@ void bot::welcomeMsg(std::string cli_name, std::string chan, std::vector<client*
 	}
 }
 
-void bot::_talk(std::vector<std::string> _cmd, std::string cli_name, int cli_sd, std::string chan)
+void	bot::_talk(std::vector<std::string> _cmd, std::string cli_name, int cli_sd, std::string chan)
 {
 	std::string chan_message;
 	if (_cmd.size() == 3)
@@ -111,7 +165,7 @@ void bot::_talk(std::vector<std::string> _cmd, std::string cli_name, int cli_sd,
 	}*/
 }
 
-void bot::_help(std::vector<std::string> _cmd, std::string cli_name, int cli_sd, std::string chan)
+void	bot::_help(std::vector<std::string> _cmd, std::string cli_name, int cli_sd, std::string chan)
 {
 	(void) chan;
 	std::string chan_message;
@@ -188,7 +242,7 @@ void bot::_help(std::vector<std::string> _cmd, std::string cli_name, int cli_sd,
 	}*/
 }
 
-void bot::_on(std::vector<client*> members, std::string chan)
+void	bot::_on(std::vector<client*> members, std::string chan)
 {
 	std::string message;
 	message = ":" + getName() + "!" + getName() + "@0.0.0.0 JOIN " + chan + " :" + "is off"+ "\r\n";
@@ -197,11 +251,62 @@ void bot::_on(std::vector<client*> members, std::string chan)
 	setActive(true);
 }
 
-void bot::_off(std::vector<client*> members, std::string chan)
+void	bot::_off(std::vector<client*> members, std::string chan)
 {
 	std::string message;
 	message = ":" + getName() + "!" + getName() + "@0.0.0.0 PART " + chan + " :" + "is off"+ "\r\n";
 	for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
 		send((*it)->getSd(), message.c_str(), message.length(), 0);
 	setActive(false);
+}
+
+void	bot::_banWOn(int cli_sd, std::string chan)
+{
+	std::string message;
+	message = ":" + getName() + " PRIVMSG " + chan + " : Activation of the banned word function\r\n";
+	send(cli_sd, message.c_str(), message.length(), 0);
+	setBanWActive(true);
+}
+
+void	bot::_banWOff(int cli_sd, std::string chan)
+{
+	std::string message;
+	message = ":" + getName() + " PRIVMSG " + chan + " : Disabling the banned word function\r\n";
+	send(cli_sd, message.c_str(), message.length(), 0);
+	setBanWActive(false);
+}
+
+void	bot::_banWords(std::vector<std::string> _cmd, std::string cli, int cli_sd, std::string chan)
+{
+	(void)cli;
+	std::string message;
+
+	if (_cmd.size() == 3)
+	{
+		message = ":" + getName() + " PRIVMSG " + chan + " : The ban words function is " + ((getIsBanWActive() == true) ? "enable" : "disable") + " on this channel\r\n";
+		send(cli_sd, message.c_str(), message.length(), 0);
+		if (_banWordsList.size() == 0)
+			message = ":---> PRIVMSG " + chan + " : The list of banned words is empty\r\n";
+		else
+			message = ":---> PRIVMSG " + chan + " : Here are the list of banned words on this channel : " + getBanWords() + "\r\n";
+		send(cli_sd, message.c_str(), message.length(), 0);	
+	}
+	else if (_cmd.size() > 4 && _cmd[3] == "add")
+	{
+		addBanWord(_cmd[4]);
+		message = ":" + getName() + " PRIVMSG " + chan + " : The word banned has been added\r\n";
+		send(cli_sd, message.c_str(), message.length(), 0);
+	}
+	else if (_cmd.size() > 4 && _cmd[3] == "del")
+	{
+		if (delBanWord(_cmd[4]) == 1)
+		{
+			message = ":" + getName() + " PRIVMSG " + chan + " : The banned word has been removed\r\n";
+			send(cli_sd, message.c_str(), message.length(), 0);
+		}
+	}
+	else if (_cmd.size() > 3 && _cmd[3] == "on" && !getIsBanWActive())
+		_banWOn(cli_sd, chan);
+	else if (_cmd.size() > 3 && _cmd[3] == "off" && getIsBanWActive())
+		_banWOff(cli_sd, chan);
 }

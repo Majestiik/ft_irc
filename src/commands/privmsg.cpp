@@ -8,7 +8,7 @@ privmsg::~privmsg()
 {
 }
 
-void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *cli_list)
+std::string privmsg::execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *cli_list)
 {
 	std::string message;
 	std::string privmsg;
@@ -19,7 +19,7 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 	{
 		message = ":server " + std::string(ERR_NOTEXTTOSEND) + " " + cli->getNick() + " :No text to send\r\n";
 		send(cli->getSd(), message.c_str(), message.length(), 0);
-		return;
+		return "";
 	}
 	if (_cmd[1][0] == '#') /* is chan */
 	{
@@ -28,13 +28,13 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 		{
 			message = ":server " + std::string(ERR_NOSUCHCHANNEL) + " " + cli->getNick() + " " + _cmd[1] + " :No such channel\r\n";
 			send(cli->getSd(), message.c_str(), message.length(), 0);
-			return;
+			return "";
 		}
 		if ((chan != NULL && chan->getExtMessAllow() && !chan->isMember(cli)) || (chan != NULL && chan->getModerated() && (!chan->isOp(cli) && !chan->isCanSpeakM(cli))))
 		{
 			message = ":server " + std::string(ERR_CANNOTSENDTOCHAN) + " " + cli->getNick() + " " + _cmd[1] + " :Cannot send to channel\r\n";
 			send(cli->getSd(), message.c_str(), message.length(), 0);
-			return;
+			return "";
 		}
 		if (chan != NULL)
 		{
@@ -44,6 +44,8 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 				if (i != _cmd.size() - 1)
 					privmsg.append(" ");
 			}
+			if (chan->getBot()->getIsBanWActive() && chan->getBot()->isBanWorld(privmsg))
+				return(chan->getBot()->getName());
 			std::string chan_message = ":" + cli->getNick() + " PRIVMSG " + _cmd[1] + " :" + privmsg + "\r\n";
 			std::vector<client*> members = chan->getMembers();
 			for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
@@ -73,7 +75,7 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 		{
 			std::string tmp = ":server " + std::string(ERR_NOSUCHNICK) + " " + _cmd[1] + " :No such nick\r\n";
 			send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
-			return;
+			return "";
 		}
 		else
 		{
@@ -89,5 +91,6 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 			send(c->getSd(), cli_message.c_str(), cli_message.length(), 0);
 		}
 	}
+	return "";
 }
 

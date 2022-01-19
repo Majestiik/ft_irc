@@ -16,6 +16,6 @@ class privmsg : public command
 	public :
 		privmsg();
 		~privmsg();
-		void execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *cli_list);
+		std::string execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *cli_list);
 
 };

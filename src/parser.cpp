@@ -75,7 +75,11 @@ void	parser::parse(std::string buf, client *cli)
 		_join.execute(buf, cli, &channels);
 
 	else if (command == "PRIVMSG")
-		_privmsg.execute(buf, cli, &channels, _serv->getClients());
+	{
+		std::string ret = _privmsg.execute(buf, cli, &channels, _serv->getClients());
+		if (ret.size() > 0)
+			_kick.execute(buf, cli, &channels, true, ret);
+	}
 
 	else if (command == "NOTICE")
 		_notice.execute(buf, cli, &channels, _serv->getClients());
@@ -96,7 +100,7 @@ void	parser::parse(std::string buf, client *cli)
 		_list.execute(buf, cli, &channels);
 
 	else if (command == "KICK")
-		_kick.execute(buf, cli, &channels);
+		_kick.execute(buf, cli, &channels, false, " ");
 
 	else if (command == "EXIT")
 		_serv->setOffline();
