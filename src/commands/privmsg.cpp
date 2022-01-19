@@ -21,12 +21,6 @@ void privmsg::execute(std::string buf, client *cli, std::vector<channel *> *chan
 		send(cli->getSd(), message.c_str(), message.length(), 0);
 		return;
 	}
-	//DCC for file transfer
-	if (_cmd[2] == "DCC" || _cmd[2].substr(1, 3) == "DCC")
-	{
-		_dcc.execute(cli, cli_list, _cmd);
-		return ;
-	}
 	if (_cmd[1][0] == '#') /* is chan */
 	{
 		chan = _getChan(_cmd[1], channels);
