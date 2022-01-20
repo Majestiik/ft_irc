@@ -53,6 +53,18 @@ void	nick::_informChange(std::string message, client *cli, std::vector<channel *
 	}
 }
 
+std::string _toupper(std::string str)
+{
+	int i = 0;
+	while (str[i])
+	{
+		if (str[i] >= 'a' && str[i] <= 'z')
+			str[i] -= 32;
+		i++;
+	}
+	return str;
+}
+
 bool	nick::_validChars(std::string nick)
 {
 	size_t i = 0;
@@ -62,7 +74,7 @@ bool	nick::_validChars(std::string nick)
 			return false;
 		i++;
 	}
-	if (nick == "STONKS_BOT")
+	if (_toupper(nick) == "STONKS_BOT")
 		return false;
 	return true;
 }
