@@ -62,6 +62,8 @@ bool	nick::_validChars(std::string nick)
 			return false;
 		i++;
 	}
+	if (nick == "STONKS_BOT")
+		return false;
 	return true;
 }
 
