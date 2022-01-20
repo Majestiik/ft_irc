@@ -17,6 +17,8 @@ void	join::execute(std::string buf, client *cli, std::vector<channel *> *channel
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}
+	if (_cmd[1][0] && _cmd[1][0] != '#')
+		_cmd[1] = '#' + _cmd[1];
 	if (_checkName(_cmd[1], channels))
 	{
 		channels->push_back(new channel(_cmd[1]));
@@ -62,7 +64,7 @@ void	join::_joinChan(std::string name, client *cli, std::vector<channel *> *chan
 	}
 	else if (chan->isMember(cli))
 	{
-		tmp = ":server " + std::string(ERR_USERONCHANNEL) + " " + cli->getNick() + " " + name + " :is already on channel\r\n";
+		tmp = ":server " + std::string(ERR_USERONCHANNEL) + " " + cli->getNick() + " " + cli->getNick() + " :is already on channel\r\n";
 		send(cli->getSd(), tmp.c_str(), tmp.length(), 0);
 		return;
 	}

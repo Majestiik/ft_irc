@@ -58,7 +58,7 @@ bool	nick::_validChars(std::string nick)
 	size_t i = 0;
 	while (i < nick.length())
 	{
-		if (nick[i] <= 32 || nick[i] > 126 || nick[i] == ':')
+		if (nick[i] <= 32 || nick[i] > 126 || nick[i] == ':' || nick[i] == '#' || nick[i] == '!' || nick[i] == '@')
 			return false;
 		i++;
 	}
