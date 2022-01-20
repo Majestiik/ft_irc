@@ -2,7 +2,7 @@
 
 bot::bot()
 {
-	_name = "BotteurDeFesse";
+	_name = "STONKS_BOT";
 	_isActive = true;
 }
 
@@ -82,7 +82,6 @@ bool	bot::isBanWorld(std::string message)
 
 bool	bot::execute(std::vector<std::string> _cmd, std::string cli_name, int cli_sd, bool cliIsOpe, std::string chan, std::vector<client*> members)
 {
-	//std::cout << BOLDMAGENTA << "command = |" << _cmd[2] + " " + _cmd[3] << "|" << RESET << std::endl;
 	if (getIsActive())
 	{
 		if (_cmd.size() > 2 && (_cmd[2] == "!TALK" || _cmd[2] == "!talk"))
@@ -126,11 +125,11 @@ void	bot::welcomeMsg(std::string cli_name, std::string chan, std::vector<client*
 	int r = rand() % 5 + 1;
 
 	if (r == 1)
-		message = ":" + getName() + " PRIVMSG " + chan + " : Say hello to " + cli_name + ", and be nice to his !\r\n";
+		message = ":" + getName() + " PRIVMSG " + chan + " : Say hello to " + cli_name + ", and be nice to him !\r\n";
 	else if (r == 2)
-		message = ":" + getName() + " PRIVMSG " + chan + " : " + cli_name + " just arrived, he's bright !\r\n";
+		message = ":" + getName() + " PRIVMSG " + chan + " : " + cli_name + " just arrived, he is bright !\r\n";
 	else if (r == 3)
-		message = ":" + getName() + " PRIVMSG " + chan + " : A wild " + cli_name + " just appeared, he looks uncapturable..\r\n";
+		message = ":" + getName() + " PRIVMSG " + chan + " : A wild " + cli_name + " just appeared, he looks uncapturable...\r\n";
 	else if (r == 4)
 		message = ":" + getName() + " PRIVMSG " + chan + " : What a racket, we heard " + cli_name + " arrive at 10 miles around\r\n";
 	else if (r == 5)
@@ -148,27 +147,35 @@ void	bot::_talk(std::vector<std::string> _cmd, std::string cli_name, int cli_sd,
 	std::string chan_message;
 	if (_cmd.size() == 3)
 	{
-		chan_message = ":" + getName() + " PRIVMSG " + chan + " : Yes ?? " + cli_name + " ? I hope it's important , you leave me to my bed\r\n";
+		chan_message = ":" + getName() + " PRIVMSG " + chan + " : Yes ?? " + cli_name + " ? I hope it's important, you just woke me up\r\n";
 	}
 	else if (_cmd.size() > 3 && _cmd[3] == "hello")
 	{
 		chan_message = ":" + getName() + " PRIVMSG " + chan + " : Hii ! How are you today " + cli_name + " ?\r\n";
 	}
+	else if (_cmd.size() > 3 && _cmd[3] == "best")
+	{
+		chan_message = ":" + getName() + " PRIVMSG " + chan + " : the best guy is " + cli_name + " ? Or maybe me IDK\r\n";
+	}
+	else if (_cmd.size() > 3 && _cmd[3] == "weather")
+	{
+		chan_message = ":" + getName() + " PRIVMSG " + chan + " : The sun is always shining inside my heart when i'm talking to " + cli_name + "\r\n";
+	}
+	else if (_cmd.size() > 3 && _cmd[3] == "irc")
+	{
+		chan_message = ":" + getName() + " PRIVMSG " + chan + " : According to me, the best IRC project ever made is IRCMEGASTONKS by DEUSTACH and LEICKMAY, it doesn't matter if you don't agree " +  "\r\n";
+	}
+	else if (_cmd.size() > 3 && _cmd[3] == "segfault")
+	{
+		chan_message = ":" + getName() + " PRIVMSG " + chan + " : What were you thinking about ?? IT WON'T HAPPEN !!" +  "\r\n";
+	}
 	else if (_cmd.size() > 3)
 	{
-		chan_message = ":" + getName() + " PRIVMSG " + chan + " : What are you saying ? i'm understand nothing...\r\n";
+		chan_message = ":" + getName() + " PRIVMSG " + chan + " : What are you saying ? I understand nothing...\r\n";
 	}
 
 	/* Send only to emmiter client */
 	send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-
-	/* Send to all client */
-	/*std::vector<client*> members = chan->getMembers();
-	for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
-	{
-		client *c = *it;
-		send(c->getSd(), chan_message.c_str(), chan_message.length(), 0);
-	}*/
 }
 
 void	bot::_help(std::vector<std::string> _cmd, std::string cli_name, int cli_sd, bool cliIsOpe, std::string chan)
@@ -181,29 +188,29 @@ void	bot::_help(std::vector<std::string> _cmd, std::string cli_name, int cli_sd,
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
 		chan_message = ":---> PRIVMSG " + _cmd[1] + " :                           Official IRC commands\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /topic <new topic>                    to change the topic of the channel, type only /topic for see the topic\r\n";	
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /topic <new topic>                    to change the topic of the channel, type only /topic to see the topic\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /mode +?                              for see the channel's active mode, for change mode utilisation, type !help mode\r\n";	
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /mode +?                              to see the channel's active mode\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /names <channel> <channel> ...        for see the names of user in channels (if no channel give, see in all visible channels)\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /names <channel> <channel> ...        to see the name of users in channels (if no channel given, see in all visible channels)\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /invite <nickname> <channel>          for send channel invitation to user\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /invite <nickname> <channel>          to send channel invitation to user\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /kick <nickname> <reason>             for kick user to channel, reason is facultative\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /kick <nickname> <reason>             to kick user to channel, reason is facultative\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /privmsg <nickname> <text>            for send a private message to user\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /privmsg <nickname> <text>            to send a private message to user\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /notice <nickname> <text>             like privmsg but without error reply\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /notice <nickname> <text>             like privmsg but without numeric reply\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /part <reason>                        for leave the channel, reason is facultative\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /part <reason>                        to leave the channel, reason is facultative\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /nick <new nickname>                  for change your nickname\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /nick <new nickname>                  to change your nickname\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /list                                 for see the list of visible channels\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /list                                 to see the list of visible channels\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /join <channel>                       for enter in a channel, if do not exist, create new one with you as operator\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /join <channel>                       to enter in a channel. If this channel doesn't exist, create new one with you as operator\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /quit <reason>                        for leave the server, reason is facultative\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /quit <reason>                        to leave the server, reason is facultative\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
 
 		chan_message = ":---> PRIVMSG " + _cmd[1] + " :                           Bot commands\r\n";	
@@ -216,9 +223,9 @@ void	bot::_help(std::vector<std::string> _cmd, std::string cli_name, int cli_sd,
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
 		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !talk <text>                          to try to speak with the BOT, try to write hello for exemple\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords                             to see if banwords function is activated on this channel , and see the list of ban words\r\n";	
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords                             to see if banwords function is activated on this channel, and see the list of ban words\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords on                          to enabled a ban words function\r\n";	
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords on                          to enable a ban words function\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
 		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords off                         to disable a ban words function\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
@@ -234,27 +241,27 @@ void	bot::_help(std::vector<std::string> _cmd, std::string cli_name, int cli_sd,
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
 		chan_message = ":---> PRIVMSG " + _cmd[1] + " :                           Official IRC commands\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /topic                                for see the topic\r\n";	
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /topic                                to see the topic\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /mode +?                              for see the channel's active mode\r\n";	
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /mode +?                              to see the channel's active mode\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /names <channel> <channel> ...        for see the names of user in channels (if no channel give, see in all visible channels)\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /names <channel> <channel> ...        to see the name of users in channels (if no channel given, see in all visible channels)\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /invite <nickname> <channel>          for send channel invitation to user\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /invite <nickname> <channel>          to send channel invitation to user\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /privmsg <nickname> <text>            for send a private message to user\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /privmsg <nickname> <text>            to send a private message to user\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /notice <nickname> <text>             like privmsg but without error reply\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /notice <nickname> <text>             like privmsg but without numeric reply\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /part <reason>                        for leave the channel, reason is facultative\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /part <reason>                        to leave the channel, reason is facultative\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /nick <new nickname>                  for change your nickname\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /nick <new nickname>                  to change your nickname\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /list                                 for see the list of visible channels\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /list                                 to see the list of visible channels\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /join <channel>                       for enter in a channel, if do not exist, create new one with you as operator\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /join <channel>                       to enter in a channel. If this channel doesn't exist, create new one with you as operator\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /quit <reason>                        for leave the server, reason is facultative\r\n";
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /quit <reason>                        to leave the server, reason is facultative\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
 
 		chan_message = ":---> PRIVMSG " + _cmd[1] + " :                           Bot commands\r\n";	
@@ -263,7 +270,7 @@ void	bot::_help(std::vector<std::string> _cmd, std::string cli_name, int cli_sd,
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
 		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !talk <text>                          to try to speak with the BOT, try to write hello for exemple\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords                             to see if banwords function is activated on this channel , and see the list of ban words\r\n";	
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords                             to see if banwords function is activated on this channel, and see the list of ban words\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
 	}
 }
@@ -309,18 +316,18 @@ void	bot::_banWords(std::vector<std::string> _cmd, std::string cli, int cli_sd, 
 
 	if (_cmd.size() == 3)
 	{
-		message = ":" + getName() + " PRIVMSG " + chan + " : The ban words function is " + ((getIsBanWActive() == true) ? "enable" : "disable") + " on this channel\r\n";
+		message = ":" + getName() + " PRIVMSG " + chan + " : The ban words function is " + ((getIsBanWActive() == true) ? "enabled" : "disabled") + " on this channel\r\n";
 		send(cli_sd, message.c_str(), message.length(), 0);
 		if (_banWordsList.size() == 0)
 			message = ":---> PRIVMSG " + chan + " : The list of banned words is empty\r\n";
 		else
-			message = ":---> PRIVMSG " + chan + " : Here are the list of banned words on this channel : " + getBanWords() + "\r\n";
+			message = ":---> PRIVMSG " + chan + " : Here is the list of banned words on this channel : " + getBanWords() + "\r\n";
 		send(cli_sd, message.c_str(), message.length(), 0);	
 	}
 	else if (_cmd.size() > 4 && _cmd[3] == "add" && cliIsOpe)
 	{
 		addBanWord(_cmd[4]);
-		message = ":" + getName() + " PRIVMSG " + chan + " : The word banned has been added\r\n";
+		message = ":" + getName() + " PRIVMSG " + chan + " : The banned word has been added\r\n";
 		send(cli_sd, message.c_str(), message.length(), 0);
 	}
 	else if (_cmd.size() > 4 && _cmd[3] == "del" && cliIsOpe)
