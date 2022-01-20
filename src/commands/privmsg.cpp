@@ -10,6 +10,7 @@ privmsg::~privmsg()
 
 std::string privmsg::execute(std::string buf, client *cli, std::vector<channel *> *channels, std::vector<client *> *cli_list)
 {
+	bool isBotCmd = false;
 	std::string message;
 	std::string privmsg;
 	_getCmd(buf);
@@ -36,7 +37,11 @@ std::string privmsg::execute(std::string buf, client *cli, std::vector<channel *
 			send(cli->getSd(), message.c_str(), message.length(), 0);
 			return "";
 		}
-		if (chan != NULL)
+		if (_cmd[2][0] == '!')
+		{
+			isBotCmd = chan->getBot()->execute(_cmd, cli->getNick(), cli->getSd(), chan->isOp(cli), chan->getName(), chan->getMembers());
+		}
+		if (chan != NULL && !isBotCmd)
 		{
 			for (size_t i = 2; i < _cmd.size(); i++)
 			{
@@ -44,7 +49,7 @@ std::string privmsg::execute(std::string buf, client *cli, std::vector<channel *
 				if (i != _cmd.size() - 1)
 					privmsg.append(" ");
 			}
-			if (chan->getBot()->getIsBanWActive() && chan->getBot()->isBanWorld(privmsg))
+			if (!chan->isOp(cli) && chan->getBot()->getIsBanWActive() && chan->getBot()->isBanWorld(privmsg))
 				return(chan->getBot()->getName());
 			std::string chan_message = ":" + cli->getNick() + " PRIVMSG " + _cmd[1] + " :" + privmsg + "\r\n";
 			std::vector<client*> members = chan->getMembers();
@@ -54,10 +59,6 @@ std::string privmsg::execute(std::string buf, client *cli, std::vector<channel *
 				if (c->getNick() != cli->getNick())
 					send(c->getSd(), chan_message.c_str(), chan_message.length(), 0);
 			}
-		}
-		if (_cmd[2][0] == '!')
-		{
-			chan->getBot()->execute(_cmd, cli->getNick(), cli->getSd(), chan->getName(), chan->getMembers());
 		}
 	}
 	else

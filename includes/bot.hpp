@@ -20,12 +20,12 @@ class bot
 		bot(bot const& other);
 		bot operator=(bot const& other);
 		void _talk(std::vector<std::string> _cmd, std::string cli, int cli_sd, std::string chan);
-		void _help(std::vector<std::string> _cmd, std::string cli, int cli_sd, std::string chan);
+		void _help(std::vector<std::string> _cmd, std::string cli, int cli_sd, bool cliIsOpe, std::string chan);
 		void _on(std::vector<client*> members, std::string chan);
 		void _off(std::vector<client*> members, std::string chan);
 		void _banWOn(int cli_sd, std::string chan);
 		void _banWOff(int cli_sd, std::string chan);
-		void _banWords(std::vector<std::string> _cmd, std::string cli, int cli_sd, std::string chan);
+		void _banWords(std::vector<std::string> _cmd, std::string cli, int cli_sd, bool cliIsOpe, std::string chan);
 
 
 	public:
@@ -45,6 +45,6 @@ class bot
 		int			delBanWord(std::string banWord);
 		bool		isBanWorld(std::string message);
 
-		void		execute(std::vector<std::string> _cmd, std::string cli, int cli_sd, std::string chan, std::vector<client*> members);
+		bool		execute(std::vector<std::string> _cmd, std::string cli, int cli_sd, bool cliIsOp, std::string chan, std::vector<client*> members);
 		void		welcomeMsg(std::string cli, std::string chan, std::vector<client*> members);
 };

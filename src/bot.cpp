@@ -2,7 +2,7 @@
 
 bot::bot()
 {
-	_name = "BotteurDeFesse!";
+	_name = "BotteurDeFesse";
 	_isActive = true;
 }
 
@@ -80,7 +80,7 @@ bool	bot::isBanWorld(std::string message)
 	return false;
 }
 
-void	bot::execute(std::vector<std::string> _cmd, std::string cli_name, int cli_sd, std::string chan, std::vector<client*> members)
+bool	bot::execute(std::vector<std::string> _cmd, std::string cli_name, int cli_sd, bool cliIsOpe, std::string chan, std::vector<client*> members)
 {
 	//std::cout << BOLDMAGENTA << "command = |" << _cmd[2] + " " + _cmd[3] << "|" << RESET << std::endl;
 	if (getIsActive())
@@ -88,30 +88,36 @@ void	bot::execute(std::vector<std::string> _cmd, std::string cli_name, int cli_s
 		if (_cmd.size() > 2 && (_cmd[2] == "!TALK" || _cmd[2] == "!talk"))
 		{
 			_talk(_cmd, cli_name, cli_sd, chan);
+			return (true);
 		}
 
 		if (_cmd.size() > 2 && (_cmd[2] == "!HELP" || _cmd[2] == "!help"))
 		{
-			_help(_cmd, cli_name, cli_sd, chan);
+			_help(_cmd, cli_name, cli_sd, cliIsOpe, chan);
+			return (true);
 		}
 
 		if (_cmd.size() > 2 && (_cmd[2] == "!BANWORDS" || _cmd[2] == "!banwords"))
 		{
-			_banWords(_cmd, cli_name, cli_sd, chan);
+			_banWords(_cmd, cli_name, cli_sd, cliIsOpe, chan);
+			return (true);
 		}
 
-		if (_cmd.size() > 2 && (_cmd[2] == "!OFF" || _cmd[2] == "!off"))
+		if (_cmd.size() > 2 && (_cmd[2] == "!OFF" || _cmd[2] == "!off") && cliIsOpe)
 		{
 			_off(members, chan);
+			return (true);
 		}
 	}
 	else
 	{
-		if (_cmd.size() > 2 && (_cmd[2] == "!ON" || _cmd[2] == "!on"))
+		if (_cmd.size() > 2 && (_cmd[2] == "!ON" || _cmd[2] == "!on") && cliIsOpe)
 		{
 			_on(members, chan);
+			return (true);
 		}
 	}
+	return (false);
 }
 
 void	bot::welcomeMsg(std::string cli_name, std::string chan, std::vector<client*> members)
@@ -165,11 +171,11 @@ void	bot::_talk(std::vector<std::string> _cmd, std::string cli_name, int cli_sd,
 	}*/
 }
 
-void	bot::_help(std::vector<std::string> _cmd, std::string cli_name, int cli_sd, std::string chan)
+void	bot::_help(std::vector<std::string> _cmd, std::string cli_name, int cli_sd, bool cliIsOpe, std::string chan)
 {
 	(void) chan;
 	std::string chan_message;
-	if (_cmd.size() == 3)
+	if (_cmd.size() == 3 && cliIsOpe)
 	{
 		chan_message = ":" + getName() + " PRIVMSG " + _cmd[1] + " : Here are the commands available for you " + cli_name + " :\r\n";
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
@@ -210,36 +216,56 @@ void	bot::_help(std::vector<std::string> _cmd, std::string cli_name, int cli_sd,
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
 		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !talk <text>                          to try to speak with the BOT, try to write hello for exemple\r\n";	
 		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
-		/*chan_message = ":server " + std::string(RPL_MYINFO) + " " + _cmd[1] + " :Test Info\r\n";
-		send(cli->getSd(), chan_message.c_str(), chan_message.length(), 0);
-
-		chan_message = ":server " + std::string(RPL_MOTDSTART) + " " + _cmd[1] + " :- <server> Message of the day - \r\n";
-		send(cli->getSd(), chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":server " + std::string(RPL_MOTD) + " " + _cmd[1] + " :- truck de fou\r\n";
-		send(cli->getSd(), chan_message.c_str(), chan_message.length(), 0);
-		chan_message = ":server " + std::string(RPL_ENDOFINFO) + " " + _cmd[1] + " :End of MOTD command\r\n";
-		send(cli->getSd(), chan_message.c_str(), chan_message.length(), 0);*/
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords                             to see if banwords function is activated on this channel , and see the list of ban words\r\n";	
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords on                          to enabled a ban words function\r\n";	
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords off                         to disable a ban words function\r\n";	
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords add                         to add a ban word\r\n";	
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords del                         to delete a ban word\r\n";	
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
 
 	}
-	/*else if (_cmd.size() > 3 && _cmd[4] == "hello")
+	if (_cmd.size() == 3 && !cliIsOpe)
 	{
-		chan_message = ":" + getName() + " PRIVMSG " + _cmd[1] + " : Tout vas bien et toi BG du 69 ?\r\n";
+		chan_message = ":" + getName() + " PRIVMSG " + _cmd[1] + " : Here are the commands available for you " + cli_name + " :\r\n";
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :                           Official IRC commands\r\n";	
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /topic                                for see the topic\r\n";	
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /mode +?                              for see the channel's active mode\r\n";	
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /names <channel> <channel> ...        for see the names of user in channels (if no channel give, see in all visible channels)\r\n";
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /invite <nickname> <channel>          for send channel invitation to user\r\n";
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /privmsg <nickname> <text>            for send a private message to user\r\n";
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /notice <nickname> <text>             like privmsg but without error reply\r\n";
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /part <reason>                        for leave the channel, reason is facultative\r\n";
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /nick <new nickname>                  for change your nickname\r\n";
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /list                                 for see the list of visible channels\r\n";
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /join <channel>                       for enter in a channel, if do not exist, create new one with you as operator\r\n";
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     /quit <reason>                        for leave the server, reason is facultative\r\n";
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :                           Bot commands\r\n";	
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !help                                 to see this message\r\n";	
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !talk <text>                          to try to speak with the BOT, try to write hello for exemple\r\n";	
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
+		chan_message = ":---> PRIVMSG " + _cmd[1] + " :     !banwords                             to see if banwords function is activated on this channel , and see the list of ban words\r\n";	
+		send(cli_sd, chan_message.c_str(), chan_message.length(), 0);
 	}
-	else if (_cmd.size() > 3)
-	{
-		chan_message = ":" + getName() + " PRIVMSG " + _cmd[1] + " : Quoi ? rien compris moi ...\r\n";
-	}*/
-
-	/* Send only to emmiter client */
-	//send(cli->getSd(), chan_message.c_str(), chan_message.length(), 0);
-
-	/* Send to all client */
-	/*std::vector<client*> members = chan->getMembers();
-	for (std::vector<client*>::iterator it = members.begin(); it != members.end(); it++)
-	{
-		client *c = *it;
-		send(c->getSd(), chan_message.c_str(), chan_message.length(), 0);
-	}*/
 }
 
 void	bot::_on(std::vector<client*> members, std::string chan)
@@ -276,7 +302,7 @@ void	bot::_banWOff(int cli_sd, std::string chan)
 	setBanWActive(false);
 }
 
-void	bot::_banWords(std::vector<std::string> _cmd, std::string cli, int cli_sd, std::string chan)
+void	bot::_banWords(std::vector<std::string> _cmd, std::string cli, int cli_sd, bool cliIsOpe, std::string chan)
 {
 	(void)cli;
 	std::string message;
@@ -291,13 +317,13 @@ void	bot::_banWords(std::vector<std::string> _cmd, std::string cli, int cli_sd, 
 			message = ":---> PRIVMSG " + chan + " : Here are the list of banned words on this channel : " + getBanWords() + "\r\n";
 		send(cli_sd, message.c_str(), message.length(), 0);	
 	}
-	else if (_cmd.size() > 4 && _cmd[3] == "add")
+	else if (_cmd.size() > 4 && _cmd[3] == "add" && cliIsOpe)
 	{
 		addBanWord(_cmd[4]);
 		message = ":" + getName() + " PRIVMSG " + chan + " : The word banned has been added\r\n";
 		send(cli_sd, message.c_str(), message.length(), 0);
 	}
-	else if (_cmd.size() > 4 && _cmd[3] == "del")
+	else if (_cmd.size() > 4 && _cmd[3] == "del" && cliIsOpe)
 	{
 		if (delBanWord(_cmd[4]) == 1)
 		{
@@ -305,8 +331,8 @@ void	bot::_banWords(std::vector<std::string> _cmd, std::string cli, int cli_sd, 
 			send(cli_sd, message.c_str(), message.length(), 0);
 		}
 	}
-	else if (_cmd.size() > 3 && _cmd[3] == "on" && !getIsBanWActive())
+	else if (_cmd.size() > 3 && _cmd[3] == "on" && !getIsBanWActive() && cliIsOpe)
 		_banWOn(cli_sd, chan);
-	else if (_cmd.size() > 3 && _cmd[3] == "off" && getIsBanWActive())
+	else if (_cmd.size() > 3 && _cmd[3] == "off" && getIsBanWActive() && cliIsOpe)
 		_banWOff(cli_sd, chan);
 }
